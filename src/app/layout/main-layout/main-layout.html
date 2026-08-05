@@ -1,0 +1,136 @@
+<div class="app-shell">
+
+  <aside
+    class="sidebar"
+    [class.sidebar-open]="sidebarOpen"
+  >
+    <a
+      class="brand"
+      routerLink="/dashboard/freelancer"
+      (click)="closeSidebar()"
+    >
+      <span class="brand-mark">OF</span>
+
+      <span class="brand-copy">
+        <strong>OpenFree</strong>
+        <small>by Genova Forge</small>
+      </span>
+    </a>
+
+    <nav class="navigation">
+      <span class="navigation-label">Visão geral</span>
+
+      <a
+        routerLink="/dashboard/freelancer"
+        routerLinkActive="active"
+        (click)="closeSidebar()"
+      >
+        <span class="nav-icon">⌂</span>
+        Dashboard
+      </a>
+
+      <a
+        routerLink="/jobs"
+        routerLinkActive="active"
+        (click)="closeSidebar()"
+      >
+        <span class="nav-icon">◇</span>
+        Vagas
+      </a>
+
+      <a
+        routerLink="/applications"
+        routerLinkActive="active"
+        (click)="closeSidebar()"
+      >
+        <span class="nav-icon">▤</span>
+        Candidaturas
+      </a>
+
+      <span class="navigation-label">Comunicação</span>
+
+      <a
+        routerLink="/chat"
+        routerLinkActive="active"
+        (click)="closeSidebar()"
+      >
+        <span class="nav-icon">◌</span>
+        Chat
+        <span class="badge">3</span>
+      </a>
+
+      <span class="navigation-label">Conta</span>
+
+      <a
+        routerLink="/profile"
+        routerLinkActive="active"
+        (click)="closeSidebar()"
+      >
+        <span class="nav-icon">◎</span>
+        Perfil
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="avatar">MG</div>
+
+        <div class="user-info">
+          <strong>Murillo Gomes</strong>
+          <span>Freelancer</span>
+        </div>
+
+        <button
+          type="button"
+          class="logout-button"
+          aria-label="Sair"
+          (click)="logout()"
+        >
+          ↗
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  @if (sidebarOpen) {
+    <button
+      type="button"
+      class="overlay"
+      aria-label="Fechar menu"
+      (click)="closeSidebar()"
+    ></button>
+  }
+
+  <section class="main-area">
+    <header class="topbar">
+      <button
+        type="button"
+        class="menu-button"
+        aria-label="Abrir menu"
+        (click)="toggleSidebar()"
+      >
+        ☰
+      </button>
+
+      <div class="topbar-title">
+        <strong>OpenFree</strong>
+        <span>Encontre sua próxima oportunidade.</span>
+      </div>
+
+      <div class="topbar-actions">
+        <button
+          type="button"
+          class="icon-button"
+          aria-label="Notificações"
+        >
+          ♢
+          <span class="notification-dot"></span>
+        </button>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <router-outlet />
+    </main>
+  </section>
+</div>

@@ -1,0 +1,299 @@
+<section class="dashboard-page">
+
+  @if (loading) {
+    <div class="loading-state">
+      <div class="loader"></div>
+      <p>Carregando dashboard da empresa...</p>
+    </div>
+  }
+
+  @else if (errorMessage) {
+    <div class="error-state">
+      <span>!</span>
+
+      <div>
+        <strong>Não foi possível carregar os dados.</strong>
+        <p>{{ errorMessage }}</p>
+      </div>
+
+      <button
+        type="button"
+        (click)="carregarDashboard()"
+      >
+        Tentar novamente
+      </button>
+    </div>
+  }
+
+  @else if (dashboard) {
+
+    <header class="hero">
+      <div>
+        <span class="eyebrow">
+          Painel empresarial
+        </span>
+
+        <h1>
+          Olá, {{ dashboard.nomeEmpresa || 'empresa' }}
+          <span>👋</span>
+        </h1>
+
+        <p>
+          Acompanhe vagas, candidaturas, contratações
+          e o desempenho da sua empresa.
+        </p>
+      </div>
+
+      <a
+        routerLink="/profile"
+        class="profile-summary"
+      >
+        <div class="company-avatar">
+          {{ dashboard.nomeEmpresa?.charAt(0)?.toUpperCase() || 'E' }}
+        </div>
+
+        <div>
+          <small>Perfil empresarial</small>
+          <strong>Gerenciar empresa</strong>
+        </div>
+
+        <span class="arrow">→</span>
+      </a>
+    </header>
+
+    <div class="primary-grid">
+
+      <app-stat-card
+        title="Vagas abertas"
+        [value]="dashboard.vagasAbertas"
+        icon="◇"
+        description="Publicadas"
+        variant="primary"
+      />
+
+      <app-stat-card
+        title="Candidaturas recebidas"
+        [value]="dashboard.candidaturasRecebidas"
+        icon="▤"
+        description="Total"
+        variant="warning"
+      />
+
+      <app-stat-card
+        title="Profissionais contratados"
+        [value]="dashboard.profissionaisContratados"
+        icon="✓"
+        description="Aceitos"
+        variant="success"
+      />
+
+      <app-stat-card
+        title="Mensagens não lidas"
+        [value]="dashboard.mensagensNaoLidas"
+        icon="◌"
+        description="Aguardando"
+        variant="danger"
+      />
+
+    </div>
+
+    <div class="content-grid">
+
+      <section class="panel vacancies-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">Operação</span>
+            <h2>Resumo das vagas</h2>
+          </div>
+
+          <a routerLink="/jobs">
+            Gerenciar vagas
+          </a>
+        </div>
+
+        <div class="status-list">
+
+          <div class="status-item">
+            <div class="status-marker published"></div>
+
+            <div>
+              <span>Vagas publicadas</span>
+              <small>Total criado pela empresa</small>
+            </div>
+
+            <strong>
+              {{ dashboard.vagasPublicadas }}
+            </strong>
+          </div>
+
+          <div class="status-item">
+            <div class="status-marker open"></div>
+
+            <div>
+              <span>Vagas abertas</span>
+              <small>Recebendo candidaturas</small>
+            </div>
+
+            <strong>
+              {{ dashboard.vagasAbertas }}
+            </strong>
+          </div>
+
+          <div class="status-item">
+            <div class="status-marker finished"></div>
+
+            <div>
+              <span>Vagas finalizadas</span>
+              <small>Processos concluídos</small>
+            </div>
+
+            <strong>
+              {{ dashboard.vagasFinalizadas }}
+            </strong>
+          </div>
+
+          <div class="status-item">
+            <div class="status-marker pending"></div>
+
+            <div>
+              <span>Candidaturas pendentes</span>
+              <small>Aguardando análise</small>
+            </div>
+
+            <strong>
+              {{ dashboard.candidaturasPendentes }}
+            </strong>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="panel performance-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">Desempenho</span>
+            <h2>Taxa de contratação</h2>
+          </div>
+        </div>
+
+        <div class="percentage">
+          <strong>{{ taxaFormatada }}</strong>
+
+          <span>
+            das candidaturas recebidas resultaram
+            em contratação
+          </span>
+        </div>
+
+        <div class="progress">
+          <div
+            class="progress-value"
+            [style.width.%]="
+              dashboard.taxaContratacao > 100
+                ? 100
+                : dashboard.taxaContratacao
+            "
+          ></div>
+        </div>
+
+        <div class="performance-footer">
+          <span>
+            {{ dashboard.profissionaisContratados }}
+            contratado(s)
+          </span>
+
+          <span>
+            {{ dashboard.candidaturasRecebidas }}
+            candidatura(s)
+          </span>
+        </div>
+      </section>
+
+      <section class="panel reputation-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">Reputação</span>
+            <h2>Avaliações da empresa</h2>
+          </div>
+        </div>
+
+        <div class="rating-highlight">
+          <strong>
+            {{ dashboard.avaliacaoMedia | number:'1.1-1' }}
+          </strong>
+
+          <div>
+            <div class="stars">
+              @for (estrela of estrelas; track $index) {
+                <span [class.empty]="estrela === 0">
+                  ★
+                </span>
+              }
+            </div>
+
+            <p>
+              {{ dashboard.totalAvaliacoes }}
+              avaliação(ões)
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel actions-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">Ações rápidas</span>
+            <h2>O que fazer agora</h2>
+          </div>
+        </div>
+
+        <div class="action-list">
+
+          <a routerLink="/jobs">
+            <span class="action-icon">＋</span>
+
+            <div>
+              <strong>Publicar uma vaga</strong>
+              <small>
+                Encontre o profissional ideal
+              </small>
+            </div>
+
+            <span>→</span>
+          </a>
+
+          <a routerLink="/applications">
+            <span class="action-icon">▤</span>
+
+            <div>
+              <strong>Analisar candidaturas</strong>
+              <small>
+                {{ dashboard.candidaturasPendentes }}
+                aguardando análise
+              </small>
+            </div>
+
+            <span>→</span>
+          </a>
+
+          <a routerLink="/chat">
+            <span class="action-icon">◌</span>
+
+            <div>
+              <strong>Responder mensagens</strong>
+              <small>
+                {{ dashboard.mensagensNaoLidas }}
+                mensagem(ns) não lida(s)
+              </small>
+            </div>
+
+            <span>→</span>
+          </a>
+
+        </div>
+      </section>
+
+    </div>
+  }
+
+</section>

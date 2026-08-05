@@ -1,0 +1,24 @@
+<article
+  class="stat-card"
+  [class]="'stat-card ' + variant"
+>
+  <div class="stat-card-header">
+    <div class="icon-wrapper">
+      {{ icon }}
+    </div>
+
+    @if (description) {
+      <span class="description">
+        {{ description }}
+      </span>
+    }
+  </div>
+
+  <div class="stat-card-content">
+    <strong>{{ value }}</strong>
+    <span>{{ title }}</span>
+  </div>
+
+  <div class="card-glow"></div>
+</article>
+

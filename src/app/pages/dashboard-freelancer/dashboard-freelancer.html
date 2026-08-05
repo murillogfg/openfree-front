@@ -1,0 +1,274 @@
+<section class="dashboard-page">
+
+  @if (loading) {
+    <div class="loading-state">
+      <div class="loader"></div>
+      <p>Carregando seu dashboard...</p>
+    </div>
+  }
+
+  @else if (errorMessage) {
+    <div class="error-state">
+      <span>!</span>
+
+      <div>
+        <strong>Não foi possível carregar os dados.</strong>
+        <p>{{ errorMessage }}</p>
+      </div>
+
+      <button
+        type="button"
+        (click)="carregarDashboard()"
+      >
+        Tentar novamente
+      </button>
+    </div>
+  }
+
+  @else if (dashboard) {
+
+    <header class="hero">
+      <div>
+        <span class="eyebrow">Painel do profissional</span>
+
+        <h1>
+          Olá, {{ dashboard.nomeUsuario || 'profissional' }}
+          <span>👋</span>
+        </h1>
+
+        <p>
+          Acompanhe suas oportunidades, conversas e desempenho
+          dentro da OpenFree.
+        </p>
+      </div>
+
+      <a
+        routerLink="/profile"
+        class="profile-summary"
+      >
+        <div class="profile-avatar">
+          {{ iniciais }}
+        </div>
+
+        <div>
+          <small>Seu perfil</small>
+          <strong>Completar informações</strong>
+        </div>
+
+        <span class="arrow">→</span>
+      </a>
+    </header>
+
+    <div class="primary-grid">
+  <app-stat-card
+    title="Candidaturas enviadas"
+    [value]="dashboard.candidaturasEnviadas"
+    icon="▤"
+    description="Total"
+    variant="primary"
+  />
+
+  <app-stat-card
+    title="Vagas favoritas"
+    [value]="dashboard.favoritos"
+    icon="★"
+    description="Salvas"
+    variant="warning"
+  />
+
+  <app-stat-card
+    title="Mensagens não lidas"
+    [value]="dashboard.mensagensNaoLidas"
+    icon="◌"
+    description="Aguardando"
+    variant="success"
+  />
+
+  <app-stat-card
+    title="Notificações"
+    [value]="dashboard.notificacoesNaoLidas"
+    icon="♢"
+    description="Pendentes"
+    variant="danger"
+  />
+</div>
+
+    <div class="content-grid">
+
+      <section class="panel applications-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">Visão geral</span>
+            <h2>Status das candidaturas</h2>
+          </div>
+
+          <a routerLink="/applications">
+            Ver todas
+          </a>
+        </div>
+
+        <div class="status-list">
+          <div class="status-item">
+            <div class="status-marker pending"></div>
+
+            <div>
+              <span>Pendentes</span>
+              <small>Aguardando análise da empresa</small>
+            </div>
+
+            <strong>{{ dashboard.pendentes }}</strong>
+          </div>
+
+          <div class="status-item">
+            <div class="status-marker accepted"></div>
+
+            <div>
+              <span>Aceitas</span>
+              <small>Oportunidades conquistadas</small>
+            </div>
+
+            <strong>{{ dashboard.aceitas }}</strong>
+          </div>
+
+          <div class="status-item">
+            <div class="status-marker rejected"></div>
+
+            <div>
+              <span>Recusadas</span>
+              <small>Processos encerrados</small>
+            </div>
+
+            <strong>{{ dashboard.recusadas }}</strong>
+          </div>
+
+          <div class="status-item">
+            <div class="status-marker completed"></div>
+
+            <div>
+              <span>Trabalhos concluídos</span>
+              <small>Serviços finalizados</small>
+            </div>
+
+            <strong>{{ dashboard.trabalhosConcluidos }}</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel reputation-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">Sua reputação</span>
+            <h2>Avaliações</h2>
+          </div>
+        </div>
+
+        <div class="rating-highlight">
+          <strong>
+            {{ dashboard.avaliacaoMedia | number:'1.1-1' }}
+          </strong>
+
+          <div>
+            <div class="stars">
+              @for (estrela of estrelas; track $index) {
+                <span [class.empty]="estrela === 0">
+                  ★
+                </span>
+              }
+            </div>
+
+            <p>
+              Baseado em
+              {{ dashboard.totalAvaliacoes }}
+              avaliação(ões)
+            </p>
+          </div>
+        </div>
+
+        <div class="reputation-message">
+          <span>✦</span>
+
+          <p>
+            Continue entregando bons trabalhos para fortalecer
+            sua reputação na plataforma.
+          </p>
+        </div>
+      </section>
+
+      <section class="panel attention-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">Atenção</span>
+            <h2>Próximas ações</h2>
+          </div>
+        </div>
+
+        <div class="action-list">
+          <a routerLink="/chat">
+            <span class="action-icon">◌</span>
+
+            <div>
+              <strong>Responder mensagens</strong>
+              <small>
+                {{ dashboard.mensagensNaoLidas }}
+                mensagem(ns) aguardando resposta
+              </small>
+            </div>
+
+            <span>→</span>
+          </a>
+
+          <a routerLink="/applications">
+            <span class="action-icon">▤</span>
+
+            <div>
+              <strong>Acompanhar candidaturas</strong>
+              <small>
+                {{ dashboard.pendentes }}
+                candidatura(s) pendente(s)
+              </small>
+            </div>
+
+            <span>→</span>
+          </a>
+
+          <a routerLink="/profile">
+            <span class="action-icon">◎</span>
+
+            <div>
+              <strong>Atualizar seu perfil</strong>
+              <small>
+                Mantenha currículo e habilidades atualizados
+              </small>
+            </div>
+
+            <span>→</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="panel conversations-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">Comunicação</span>
+            <h2>Conversas ativas</h2>
+          </div>
+        </div>
+
+        <div class="conversation-number">
+          <strong>{{ dashboard.conversasAtivas }}</strong>
+          <span>conversa(s) em andamento</span>
+        </div>
+
+        <a
+          routerLink="/chat"
+          class="primary-action"
+        >
+          Acessar o chat
+          <span>→</span>
+        </a>
+      </section>
+
+    </div>
+  }
+
+</section>

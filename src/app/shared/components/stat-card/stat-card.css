@@ -1,0 +1,124 @@
+:host {
+  display: block;
+}
+
+.stat-card {
+  --accent: #7f89ff;
+  --accent-soft: rgba(102, 113, 255, 0.12);
+
+  position: relative;
+  min-height: 170px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 21px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 20px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(20, 28, 53, 0.97),
+      rgba(13, 20, 40, 0.97)
+    );
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.18);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(
+    in srgb,
+    var(--accent) 42%,
+    transparent
+  );
+}
+
+.stat-card.primary {
+  --accent: #7f89ff;
+  --accent-soft: rgba(102, 113, 255, 0.14);
+}
+
+.stat-card.success {
+  --accent: #46d68c;
+  --accent-soft: rgba(70, 214, 140, 0.12);
+}
+
+.stat-card.warning {
+  --accent: #f2b84b;
+  --accent-soft: rgba(242, 184, 75, 0.12);
+}
+
+.stat-card.danger {
+  --accent: #ef6976;
+  --accent-soft: rgba(239, 105, 118, 0.12);
+}
+
+.stat-card.neutral {
+  --accent: #9aa4c2;
+  --accent-soft: rgba(154, 164, 194, 0.1);
+}
+
+.stat-card-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.icon-wrapper {
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--accent) 24%,
+      transparent
+    );
+  border-radius: 13px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 21px;
+}
+
+.description {
+  color: #737e9c;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.stat-card-content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 5px;
+}
+
+.stat-card-content strong {
+  color: #ffffff;
+  font-size: 35px;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.stat-card-content span {
+  color: #8e98b5;
+  font-size: 13px;
+}
+
+.card-glow {
+  position: absolute;
+  right: -46px;
+  bottom: -60px;
+  width: 145px;
+  height: 145px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  filter: blur(2px);
+}

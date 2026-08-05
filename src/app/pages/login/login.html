@@ -1,0 +1,53 @@
+<main class="login-page">
+  <section class="login-card">
+    <div class="brand">
+      <span class="brand-mark">OF</span>
+
+      <div>
+        <h1>OpenFree</h1>
+        <p>Conectando empresas e profissionais.</p>
+      </div>
+    </div>
+
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="submit()"
+    >
+      <label for="email">E-mail</label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="seu@email.com"
+      />
+
+      <small *ngIf="loginForm.controls.email.touched && loginForm.controls.email.invalid">
+        Informe um e-mail válido.
+      </small>
+
+      <label for="senha">Senha</label>
+
+      <input
+        id="senha"
+        type="password"
+        formControlName="senha"
+        placeholder="Sua senha"
+      />
+
+      <small *ngIf="loginForm.controls.senha.touched && loginForm.controls.senha.invalid">
+        A senha deve possuir ao menos 6 caracteres.
+      </small>
+
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="loading"
+      >
+        {{ loading ? 'Entrando...' : 'Entrar' }}
+      </button>
+    </form>
+  </section>
+</main>
