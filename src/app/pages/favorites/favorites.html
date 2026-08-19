@@ -1,0 +1,260 @@
+<section class="favorites-page">
+
+  <header class="page-header">
+
+    <div>
+
+      <span class="eyebrow">
+        OPORTUNIDADES SALVAS
+      </span>
+
+      <h1>
+        Favoritos
+      </h1>
+
+      <p>
+        Guarde oportunidades interessantes
+        para analisar e se candidatar depois.
+      </p>
+
+    </div>
+
+    <div class="favorite-counter">
+
+      <strong>
+        {{ total }}
+      </strong>
+
+      <span>
+        {{
+          total === 1
+            ? 'vaga salva'
+            : 'vagas salvas'
+        }}
+      </span>
+
+    </div>
+
+  </header>
+
+
+  @if (successMessage) {
+
+    <div class="feedback success">
+
+      <span>✓</span>
+
+      <p>
+        {{ successMessage }}
+      </p>
+
+    </div>
+
+  }
+
+
+  @if (errorMessage) {
+
+    <div class="feedback error">
+
+      <span>!</span>
+
+      <p>
+        {{ errorMessage }}
+      </p>
+
+    </div>
+
+  }
+
+
+  @if (loading) {
+
+    <div class="loading-state">
+
+      <div class="loader"></div>
+
+      <p>
+        Carregando suas vagas favoritas...
+      </p>
+
+    </div>
+
+  }
+
+
+  @else if (
+    favorites.length === 0
+  ) {
+
+    <div class="empty-state">
+
+      <div class="empty-icon">
+        ★
+      </div>
+
+      <span class="eyebrow">
+        FAVORITOS
+      </span>
+
+      <h2>
+        Você ainda não salvou nenhuma vaga
+      </h2>
+
+      <p>
+        Explore as oportunidades disponíveis
+        e salve aquelas que mais combinam
+        com seu perfil.
+      </p>
+
+      <a
+        routerLink="/jobs"
+        class="primary-button"
+      >
+        Explorar vagas
+        <span>→</span>
+      </a>
+
+    </div>
+
+  }
+
+
+  @else {
+
+    <div class="favorites-grid">
+
+      @for (
+        favorite of favorites;
+        track favorite.id
+      ) {
+
+        <article class="favorite-card">
+
+          <div class="card-top">
+
+            <div>
+
+              <span class="company">
+                {{ favorite.empresaNome }}
+              </span>
+
+              <h2>
+                {{ favorite.titulo }}
+              </h2>
+
+            </div>
+
+            <button
+              type="button"
+              class="remove-button"
+              aria-label="Remover dos favoritos"
+              title="Remover dos favoritos"
+              [disabled]="
+                removingId === favorite.id
+              "
+              (click)="remover(favorite)"
+            >
+              {{
+                removingId === favorite.id
+                  ? '...'
+                  : '★'
+              }}
+            </button>
+
+          </div>
+
+
+          <div class="job-meta">
+
+            <div>
+
+              <small>
+                Localização
+              </small>
+
+              <strong>
+
+                {{
+                  favorite.cidade
+                  || 'Não informada'
+                }}
+
+                @if (favorite.estado) {
+                  · {{ favorite.estado }}
+                }
+
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <small>
+                Data
+              </small>
+
+              <strong>
+                {{
+                  favorite.dataServico
+                    | date:'dd/MM/yyyy'
+                }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div class="value-area">
+
+            <span>
+              Valor
+            </span>
+
+            <strong>
+              {{
+                favorite.valor
+                  | currency:'BRL'
+              }}
+            </strong>
+
+          </div>
+
+
+          <footer class="card-footer">
+
+            <div class="favorite-date">
+
+              Salva em
+
+              {{
+                favorite.favoritadoEm
+                  | date:'dd/MM/yyyy'
+              }}
+
+            </div>
+
+            <a
+              [routerLink]="[
+                '/jobs',
+                favorite.vagaId
+              ]"
+              class="view-button"
+            >
+              Ver vaga
+              <span>→</span>
+            </a>
+
+          </footer>
+
+        </article>
+
+      }
+
+    </div>
+
+  }
+
+</section>

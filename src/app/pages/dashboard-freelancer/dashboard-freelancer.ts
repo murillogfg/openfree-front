@@ -21,9 +21,8 @@ imports: [
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
-    StatCard
-],
+    RouterLink
+  ],
   templateUrl: './dashboard-freelancer.html',
   styleUrl: './dashboard-freelancer.css'
 })
@@ -87,4 +86,37 @@ export class DashboardFreelancer implements OnInit {
       (_, index) => index < quantidade ? 1 : 0
     );
   }
+
+  profileCompletion = 0;
+profileReady = false;
+
+calcularProgressoPerfil(profile: any): void {
+
+  const campos = [
+    profile.nome,
+    profile.telefone,
+    profile.tituloProfissional,
+    profile.biografia,
+    profile.cidade,
+    profile.estado,
+    profile.habilidades,
+    profile.avatarUrl,
+    profile.portfolioUrl
+  ];
+
+  const preenchidos =
+    campos.filter(valor =>
+      valor !== null
+      && valor !== undefined
+      && String(valor).trim() !== ''
+    ).length;
+
+  this.profileCompletion =
+    Math.round(
+      (preenchidos / campos.length) * 100
+    );
+
+  this.profileReady =
+    this.profileCompletion >= 70;
+}
 }

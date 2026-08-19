@@ -306,4 +306,90 @@
   .page-content {
     padding: 24px 18px;
   }
+  .sidebar {
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+.brand {
+  flex-shrink: 0;
+}
+
+.navigation {
+  flex: 1;
+
+  min-height: 0;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding-bottom: 24px;
+}
+
+.sidebar-footer {
+  flex-shrink: 0;
+}
+.navigation .nav-text {
+  display: inline-block;
+  visibility: visible;
+  opacity: 1;
+  white-space: nowrap;
+}
+.navigation a {
+  position: relative;
+}
+
+.nav-badge {
+  min-width: 20px;
+  height: 20px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-left: auto;
+  padding: 0 6px;
+
+  border-radius: 999px;
+
+  background: #6671ff;
+  color: #ffffff;
+
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.icon-button {
+  position: relative;
+}
+
+.topbar-badge {
+  position: absolute;
+
+  top: -5px;
+  right: -6px;
+
+  min-width: 18px;
+  height: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 5px;
+
+  border: 2px solid #0a1122;
+  border-radius: 999px;
+
+  background: #6671ff;
+  color: #ffffff;
+
+  font-size: 8px;
+  font-weight: 900;
+}
+
 }

@@ -1,1 +1,261 @@
-<p>applications works!</p>
+<section class="applications-page">
+
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">
+        Suas oportunidades
+      </span>
+
+      <h1>Minhas candidaturas</h1>
+
+      <p>
+        Acompanhe o andamento das vagas para as quais
+        você se candidatou.
+      </p>
+    </div>
+
+    <a
+      routerLink="/jobs"
+      class="explore-button"
+    >
+      Explorar vagas
+      <span>→</span>
+    </a>
+  </header>
+
+  <div class="summary-grid">
+
+    <button
+      type="button"
+      class="summary-card"
+      [class.active]="filtro === 'TODAS'"
+      (click)="definirFiltro('TODAS')"
+    >
+      <span>Total</span>
+      <strong>{{ applications.length }}</strong>
+    </button>
+
+    <button
+      type="button"
+      class="summary-card pending"
+      [class.active]="filtro === 'PENDENTE'"
+      (click)="definirFiltro('PENDENTE')"
+    >
+      <span>Pendentes</span>
+      <strong>{{ pendentes }}</strong>
+    </button>
+
+    <button
+      type="button"
+      class="summary-card accepted"
+      [class.active]="filtro === 'ACEITA'"
+      (click)="definirFiltro('ACEITA')"
+    >
+      <span>Aceitas</span>
+      <strong>{{ aceitas }}</strong>
+    </button>
+
+    <button
+      type="button"
+      class="summary-card rejected"
+      [class.active]="filtro === 'RECUSADA'"
+      (click)="definirFiltro('RECUSADA')"
+    >
+      <span>Recusadas</span>
+      <strong>{{ recusadas }}</strong>
+    </button>
+
+  </div>
+
+  @if (loading) {
+
+    <div class="loading-state">
+      <div class="loader"></div>
+
+      <p>
+        Carregando suas candidaturas...
+      </p>
+    </div>
+
+  }
+
+  @else if (errorMessage) {
+
+    <div class="error-state">
+      <div>
+        <strong>
+          Não foi possível carregar as candidaturas.
+        </strong>
+
+        <p>{{ errorMessage }}</p>
+      </div>
+
+      <button
+        type="button"
+        (click)="carregar()"
+      >
+        Tentar novamente
+      </button>
+    </div>
+
+  }
+
+  @else if (applicationsFiltradas.length === 0) {
+
+    <div class="empty-state">
+      <div class="empty-icon">▤</div>
+
+      <h2>
+        Nenhuma candidatura encontrada
+      </h2>
+
+      <p>
+        Explore as oportunidades disponíveis e encontre
+        seu próximo trabalho.
+      </p>
+
+      <a routerLink="/jobs">
+        Explorar oportunidades
+      </a>
+    </div>
+
+  }
+
+  @else {
+
+    <div class="applications-list">
+
+      @for (
+        application of applicationsFiltradas;
+        track application.candidaturaId
+      ) {
+
+        <article class="application-card">
+
+          <div class="company-logo">
+            {{
+              application.empresa
+                ? application.empresa.charAt(0).toUpperCase()
+                : 'O'
+            }}
+          </div>
+
+          <div class="application-main">
+
+            <div class="application-heading">
+
+              <div>
+                <h2>
+                  {{ application.titulo }}
+                </h2>
+
+                <span>
+                  {{ application.empresa }}
+                </span>
+              </div>
+
+              <span
+                class="status"
+                [class.pending]="
+                  application.status === 'PENDENTE'
+                "
+                [class.accepted]="
+                  application.status === 'ACEITA'
+                "
+                [class.rejected]="
+                  application.status === 'RECUSADA'
+                "
+              >
+                {{ application.status }}
+              </span>
+
+            </div>
+
+            <div class="application-info">
+
+              <div>
+                <small>Local</small>
+
+                <strong>
+                  {{ application.cidade }}
+                  ·
+                  {{ application.estado }}
+                </strong>
+              </div>
+
+              <div>
+                <small>Valor da vaga</small>
+
+                <strong>
+                  {{
+                    application.valor
+                      | currency:'BRL'
+                  }}
+                </strong>
+              </div>
+
+              <div>
+                <small>Data do serviço</small>
+
+                <strong>
+                  {{
+                    application.dataServico
+                      | date:'dd/MM/yyyy'
+                  }}
+                </strong>
+              </div>
+
+              <div>
+                <small>Candidatura enviada</small>
+
+                <strong>
+                  {{
+                    application.dataCandidatura
+                      | date:'dd/MM/yyyy'
+                  }}
+                </strong>
+              </div>
+
+            </div>
+
+            <footer>
+
+              <div
+                class="view-status"
+                [class.viewed]="
+                  application.empresaVisualizou
+                "
+              >
+                @if (application.empresaVisualizou) {
+                  <span>◉</span>
+                  Empresa visualizou sua candidatura
+                }
+                @else {
+                  <span>○</span>
+                  Aguardando visualização
+                }
+              </div>
+
+              <a
+                [routerLink]="[
+                  '/jobs',
+                  application.vagaId
+                ]"
+              >
+                Ver vaga
+                <span>→</span>
+              </a>
+
+            </footer>
+
+          </div>
+
+        </article>
+
+      }
+
+    </div>
+
+  }
+
+</section>

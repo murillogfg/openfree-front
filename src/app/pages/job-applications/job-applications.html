@@ -1,0 +1,294 @@
+<section class="applications-page">
+
+  <a
+    routerLink="/jobs"
+    class="back-link"
+  >
+    ← Voltar para vagas
+  </a>
+
+  <header class="page-header">
+
+    <div>
+      <span class="eyebrow">
+        Processo seletivo
+      </span>
+
+      <h1>Candidatos da vaga</h1>
+
+      <p>
+        Analise propostas, mensagens e selecione
+        os profissionais para esta oportunidade.
+      </p>
+    </div>
+
+    <div class="summary">
+
+      <div>
+        <strong>
+          {{ applications.length }}
+        </strong>
+
+        <span>Total</span>
+      </div>
+
+      <div class="pending">
+        <strong>
+          {{ pendentes }}
+        </strong>
+
+        <span>Pendentes</span>
+      </div>
+
+      <div class="accepted">
+        <strong>
+          {{ aceitas }}
+        </strong>
+
+        <span>Aceitas</span>
+      </div>
+
+      <div class="rejected">
+        <strong>
+          {{ recusadas }}
+        </strong>
+
+        <span>Recusadas</span>
+      </div>
+
+    </div>
+
+  </header>
+
+  @if (successMessage) {
+
+    <div class="success-message">
+      <span>✓</span>
+
+      <p>{{ successMessage }}</p>
+    </div>
+
+  }
+
+  @if (errorMessage) {
+
+    <div class="error-message">
+      <strong>Algo deu errado.</strong>
+      <p>{{ errorMessage }}</p>
+    </div>
+
+  }
+
+  @if (loading) {
+
+    <div class="loading-state">
+      <div class="loader"></div>
+
+      <p>
+        Carregando candidatos...
+      </p>
+    </div>
+
+  }
+
+  @else if (applications.length === 0) {
+
+    <div class="empty-state">
+
+      <div class="empty-icon">
+        ◎
+      </div>
+
+      <h2>
+        Nenhuma candidatura recebida
+      </h2>
+
+      <p>
+        Quando profissionais se candidatarem,
+        eles aparecerão aqui.
+      </p>
+
+    </div>
+
+  }
+
+  @else {
+
+    <div class="applications-list">
+
+      @for (
+        application of applications;
+        track application.id
+      ) {
+
+        <article class="application-card">
+
+          <div class="avatar">
+            {{
+              application.nome
+                ? application.nome
+                    .charAt(0)
+                    .toUpperCase()
+                : 'U'
+            }}
+          </div>
+
+          <div class="application-content">
+
+            <header class="candidate-header">
+
+              <div>
+                <h2>
+                  {{ application.nome }}
+                </h2>
+
+                <span>
+                  {{ application.email }}
+                </span>
+              </div>
+
+              <span
+                class="status"
+                [class.pending]="
+                  application.status === 'PENDENTE'
+                "
+                [class.accepted]="
+                  application.status === 'ACEITA'
+                "
+                [class.rejected]="
+                  application.status === 'RECUSADA'
+                "
+              >
+                {{ application.status }}
+              </span>
+
+            </header>
+
+            <div class="proposal">
+
+              <div>
+                <small>
+                  Valor proposto
+                </small>
+
+                <strong>
+                  @if (
+                    application.valorProposto !== null
+                  ) {
+                    {{
+                      application.valorProposto
+                        | currency:'BRL'
+                    }}
+                  }
+                  @else {
+                    Valor da vaga
+                  }
+                </strong>
+              </div>
+
+              <div>
+                <small>
+                  Enviado em
+                </small>
+
+                <strong>
+                  {{
+                    application.createdAt
+                      | date:'dd/MM/yyyy HH:mm'
+                  }}
+                </strong>
+              </div>
+
+            </div>
+
+            <div class="candidate-message">
+
+              <small>
+                Mensagem do profissional
+              </small>
+
+              <p>
+                {{
+                  application.mensagem
+                  || 'O profissional não adicionou uma mensagem.'
+                }}
+              </p>
+
+            </div>
+
+            <footer>
+
+              <a
+                [routerLink]="[
+                  '/profile/user',
+                  application.usuarioId
+                ]"
+                class="profile-link"
+              >
+                Ver perfil
+                <span>→</span>
+              </a>
+
+              @if (
+                application.status === 'PENDENTE'
+              ) {
+
+                <div class="actions">
+
+                  <button
+                    type="button"
+                    class="reject-button"
+                    [disabled]="
+                      updatingId === application.id
+                    "
+                    (click)="recusar(application)"
+                  >
+                    Recusar
+                  </button>
+
+                  <button
+                    type="button"
+                    class="accept-button"
+                    [disabled]="
+                      updatingId === application.id
+                    "
+                    (click)="aceitar(application)"
+                  >
+                    {{
+                      updatingId === application.id
+                        ? 'Processando...'
+                        : 'Aceitar'
+                    }}
+                  </button>
+
+                </div>
+
+              }
+
+              @else if (
+                application.status === 'ACEITA'
+              ) {
+
+                <a
+                  routerLink="/chat"
+                  class="chat-button"
+                >
+                  Abrir conversa
+                  <span>→</span>
+                </a>
+
+              }
+
+            </footer>
+
+          </div>
+
+        </article>
+
+      }
+
+    </div>
+
+  }
+
+</section>

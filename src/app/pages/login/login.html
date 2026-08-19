@@ -1,19 +1,33 @@
 <main class="login-page">
+
   <section class="login-card">
+
     <div class="brand">
-      <span class="brand-mark">OF</span>
+
+      <span class="brand-mark">
+        OF
+      </span>
 
       <div>
         <h1>OpenFree</h1>
-        <p>Conectando empresas e profissionais.</p>
+
+        <p>
+          Conectando empresas e profissionais.
+        </p>
       </div>
+
     </div>
 
     <form
       [formGroup]="loginForm"
       (ngSubmit)="submit()"
     >
-      <label for="email">E-mail</label>
+
+      <!-- E-MAIL -->
+      <label for="email">
+        E-mail
+      </label>
+
       <input
         id="email"
         type="email"
@@ -21,11 +35,20 @@
         placeholder="seu@email.com"
       />
 
-      <small *ngIf="loginForm.controls.email.touched && loginForm.controls.email.invalid">
+      <small
+        *ngIf="
+          loginForm.controls.email.touched &&
+          loginForm.controls.email.invalid
+        "
+      >
         Informe um e-mail válido.
       </small>
 
-      <label for="senha">Senha</label>
+
+      <!-- SENHA -->
+      <label for="senha">
+        Senha
+      </label>
 
       <input
         id="senha"
@@ -34,20 +57,61 @@
         placeholder="Sua senha"
       />
 
-      <small *ngIf="loginForm.controls.senha.touched && loginForm.controls.senha.invalid">
+      <small
+        *ngIf="
+          loginForm.controls.senha.touched &&
+          loginForm.controls.senha.invalid
+        "
+      >
         A senha deve possuir ao menos 6 caracteres.
       </small>
 
-      <div class="error-message" *ngIf="errorMessage">
+
+      <!-- RECUPERAÇÃO DE SENHA -->
+      <div class="forgot-password-link">
+        <a routerLink="/forgot-password">
+          Esqueci minha senha
+        </a>
+      </div>
+
+
+      <!-- ERRO DE LOGIN -->
+      <div
+        class="error-message"
+        *ngIf="errorMessage"
+      >
         {{ errorMessage }}
       </div>
 
+
+      <!-- LOGIN -->
       <button
         type="submit"
         [disabled]="loading"
       >
-        {{ loading ? 'Entrando...' : 'Entrar' }}
+        {{
+          loading
+            ? 'Entrando...'
+            : 'Entrar'
+        }}
       </button>
+
     </form>
+
+
+    <!-- CADASTRO -->
+    <div class="register-link">
+
+      <span>
+        Ainda não possui uma conta?
+      </span>
+
+      <a routerLink="/register">
+        Criar conta
+      </a>
+
+    </div>
+
   </section>
+
 </main>

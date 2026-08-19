@@ -1,0 +1,418 @@
+<section class="contracts-page">
+
+  <header class="page-header">
+
+    <div>
+      <span class="eyebrow">
+        Contratações
+      </span>
+
+      <h1>
+        {{
+          isCompany
+            ? 'Contratos da empresa'
+            : 'Meus contratos'
+        }}
+      </h1>
+
+      <p>
+        {{
+          isCompany
+            ? 'Acompanhe serviços contratados, confirmações e conclusão dos trabalhos.'
+            : 'Acompanhe seus trabalhos contratados e confirme cada etapa do serviço.'
+        }}
+      </p>
+    </div>
+
+  </header>
+
+  @if (successMessage) {
+    <div class="feedback success">
+      ✓ {{ successMessage }}
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="feedback error">
+      ! {{ errorMessage }}
+    </div>
+  }
+
+  <div class="filters">
+
+    <button
+      type="button"
+      [class.active]="filtro === 'TODOS'"
+      (click)="definirFiltro('TODOS')"
+    >
+      Todos
+    </button>
+
+    <button
+      type="button"
+      [class.active]="filtro === 'AGUARDANDO_INICIO'"
+      (click)="definirFiltro('AGUARDANDO_INICIO')"
+    >
+      Aguardando início
+    </button>
+
+    <button
+      type="button"
+      [class.active]="filtro === 'EM_ANDAMENTO'"
+      (click)="definirFiltro('EM_ANDAMENTO')"
+    >
+      Em andamento
+    </button>
+
+    <button
+      type="button"
+      [class.active]="filtro === 'CONCLUIDO'"
+      (click)="definirFiltro('CONCLUIDO')"
+    >
+      Concluídos
+    </button>
+
+  </div>
+
+  @if (loading) {
+
+    <div class="loading-state">
+      <div class="loader"></div>
+      <p>Carregando contratos...</p>
+    </div>
+
+  }
+
+  @else if (contractsFiltrados.length === 0) {
+
+    <div class="empty-state">
+      <div class="empty-icon">◇</div>
+
+      <h2>Nenhum contrato encontrado</h2>
+
+      <p>
+        Os contratos aparecerão aqui quando uma candidatura
+        for aceita.
+      </p>
+    </div>
+
+  }
+
+  @else {
+
+    <div class="contracts-list">
+
+      @for (
+        contract of contractsFiltrados;
+        track contract.id
+      ) {
+
+        <article class="contract-card">
+
+          <header class="contract-header">
+
+            <div>
+              <span class="contract-number">
+                Contrato #{{ contract.id }}
+              </span>
+
+              <h2>
+                {{ contract.vagaTitulo }}
+              </h2>
+
+              <p>
+                {{
+                  isCompany
+                    ? contract.freelancerNome
+                    : contract.empresaNome
+                }}
+              </p>
+            </div>
+
+            <span
+              class="status"
+              [class.waiting]="
+                contract.status === 'AGUARDANDO_INICIO'
+              "
+              [class.running]="
+                contract.status === 'EM_ANDAMENTO'
+              "
+              [class.confirming]="
+                contract.status === 'AGUARDANDO_CONFIRMACAO'
+              "
+              [class.completed]="
+                contract.status === 'CONCLUIDO'
+              "
+            >
+              {{ statusLabel(contract.status) }}
+            </span>
+
+          </header>
+
+          <div class="contract-info">
+
+            <div>
+              <small>Valor</small>
+
+              <strong>
+                {{ contract.valor | currency:'BRL' }}
+              </strong>
+            </div>
+
+            <div>
+              <small>Criado em</small>
+
+              <strong>
+                {{
+                  contract.createdAt
+                    | date:'dd/MM/yyyy'
+                }}
+              </strong>
+            </div>
+
+            <div>
+              <small>Início</small>
+
+              <strong>
+                {{
+                  contract.iniciadoAt
+                    ? (contract.iniciadoAt | date:'dd/MM/yyyy HH:mm')
+                    : 'Ainda não iniciado'
+                }}
+              </strong>
+            </div>
+
+          </div>
+
+          @if (
+            contract.status === 'EM_ANDAMENTO'
+            || contract.status === 'AGUARDANDO_CONFIRMACAO'
+            || contract.status === 'CONCLUIDO'
+          ) {
+
+            <div class="confirmation-grid">
+
+              <div
+                [class.confirmed]="
+                  contract.empresaConfirmouConclusao
+                "
+              >
+                <span>
+                  {{
+                    contract.empresaConfirmouConclusao
+                      ? '✓'
+                      : '○'
+                  }}
+                </span>
+
+                Empresa confirmou
+              </div>
+
+              <div
+                [class.confirmed]="
+                  contract.freelancerConfirmouConclusao
+                "
+              >
+                <span>
+                  {{
+                    contract.freelancerConfirmouConclusao
+                      ? '✓'
+                      : '○'
+                  }}
+                </span>
+
+                Profissional confirmou
+              </div>
+
+            </div>
+
+          }
+
+          <footer class="contract-actions">
+
+            @if (
+              isCompany
+              && contract.status === 'AGUARDANDO_INICIO'
+            ) {
+
+              <button
+                type="button"
+                class="primary-button"
+                [disabled]="processingId !== null"
+                (click)="iniciar(contract)"
+              >
+                {{
+                  processingId === contract.id
+                    ? 'Iniciando...'
+                    : 'Iniciar serviço'
+                }}
+              </button>
+
+            }
+
+            @if (
+              (
+                contract.status === 'EM_ANDAMENTO'
+                || contract.status === 'AGUARDANDO_CONFIRMACAO'
+              )
+              && !jaConfirmou(contract)
+            ) {
+
+              <button
+                type="button"
+                class="primary-button"
+                [disabled]="processingId !== null"
+                (click)="confirmarConclusao(contract)"
+              >
+                {{
+                  processingId === contract.id
+                    ? 'Confirmando...'
+                    : 'Confirmar conclusão'
+                }}
+              </button>
+
+            }
+
+            @if (
+              contract.status === 'AGUARDANDO_CONFIRMACAO'
+              && jaConfirmou(contract)
+            ) {
+
+              <span class="waiting-message">
+                ✓ Sua confirmação foi registrada.
+                Aguardando a outra parte.
+              </span>
+
+            }
+
+            @if (
+              contract.status === 'CONCLUIDO'
+            ) {
+
+              <button
+                type="button"
+                class="review-button"
+                (click)="abrirAvaliacao(contract)"
+              >
+                {{
+                  isCompany
+                    ? 'Avaliar profissional'
+                    : 'Avaliar empresa'
+                }}
+              </button>
+
+            }
+
+          </footer>
+
+        </article>
+
+      }
+
+    </div>
+
+  }
+
+</section>
+
+@if (reviewModalOpen && contractToReview) {
+
+  <div
+    class="modal-backdrop"
+    (click)="fecharAvaliacao()"
+  >
+
+    <section
+      class="review-modal"
+      (click)="$event.stopPropagation()"
+    >
+
+      <header>
+
+        <div>
+          <span class="eyebrow">
+            Avaliação
+          </span>
+
+          <h2>
+            {{
+              isCompany
+                ? contractToReview.freelancerNome
+                : contractToReview.empresaNome
+            }}
+          </h2>
+        </div>
+
+        <button
+          type="button"
+          class="close-button"
+          (click)="fecharAvaliacao()"
+        >
+          ×
+        </button>
+
+      </header>
+
+      <form
+        [formGroup]="reviewForm"
+        (ngSubmit)="enviarAvaliacao()"
+      >
+
+        <label for="nota">
+          Nota
+        </label>
+
+        <select
+          id="nota"
+          formControlName="nota"
+        >
+          <option [ngValue]="5">★★★★★ — Excelente</option>
+          <option [ngValue]="4">★★★★☆ — Muito bom</option>
+          <option [ngValue]="3">★★★☆☆ — Bom</option>
+          <option [ngValue]="2">★★☆☆☆ — Regular</option>
+          <option [ngValue]="1">★☆☆☆☆ — Ruim</option>
+        </select>
+
+        <label for="comentario">
+          Comentário
+        </label>
+
+        <textarea
+          id="comentario"
+          rows="6"
+          maxlength="1500"
+          formControlName="comentario"
+          placeholder="Conte como foi sua experiência..."
+        ></textarea>
+
+        <div class="review-footer">
+
+          <button
+            type="button"
+            class="secondary-button"
+            (click)="fecharAvaliacao()"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            class="primary-button"
+            [disabled]="processingId !== null"
+          >
+            {{
+              processingId !== null
+                ? 'Enviando...'
+                : 'Enviar avaliação'
+            }}
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+  </div>
+
+}

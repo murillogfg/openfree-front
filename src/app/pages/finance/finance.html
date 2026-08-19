@@ -1,0 +1,517 @@
+<section class="finance-page">
+
+  <header class="page-header">
+
+    <div>
+      <span class="eyebrow">
+        Financeiro
+      </span>
+
+      <h1>
+        Pagamentos da empresa
+      </h1>
+
+      <p>
+        Gerencie pagamentos de profissionais,
+        valores protegidos e liberações de serviços concluídos.
+      </p>
+    </div>
+
+    <div class="security-badge">
+      <span>◆</span>
+
+      Pagamento protegido
+    </div>
+
+  </header>
+
+  @if (successMessage) {
+
+    <div class="feedback success">
+      <span>✓</span>
+      {{ successMessage }}
+    </div>
+
+  }
+
+  @if (errorMessage) {
+
+    <div class="feedback error">
+      <span>!</span>
+      {{ errorMessage }}
+    </div>
+
+  }
+
+  <section class="summary-grid">
+
+    <article class="summary-card pending">
+
+      <span>
+        Aguardando pagamento
+      </span>
+
+      <strong>
+        {{
+          aguardandoPagamento
+            | currency:'BRL'
+        }}
+      </strong>
+
+      <small>
+        Contratações ainda não pagas
+      </small>
+
+    </article>
+
+    <article class="summary-card protected">
+
+      <span>
+        Valor protegido
+      </span>
+
+      <strong>
+        {{
+          protegido
+            | currency:'BRL'
+        }}
+      </strong>
+
+      <small>
+        Pagamentos retidos pela plataforma
+      </small>
+
+    </article>
+
+    <article class="summary-card released">
+
+      <span>
+        Total liberado
+      </span>
+
+      <strong>
+        {{
+          liberado
+            | currency:'BRL'
+        }}
+      </strong>
+
+      <small>
+        Valores enviados aos profissionais
+      </small>
+
+    </article>
+
+  </section>
+
+  <section class="payments-section">
+
+    <header class="section-header">
+
+      <div>
+        <span class="eyebrow">
+          Contratações
+        </span>
+
+        <h2>
+          Movimentações
+        </h2>
+      </div>
+
+      <div class="filters">
+
+        <button
+          type="button"
+          [class.active]="
+            filtro === 'TODOS'
+          "
+          (click)="
+            definirFiltro('TODOS')
+          "
+        >
+          Todos
+        </button>
+
+        <button
+          type="button"
+          [class.active]="
+            filtro === 'AGUARDANDO_PAGAMENTO'
+          "
+          (click)="
+            definirFiltro(
+              'AGUARDANDO_PAGAMENTO'
+            )
+          "
+        >
+          Pendentes
+        </button>
+
+        <button
+          type="button"
+          [class.active]="
+            filtro === 'RETIDO'
+          "
+          (click)="
+            definirFiltro('RETIDO')
+          "
+        >
+          Protegidos
+        </button>
+
+        <button
+          type="button"
+          [class.active]="
+            filtro === 'LIBERADO'
+          "
+          (click)="
+            definirFiltro('LIBERADO')
+          "
+        >
+          Liberados
+        </button>
+
+      </div>
+
+    </header>
+
+    @if (loading) {
+
+      <div class="loading-state">
+        <div class="loader"></div>
+
+        <p>
+          Carregando pagamentos...
+        </p>
+      </div>
+
+    }
+
+    @else if (
+      paymentsFiltrados.length === 0
+    ) {
+
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          $
+        </div>
+
+        <h2>
+          Nenhum pagamento encontrado
+        </h2>
+
+        <p>
+          Os pagamentos aparecerão aqui
+          conforme profissionais forem contratados.
+        </p>
+
+      </div>
+
+    }
+
+    @else {
+
+      <div class="payments-list">
+
+        @for (
+          payment of paymentsFiltrados;
+          track payment.id
+        ) {
+
+          <article class="payment-card">
+
+            <div class="avatar">
+              {{
+                payment.freelancerNome
+                  ? payment.freelancerNome
+                      .charAt(0)
+                      .toUpperCase()
+                  : 'F'
+              }}
+            </div>
+
+            <div class="payment-content">
+
+              <div class="payment-heading">
+
+                <div>
+                  <h3>
+                    {{ payment.freelancerNome }}
+                  </h3>
+
+                  <span>
+                    {{ payment.vagaTitulo }}
+                  </span>
+                </div>
+
+                <span
+                  class="status"
+                  [class.pending]="
+                    payment.status ===
+                    'AGUARDANDO_PAGAMENTO'
+                  "
+                  [class.protected]="
+                    payment.status ===
+                    'RETIDO'
+                  "
+                  [class.released]="
+                    payment.status ===
+                    'LIBERADO'
+                  "
+                >
+
+                  @if (
+                    payment.status ===
+                    'AGUARDANDO_PAGAMENTO'
+                  ) {
+                    Aguardando pagamento
+                  }
+
+                  @else if (
+                    payment.status ===
+                    'RETIDO'
+                  ) {
+                    Protegido
+                  }
+
+                  @else if (
+                    payment.status ===
+                    'LIBERADO'
+                  ) {
+                    Liberado
+                  }
+
+                  @else {
+                    {{ payment.status }}
+                  }
+
+                </span>
+
+              </div>
+
+              <div class="financial-breakdown">
+
+                <div>
+                  <small>
+                    Valor contratado
+                  </small>
+
+                  <strong>
+                    {{
+                      payment.valorBruto
+                        | currency:'BRL'
+                    }}
+                  </strong>
+                </div>
+
+                <div>
+                  <small>
+                    Taxa OpenFree
+                  </small>
+
+                  <strong>
+                    {{
+                      payment.taxaPlataforma
+                        | currency:'BRL'
+                    }}
+                  </strong>
+                </div>
+
+                <div>
+                  <small>
+                    Profissional recebe
+                  </small>
+
+                  <strong class="net-value">
+                    {{
+                      payment.valorLiquido
+                        | currency:'BRL'
+                    }}
+                  </strong>
+                </div>
+
+              </div>
+
+              @if (
+                payment.status ===
+                'AGUARDANDO_PAGAMENTO'
+              ) {
+
+                <div class="payment-action">
+
+                  <div class="payment-method">
+
+                    <label>
+                      Método de pagamento
+                    </label>
+
+                    <select
+                      [value]="
+                        selectedMethods[payment.id]
+                        ?? 'PIX'
+                      "
+                      (change)="
+                        alterarMetodo(
+                          payment.id,
+                          $event
+                        )
+                      "
+                    >
+                      <option value="PIX">
+                        PIX
+                      </option>
+
+                      <option value="CARTAO">
+                        Cartão
+                      </option>
+
+                      <option value="BOLETO">
+                        Boleto
+                      </option>
+
+                      <option value="SALDO">
+                        Saldo OpenFree
+                      </option>
+                    </select>
+
+                  </div>
+
+                  <button
+                    type="button"
+                    class="pay-button"
+                    [disabled]="
+                      processingId !== null
+                    "
+                    (click)="pagar(payment)"
+                  >
+
+                    {{
+                      processingId === payment.id
+                        ? 'Processando...'
+                        : 'Confirmar pagamento'
+                    }}
+
+                  </button>
+
+                </div>
+
+              }
+
+              @else if (
+                payment.status === 'RETIDO'
+              ) {
+
+                <div class="protected-banner">
+
+                  <div>
+                    <span class="shield">
+                      ◆
+                    </span>
+
+                    <div>
+                      <strong>
+                        Pagamento protegido
+                      </strong>
+
+                      <p>
+                        O valor está reservado.
+                        Libere após a conclusão do serviço.
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    class="release-button"
+                    [disabled]="
+                      processingId !== null
+                    "
+                    (click)="liberar(payment)"
+                  >
+
+                    {{
+                      processingId === payment.id
+                        ? 'Liberando...'
+                        : 'Liberar pagamento'
+                    }}
+
+                  </button>
+
+                </div>
+
+              }
+
+              @else if (
+                payment.status === 'LIBERADO'
+              ) {
+
+                <div class="released-banner">
+
+                  <span>✓</span>
+
+                  <div>
+                    <strong>
+                      Pagamento concluído
+                    </strong>
+
+                    <p>
+                      O valor foi liberado ao profissional.
+
+                      @if (payment.liberadoEm) {
+                        {{
+                          payment.liberadoEm
+                            | date:'dd/MM/yyyy HH:mm'
+                        }}
+                      }
+                    </p>
+                  </div>
+
+                </div>
+
+              }
+
+              <footer>
+
+                <div class="metadata">
+
+                  <span>
+                    Contratação
+                    #{{ payment.candidaturaId }}
+                  </span>
+
+                  @if (payment.metodo) {
+                    <span>
+                      {{ payment.metodo }}
+                    </span>
+                  }
+
+                  @if (payment.externalId) {
+                    <span>
+                      {{ payment.externalId }}
+                    </span>
+                  }
+
+                </div>
+
+                <span class="created-date">
+                  {{
+                    payment.createdAt
+                      | date:'dd/MM/yyyy'
+                  }}
+                </span>
+
+              </footer>
+
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+    }
+
+  </section>
+
+</section>

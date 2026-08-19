@@ -1,0 +1,332 @@
+<section class="earnings-page">
+
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">
+        Financeiro
+      </span>
+
+      <h1>Seus ganhos</h1>
+
+      <p>
+        Acompanhe valores recebidos, protegidos e ainda pendentes
+        das suas contratações pela OpenFree.
+      </p>
+    </div>
+
+    <div class="launch-badge">
+      <span>0%</span>
+      taxa de lançamento
+    </div>
+  </header>
+
+  <section class="financial-summary">
+
+    <article class="summary-card">
+      <span class="summary-label">
+        Total recebido
+      </span>
+
+      <strong>
+        {{ totalRecebido | currency:'BRL' }}
+      </strong>
+
+      <small>
+        Valores já liberados
+      </small>
+    </article>
+
+    <article class="summary-card protected">
+      <span class="summary-label">
+        Protegido
+      </span>
+
+      <strong>
+        {{ aguardandoLiberacao | currency:'BRL' }}
+      </strong>
+
+      <small>
+        Pagamentos retidos
+      </small>
+    </article>
+
+    <article class="summary-card pending">
+      <span class="summary-label">
+        A receber
+      </span>
+
+      <strong>
+        {{ aReceber | currency:'BRL' }}
+      </strong>
+
+      <small>
+        Aguardando pagamento
+      </small>
+    </article>
+
+  </section>
+
+  <section class="history-section">
+
+    <div class="section-header">
+
+      <div>
+        <span class="eyebrow">
+          Movimentações
+        </span>
+
+        <h2>
+          Histórico financeiro
+        </h2>
+      </div>
+
+      <div class="filters">
+
+        <button
+          type="button"
+          [class.active]="filtro === 'TODOS'"
+          (click)="definirFiltro('TODOS')"
+        >
+          Todos
+        </button>
+
+        <button
+          type="button"
+          [class.active]="filtro === 'AGUARDANDO_PAGAMENTO'"
+          (click)="definirFiltro('AGUARDANDO_PAGAMENTO')"
+        >
+          Pendentes
+        </button>
+
+        <button
+          type="button"
+          [class.active]="filtro === 'RETIDO'"
+          (click)="definirFiltro('RETIDO')"
+        >
+          Protegidos
+        </button>
+
+        <button
+          type="button"
+          [class.active]="filtro === 'LIBERADO'"
+          (click)="definirFiltro('LIBERADO')"
+        >
+          Recebidos
+        </button>
+
+      </div>
+
+    </div>
+
+    @if (loading) {
+
+      <div class="loading-state">
+        <div class="loader"></div>
+        <p>Carregando movimentações...</p>
+      </div>
+
+    }
+
+    @else if (errorMessage) {
+
+      <div class="error-state">
+        <div>
+          <strong>
+            Não foi possível carregar seus ganhos.
+          </strong>
+
+          <p>
+            {{ errorMessage }}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          (click)="carregar()"
+        >
+          Tentar novamente
+        </button>
+      </div>
+
+    }
+
+    @else if (paymentsFiltrados.length === 0) {
+
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          $
+        </div>
+
+        <h2>
+          Nenhuma movimentação encontrada
+        </h2>
+
+        <p>
+          Seus pagamentos aparecerão aqui quando uma contratação
+          for iniciada.
+        </p>
+
+        <a routerLink="/jobs">
+          Explorar oportunidades
+        </a>
+
+      </div>
+
+    }
+
+    @else {
+
+      <div class="payments-list">
+
+        @for (
+          payment of paymentsFiltrados;
+          track payment.id
+        ) {
+
+          <article class="payment-card">
+
+            <div class="payment-icon">
+              $
+            </div>
+
+            <div class="payment-content">
+
+              <div class="payment-heading">
+
+                <div>
+                  <h3>
+                    {{ payment.vagaTitulo }}
+                  </h3>
+
+                  <span>
+                    {{ payment.empresaNome }}
+                  </span>
+                </div>
+
+                <span
+                  class="status"
+                  [class.pending]="
+                    payment.status === 'AGUARDANDO_PAGAMENTO'
+                  "
+                  [class.protected]="
+                    payment.status === 'RETIDO'
+                  "
+                  [class.released]="
+                    payment.status === 'LIBERADO'
+                  "
+                  [class.cancelled]="
+                    payment.status === 'CANCELADO'
+                    || payment.status === 'ESTORNADO'
+                  "
+                >
+                  @if (
+                    payment.status === 'AGUARDANDO_PAGAMENTO'
+                  ) {
+                    Aguardando pagamento
+                  }
+
+                  @else if (payment.status === 'RETIDO') {
+                    Protegido
+                  }
+
+                  @else if (payment.status === 'LIBERADO') {
+                    Liberado
+                  }
+
+                  @else {
+                    {{ payment.status }}
+                  }
+                </span>
+
+              </div>
+
+              <div class="values-grid">
+
+                <div>
+                  <small>
+                    Valor do serviço
+                  </small>
+
+                  <strong>
+                    {{ payment.valorBruto | currency:'BRL' }}
+                  </strong>
+                </div>
+
+                <div>
+                  <small>
+                    Taxa OpenFree
+                  </small>
+
+                  <strong>
+                    {{ payment.taxaPlataforma | currency:'BRL' }}
+                  </strong>
+                </div>
+
+                <div class="net-value">
+                  <small>
+                    Você recebe
+                  </small>
+
+                  <strong>
+                    {{ payment.valorLiquido | currency:'BRL' }}
+                  </strong>
+                </div>
+
+              </div>
+
+              <footer>
+
+                <div class="payment-meta">
+
+                  <span>
+                    Criado em
+                    {{
+                      payment.createdAt
+                        | date:'dd/MM/yyyy'
+                    }}
+                  </span>
+
+                  @if (payment.metodo) {
+                    <span>
+                      {{ payment.metodo }}
+                    </span>
+                  }
+
+                  @if (payment.pagoEm) {
+                    <span>
+                      Pago em
+                      {{
+                        payment.pagoEm
+                          | date:'dd/MM/yyyy'
+                      }}
+                    </span>
+                  }
+
+                </div>
+
+                <a
+                  [routerLink]="[
+                    '/jobs',
+                    payment.vagaId
+                  ]"
+                >
+                  Ver vaga
+                  <span>→</span>
+                </a>
+
+              </footer>
+
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+    }
+
+  </section>
+
+</section>

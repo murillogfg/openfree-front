@@ -1,0 +1,356 @@
+<section class="job-form-page">
+
+  <header class="page-header">
+
+    <div>
+      <span class="eyebrow">
+        NOVA OPORTUNIDADE
+      </span>
+
+      <h1>
+        Publicar vaga
+      </h1>
+
+      <p>
+        Encontre profissionais para o seu próximo
+        trabalho ou evento.
+      </p>
+    </div>
+
+  </header>
+
+  <form
+    class="job-form"
+    [formGroup]="form"
+    (ngSubmit)="publicar()"
+  >
+
+    <!-- INFORMAÇÕES PRINCIPAIS -->
+
+    <section class="form-card">
+
+      <div class="card-header">
+        <div>
+          <span class="section-label">
+            INFORMAÇÕES PRINCIPAIS
+          </span>
+
+          <h2>
+            Sobre a oportunidade
+          </h2>
+        </div>
+
+        <span class="card-icon">
+          ◇
+        </span>
+      </div>
+
+      <div class="field">
+
+        <label for="titulo">
+          Título da vaga
+        </label>
+
+        <input
+          id="titulo"
+          type="text"
+          formControlName="titulo"
+          maxlength="120"
+          placeholder="Ex.: Freelancer para evento"
+        >
+
+        @if (
+          form.controls.titulo.touched &&
+          form.controls.titulo.invalid
+        ) {
+          <small class="field-error">
+            Informe o título da vaga.
+          </small>
+        }
+
+      </div>
+
+      <div class="field">
+
+        <label for="descricao">
+          Descrição
+        </label>
+
+        <textarea
+          id="descricao"
+          formControlName="descricao"
+          rows="6"
+          placeholder="Descreva o trabalho, responsabilidades e outras informações importantes..."
+        ></textarea>
+
+        @if (
+          form.controls.descricao.touched &&
+          form.controls.descricao.invalid
+        ) {
+          <small class="field-error">
+            Informe uma descrição.
+          </small>
+        }
+
+      </div>
+
+      <div class="field">
+
+        <label for="requisitos">
+          Requisitos
+          <span>Opcional</span>
+        </label>
+
+        <textarea
+          id="requisitos"
+          formControlName="requisitos"
+          maxlength="1000"
+          rows="4"
+          placeholder="Ex.: experiência com eventos, disponibilidade no período..."
+        ></textarea>
+
+      </div>
+
+    </section>
+
+    <!-- LOCAL -->
+
+    <section class="form-card">
+
+      <div class="card-header">
+
+        <div>
+          <span class="section-label">
+            LOCALIZAÇÃO
+          </span>
+
+          <h2>
+            Onde será realizado?
+          </h2>
+        </div>
+
+        <span class="card-icon">
+          ◎
+        </span>
+
+      </div>
+
+      <div class="form-grid">
+
+        <div class="field">
+
+          <label for="cidade">
+            Cidade
+          </label>
+
+          <input
+            id="cidade"
+            type="text"
+            formControlName="cidade"
+            placeholder="São Paulo"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label for="estado">
+            Estado
+          </label>
+
+          <input
+            id="estado"
+            type="text"
+            formControlName="estado"
+            maxlength="2"
+            placeholder="SP"
+          >
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- SERVIÇO -->
+
+    <section class="form-card">
+
+      <div class="card-header">
+
+        <div>
+          <span class="section-label">
+            SERVIÇO
+          </span>
+
+          <h2>
+            Data e horário
+          </h2>
+        </div>
+
+        <span class="card-icon">
+          ◷
+        </span>
+
+      </div>
+
+      <div class="form-grid">
+
+        <div class="field">
+
+          <label for="dataServico">
+            Data
+          </label>
+
+          <input
+            id="dataServico"
+            type="date"
+            formControlName="dataServico"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label for="quantidadePessoas">
+            Profissionais necessários
+          </label>
+
+          <input
+            id="quantidadePessoas"
+            type="number"
+            min="1"
+            formControlName="quantidadePessoas"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label for="horarioInicio">
+            Horário de início
+          </label>
+
+          <input
+            id="horarioInicio"
+            type="time"
+            formControlName="horarioInicio"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label for="horarioFim">
+            Horário de término
+          </label>
+
+          <input
+            id="horarioFim"
+            type="time"
+            formControlName="horarioFim"
+          >
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- PAGAMENTO -->
+
+    <section class="form-card">
+
+      <div class="card-header">
+
+        <div>
+          <span class="section-label">
+            PAGAMENTO
+          </span>
+
+          <h2>
+            Valor da oportunidade
+          </h2>
+        </div>
+
+        <span class="card-icon">
+          $
+        </span>
+
+      </div>
+
+      <div class="field">
+
+        <label for="valor">
+          Valor
+        </label>
+
+        <div class="money-input">
+
+          <span>
+            R$
+          </span>
+
+          <input
+            id="valor"
+            type="number"
+            min="0.01"
+            step="0.01"
+            formControlName="valor"
+            placeholder="250,00"
+          >
+
+        </div>
+
+        @if (
+          form.controls.valor.touched &&
+          form.controls.valor.invalid
+        ) {
+          <small class="field-error">
+            Informe um valor maior que zero.
+          </small>
+        }
+
+      </div>
+
+    </section>
+
+    @if (errorMessage) {
+      <div class="alert error">
+        {{ errorMessage }}
+      </div>
+    }
+
+    @if (successMessage) {
+      <div class="alert success">
+        {{ successMessage }}
+      </div>
+    }
+
+    <div class="form-actions">
+
+            <button
+        type="button"
+        class="secondary-button"
+        (click)="cancelar()"
+            >
+            Cancelar
+            </button>
+
+      <button
+        type="submit"
+        class="primary-button"
+        [disabled]="loading"
+      >
+        @if (loading) {
+          Publicando...
+        } @else {
+          Publicar vaga
+        }
+      </button>
+
+    </div>
+
+  </form>
+
+</section>

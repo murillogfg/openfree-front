@@ -1,0 +1,278 @@
+
+
+
+
+
+<section class="job-details-page">
+
+  @if (loading) {
+    <div class="loading-state">
+      <div class="loader"></div>
+      <p>Carregando oportunidade...</p>
+    </div>
+  }
+
+  @else if (errorMessage && !job) {
+    <div class="error-state">
+      <strong>Não foi possível abrir esta vaga.</strong>
+      <p>{{ errorMessage }}</p>
+
+      <a routerLink="/jobs">
+        Voltar para as vagas
+      </a>
+    </div>
+  }
+
+  @else if (job) {
+
+    <a
+      routerLink="/jobs"
+      class="back-link"
+    >
+      ← Voltar para vagas
+    </a>
+
+    <header class="job-hero">
+      <div class="company-logo">
+        {{ job.empresaNome.charAt(0).toUpperCase() }}
+      </div>
+
+      <div class="hero-copy">
+        <span class="eyebrow">
+          Oportunidade publicada
+        </span>
+
+        <h1>{{ job.titulo }}</h1>
+
+        <div class="company-name">
+          {{ job.empresaNome }}
+        </div>
+
+        <div class="location">
+          {{ job.cidade }} · {{ job.estado }}
+        </div>
+      </div>
+
+      <span class="status-badge">
+        {{ job.status }}
+      </span>
+    </header>
+
+    @if (successMessage) {
+      <div class="success-message">
+        <span>✓</span>
+
+        <div>
+          <strong>Candidatura enviada.</strong>
+          <p>{{ successMessage }}</p>
+        </div>
+
+        <a routerLink="/applications">
+          Minhas candidaturas →
+        </a>
+      </div>
+    }
+
+    <div class="details-grid">
+
+      <main class="main-content">
+
+        <section class="panel">
+          <span class="eyebrow">Sobre a vaga</span>
+          <h2>Descrição</h2>
+
+          <p class="long-text">
+            {{ job.descricao }}
+          </p>
+        </section>
+
+        <section class="panel">
+          <span class="eyebrow">Perfil esperado</span>
+          <h2>Requisitos</h2>
+
+          <p class="long-text">
+            {{ job.requisitos }}
+          </p>
+        </section>
+
+        <section class="panel">
+          <span class="eyebrow">Informações do serviço</span>
+          <h2>Detalhes</h2>
+
+          <div class="info-grid">
+            <div>
+              <small>Data</small>
+              <strong>
+                {{ job.dataServico | date:'dd/MM/yyyy' }}
+              </strong>
+            </div>
+
+            <div>
+              <small>Horário</small>
+              <strong>
+                {{ job.horarioInicio.slice(0, 5) }}
+                –
+                {{ job.horarioFim.slice(0, 5) }}
+              </strong>
+            </div>
+
+            <div>
+              <small>Profissionais</small>
+              <strong>
+                {{ job.quantidadePessoas }}
+              </strong>
+            </div>
+
+            <div>
+              <small>Local</small>
+              <strong>
+                {{ job.cidade }} · {{ job.estado }}
+              </strong>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <aside class="application-card">
+
+        <span class="eyebrow">
+          Valor da oportunidade
+        </span>
+
+        <strong class="price">
+          {{ job.valor | currency:'BRL' }}
+        </strong>
+
+        <p>
+          Envie uma mensagem para a empresa e,
+          caso necessário, apresente sua proposta.
+        </p>
+
+        <button
+          type="button"
+          (click)="abrirModal()"
+        >
+          Candidatar-se
+        </button>
+
+        <small>
+          Sua candidatura ficará visível para a empresa.
+        </small>
+      </aside>
+
+    </div>
+  }
+
+</section>
+
+@if (modalOpen && job) {
+  <div
+    class="modal-backdrop"
+    (click)="fecharModal()"
+  >
+    <section
+      class="application-modal"
+      (click)="$event.stopPropagation()"
+    >
+      <header>
+        <div>
+          <span class="eyebrow">
+            Nova candidatura
+          </span>
+
+          <h2>{{ job.titulo }}</h2>
+        </div>
+
+        <button
+          type="button"
+          class="close-button"
+          aria-label="Fechar"
+          (click)="fecharModal()"
+        >
+          ×
+        </button>
+      </header>
+
+      <form
+        [formGroup]="applicationForm"
+        (ngSubmit)="candidatarSe()"
+      >
+        <label for="mensagem">
+          Mensagem para a empresa
+        </label>
+
+        <textarea
+          id="mensagem"
+          rows="6"
+          maxlength="1000"
+          formControlName="mensagem"
+          placeholder="Apresente-se e explique por que você é uma boa escolha..."
+        ></textarea>
+
+        <div class="field-footer">
+          <small>
+            Máximo de 1000 caracteres.
+          </small>
+
+          <span>
+            {{ applicationForm.controls.mensagem.value.length }}
+            / 1000
+          </span>
+        </div>
+
+        <label for="valorProposto">
+          Valor proposto
+          <small>Opcional</small>
+        </label>
+
+        <input
+          id="valorProposto"
+          type="number"
+          min="0.01"
+          step="0.01"
+          formControlName="valorProposto"
+          placeholder="Ex.: 250,00"
+        >
+
+        @if (
+          applicationForm.controls.valorProposto.touched
+          && applicationForm.controls.valorProposto.invalid
+        ) {
+          <small class="field-error">
+            O valor deve ser maior que zero.
+          </small>
+        }
+
+        @if (errorMessage) {
+          <div class="modal-error">
+            {{ errorMessage }}
+          </div>
+        }
+
+        <footer>
+          <button
+            type="button"
+            class="secondary-button"
+            [disabled]="applying"
+            (click)="fecharModal()"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            class="primary-button"
+            [disabled]="applying"
+          >
+            {{
+              applying
+                ? 'Enviando...'
+                : 'Confirmar candidatura'
+            }}
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+}

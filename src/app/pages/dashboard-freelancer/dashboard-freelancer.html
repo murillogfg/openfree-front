@@ -60,38 +60,50 @@
     </header>
 
     <div class="primary-grid">
-  <app-stat-card
-    title="Candidaturas enviadas"
-    [value]="dashboard.candidaturasEnviadas"
-    icon="▤"
-    description="Total"
-    variant="primary"
-  />
+      <article class="metric-card featured">
+        <div class="metric-icon">▤</div>
 
-  <app-stat-card
-    title="Vagas favoritas"
-    [value]="dashboard.favoritos"
-    icon="★"
-    description="Salvas"
-    variant="warning"
-  />
+        <div class="metric-copy">
+          <span>Candidaturas enviadas</span>
+          <strong>{{ dashboard.candidaturasEnviadas }}</strong>
+        </div>
 
-  <app-stat-card
-    title="Mensagens não lidas"
-    [value]="dashboard.mensagensNaoLidas"
-    icon="◌"
-    description="Aguardando"
-    variant="success"
-  />
+        <a routerLink="/applications">Ver candidaturas →</a>
+      </article>
 
-  <app-stat-card
-    title="Notificações"
-    [value]="dashboard.notificacoesNaoLidas"
-    icon="♢"
-    description="Pendentes"
-    variant="danger"
-  />
-</div>
+      <article class="metric-card">
+        <div class="metric-icon">★</div>
+
+        <div class="metric-copy">
+          <span>Vagas favoritas</span>
+          <strong>{{ dashboard.favoritos }}</strong>
+        </div>
+
+        <a routerLink="/jobs">Explorar vagas →</a>
+      </article>
+
+      <article class="metric-card">
+        <div class="metric-icon">◌</div>
+
+        <div class="metric-copy">
+          <span>Mensagens não lidas</span>
+          <strong>{{ dashboard.mensagensNaoLidas }}</strong>
+        </div>
+
+        <a routerLink="/chat">Abrir conversas →</a>
+      </article>
+
+      <article class="metric-card">
+        <div class="metric-icon">♢</div>
+
+        <div class="metric-copy">
+          <span>Notificações</span>
+          <strong>{{ dashboard.notificacoesNaoLidas }}</strong>
+        </div>
+
+        <span class="card-caption">Itens aguardando atenção</span>
+      </article>
+    </div>
 
     <div class="content-grid">
 
@@ -270,5 +282,62 @@
 
     </div>
   }
+@if (!profileReady) {
+
+  <section class="onboarding-card">
+
+    <div class="onboarding-header">
+
+      <div>
+        <span class="eyebrow">
+          PRIMEIROS PASSOS
+        </span>
+
+        <h2>
+          Complete seu perfil
+        </h2>
+
+        <p>
+          Um perfil mais completo ajuda empresas
+          a entender melhor sua experiência.
+        </p>
+      </div>
+
+      <strong class="progress-value">
+        {{ profileCompletion }}%
+      </strong>
+
+    </div>
+
+    <div class="progress-track">
+      <div
+        class="progress-bar"
+        [style.width.%]="profileCompletion"
+      ></div>
+    </div>
+
+    <div class="onboarding-actions">
+
+      <a
+        routerLink="/profile"
+        class="primary-action"
+      >
+        Completar perfil
+      </a>
+
+      <a
+        routerLink="/jobs"
+        class="secondary-action"
+      >
+        Explorar vagas
+      </a>
+
+    </div>
+
+  </section>
+
+}
+
+  
 
 </section>

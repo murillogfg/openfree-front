@@ -1,0 +1,351 @@
+<section class="company-register-page">
+
+  <header class="page-header">
+
+    <div>
+      <span class="eyebrow">
+        PERFIL EMPRESARIAL
+      </span>
+
+      <h1>
+        Crie sua empresa
+      </h1>
+
+      <p>
+        Publique oportunidades, encontre profissionais
+        e gerencie contratações pela OpenFree.
+      </p>
+    </div>
+
+  </header>
+
+  <form
+    class="company-form"
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+  >
+
+    <section class="form-card">
+
+      <header class="card-header">
+
+        <div>
+          <span class="eyebrow">
+            EMPRESA
+          </span>
+
+          <h2>
+            Informações da empresa
+          </h2>
+        </div>
+
+        <span class="card-icon">
+          ◇
+        </span>
+
+      </header>
+
+      <div class="field">
+
+        <label for="razaoSocial">
+          Razão social
+        </label>
+
+        <input
+          id="razaoSocial"
+          type="text"
+          maxlength="150"
+          formControlName="razaoSocial"
+          placeholder="Ex.: Empresa Exemplo Ltda."
+        >
+
+        @if (
+          form.controls.razaoSocial.touched
+          && form.controls.razaoSocial.invalid
+        ) {
+          <small class="field-error">
+            Informe a razão social.
+          </small>
+        }
+
+      </div>
+
+      <div class="form-grid">
+
+        <div class="field">
+
+          <label for="nomeFantasia">
+            Nome fantasia
+          </label>
+
+          <input
+            id="nomeFantasia"
+            type="text"
+            maxlength="120"
+            formControlName="nomeFantasia"
+            placeholder="Ex.: Restaurante Exemplo"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label for="cnpj">
+            CNPJ
+          </label>
+
+          <input
+            id="cnpj"
+            type="text"
+            formControlName="cnpj"
+            placeholder="00.000.000/0000-00"
+          >
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="form-card">
+
+      <header class="card-header">
+
+        <div>
+          <span class="eyebrow">
+            CONTATO
+          </span>
+
+          <h2>
+            Como entrar em contato?
+          </h2>
+        </div>
+
+        <span class="card-icon">
+          @
+        </span>
+
+      </header>
+
+      <div class="form-grid">
+
+        <div class="field">
+
+          <label for="email">
+            E-mail empresarial
+          </label>
+
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="contato@empresa.com"
+          >
+
+          @if (
+            form.controls.email.touched
+            && form.controls.email.invalid
+          ) {
+            <small class="field-error">
+              Informe um e-mail válido.
+            </small>
+          }
+
+        </div>
+
+        <div class="field">
+
+          <label for="telefone">
+            Telefone
+            <span>Opcional</span>
+          </label>
+
+          <input
+            id="telefone"
+            type="text"
+            maxlength="20"
+            formControlName="telefone"
+            placeholder="(11) 99999-9999"
+          >
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="form-card">
+
+      <header class="card-header">
+
+        <div>
+          <span class="eyebrow">
+            APRESENTAÇÃO
+          </span>
+
+          <h2>
+            Conte sobre sua empresa
+          </h2>
+        </div>
+
+      </header>
+
+      <div class="field">
+
+        <label for="descricao">
+          Descrição
+          <span>Opcional</span>
+        </label>
+
+        <textarea
+          id="descricao"
+          rows="6"
+          maxlength="2000"
+          formControlName="descricao"
+          placeholder="Conte um pouco sobre sua empresa, área de atuação e cultura..."
+        ></textarea>
+
+        <small class="character-count">
+          {{
+            form.controls.descricao.value.length
+          }}
+          / 2000
+        </small>
+
+      </div>
+
+      <div class="field">
+
+        <label for="logo">
+          URL da logo
+          <span>Opcional</span>
+        </label>
+
+        <input
+          id="logo"
+          type="url"
+          maxlength="500"
+          formControlName="logo"
+          placeholder="https://..."
+        >
+
+        <small class="field-help">
+          Depois podemos substituir isso pelo upload
+          de imagem que já criamos no backend.
+        </small>
+
+      </div>
+
+    </section>
+
+    @if (errorMessage) {
+
+      <div class="error-message">
+        {{ errorMessage }}
+      </div>
+
+    }
+
+    <div class="form-actions">
+
+      <button
+        type="button"
+        class="secondary-button"
+        [disabled]="loading"
+        (click)="cancelar()"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="submit"
+        class="primary-button"
+        [disabled]="loading"
+      >
+        {{
+          loading
+            ? 'Criando empresa...'
+            : 'Criar perfil empresarial'
+        }}
+      </button>
+
+    </div>
+
+  </form>
+<section class="form-card">
+
+  <header class="card-header">
+
+    <div>
+      <span class="eyebrow">
+        LOCALIZAÇÃO
+      </span>
+
+      <h2>
+        Onde sua empresa está?
+      </h2>
+    </div>
+
+    <span class="card-icon">
+      ◎
+    </span>
+
+  </header>
+
+  <div class="form-grid">
+
+    <div class="field">
+
+      <label for="cidade">
+        Cidade
+        <span>Opcional</span>
+      </label>
+
+      <input
+        id="cidade"
+        type="text"
+        maxlength="100"
+        formControlName="cidade"
+        placeholder="São Paulo"
+      >
+
+    </div>
+
+    <div class="field">
+
+      <label for="estado">
+        Estado
+        <span>Opcional</span>
+      </label>
+
+      <input
+        id="estado"
+        type="text"
+        maxlength="2"
+        formControlName="estado"
+        placeholder="SP"
+      >
+
+    </div>
+
+  </div>
+
+  <div class="field">
+
+    <label for="site">
+      Site
+      <span>Opcional</span>
+    </label>
+
+    <input
+      id="site"
+      type="url"
+      maxlength="255"
+      formControlName="site"
+      placeholder="https://suaempresa.com.br"
+    >
+
+  </div>
+
+</section>
+</section>

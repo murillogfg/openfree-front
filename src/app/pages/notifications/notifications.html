@@ -1,0 +1,257 @@
+<section class="notifications-page">
+
+  <header class="page-header">
+
+    <div>
+      <span class="eyebrow">
+        Central
+      </span>
+
+      <h1>Notificações</h1>
+
+      <p>
+        Acompanhe atualizações de candidaturas,
+        contratações e atividades importantes da sua conta.
+      </p>
+    </div>
+
+    <div class="unread-counter">
+
+      <span>
+        {{ quantidadeNaoLidas }}
+      </span>
+
+      não lida(s)
+
+    </div>
+
+  </header>
+
+  <section class="notifications-panel">
+
+    <header class="panel-header">
+
+      <div>
+        <span class="eyebrow">
+          Atualizações
+        </span>
+
+        <h2>
+          Suas notificações
+        </h2>
+      </div>
+
+      <div class="filters">
+
+        <button
+          type="button"
+          [class.active]="
+            filtro === 'TODAS'
+          "
+          (click)="
+            definirFiltro('TODAS')
+          "
+        >
+          Todas
+        </button>
+
+        <button
+          type="button"
+          [class.active]="
+            filtro === 'NAO_LIDAS'
+          "
+          (click)="
+            definirFiltro('NAO_LIDAS')
+          "
+        >
+          Não lidas
+        </button>
+
+      </div>
+
+    </header>
+
+    @if (loading) {
+
+      <div class="loading-state">
+
+        <div class="loader"></div>
+
+        <p>
+          Carregando notificações...
+        </p>
+
+      </div>
+
+    }
+
+    @else if (errorMessage) {
+
+      <div class="error-state">
+
+        <div>
+          <strong>
+            Não foi possível carregar as notificações.
+          </strong>
+
+          <p>
+            {{ errorMessage }}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          (click)="carregar()"
+        >
+          Tentar novamente
+        </button>
+
+      </div>
+
+    }
+
+    @else if (
+      notificationsFiltradas.length === 0
+    ) {
+
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          ◇
+        </div>
+
+        <h2>
+          Nenhuma notificação
+        </h2>
+
+        <p>
+          Quando houver novidades importantes,
+          elas aparecerão aqui.
+        </p>
+
+      </div>
+
+    }
+
+    @else {
+
+      <div class="notifications-list">
+
+        @for (
+          notification of notificationsFiltradas;
+          track notification.id
+        ) {
+
+          <article
+            class="notification-card"
+            [class.unread]="
+              !notification.lida
+            "
+          >
+
+            <div
+              class="notification-icon"
+              [class.success]="
+                notification.tipo === 'SUCCESS'
+              "
+              [class.warning]="
+                notification.tipo === 'WARNING'
+              "
+              [class.error]="
+                notification.tipo === 'ERROR'
+              "
+              [class.info]="
+                notification.tipo === 'INFO'
+              "
+            >
+              {{ icone(notification.tipo) }}
+            </div>
+
+            <div class="notification-content">
+
+              <header>
+
+                <div>
+                  <h3>
+                    {{ notification.titulo }}
+                  </h3>
+
+                  <span>
+                    {{
+                      notification.createdAt
+                        | date:'dd/MM/yyyy HH:mm'
+                    }}
+                  </span>
+                </div>
+
+                @if (!notification.lida) {
+
+                  <span class="new-badge">
+                    Nova
+                  </span>
+
+                }
+
+              </header>
+
+              <p>
+                {{ notification.mensagem }}
+              </p>
+
+              <footer>
+
+                <span
+                  class="notification-type"
+                >
+                  {{ notification.tipo }}
+                </span>
+
+                @if (!notification.lida) {
+
+                  <button
+                    type="button"
+                    [disabled]="
+                      processingId === notification.id
+                    "
+                    (click)="
+                      marcarComoLida(notification)
+                    "
+                  >
+
+                    {{
+                      processingId === notification.id
+                        ? 'Marcando...'
+                        : 'Marcar como lida'
+                    }}
+
+                  </button>
+
+                }
+
+                @else if (notification.readAt) {
+
+                  <span class="read-info">
+                    Lida em
+                    {{
+                      notification.readAt
+                        | date:'dd/MM/yyyy HH:mm'
+                    }}
+                  </span>
+
+                }
+
+              </footer>
+
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+    }
+
+  </section>
+
+</section>

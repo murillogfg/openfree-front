@@ -1,1 +1,702 @@
-<p>profile works!</p>
+<section class="profile-page">
+
+  @if (loading) {
+
+    <div class="loading-state">
+      <div class="loader"></div>
+      <p>Carregando perfil...</p>
+    </div>
+
+  }
+
+  @else {
+
+    <header class="profile-header">
+
+      <div>
+        <span class="eyebrow">
+          Conta OpenFree
+        </span>
+
+        <h1>
+          {{
+            isCompany
+              ? 'Perfil da empresa'
+              : 'Seu perfil profissional'
+          }}
+        </h1>
+
+        <p>
+          {{
+            isCompany
+              ? 'Mantenha as informações da empresa atualizadas para transmitir mais confiança aos profissionais.'
+              : 'Seu perfil é sua vitrine. Mantenha suas informações, habilidades e documentos atualizados.'
+          }}
+        </p>
+      </div>
+
+      <div class="profile-status">
+        <span class="status-dot"></span>
+
+        {{
+          isCompany
+            ? 'Conta empresarial'
+            : 'Conta profissional'
+        }}
+      </div>
+
+    </header>
+
+    @if (successMessage) {
+      <div class="feedback success">
+        <span>✓</span>
+        <p>{{ successMessage }}</p>
+      </div>
+    }
+
+    @if (errorMessage) {
+      <div class="feedback error">
+        <span>!</span>
+        <p>{{ errorMessage }}</p>
+      </div>
+    }
+
+    @if (isCompany) {
+
+      <div class="profile-grid">
+
+        <aside class="identity-card">
+
+          <div class="avatar-wrapper">
+
+            @if (avatarUrl) {
+              <img
+                [src]="avatarUrl"
+                alt="Logo da empresa"
+              >
+            }
+
+            @else {
+              <div class="avatar-placeholder">
+                {{
+                  company?.nomeFantasia
+                    ? company?.nomeFantasia?.charAt(0)?.toUpperCase()
+                    : 'O'
+                }}
+              </div>
+            }
+
+            @if (uploading) {
+              <div class="upload-overlay">
+                <div class="loader small"></div>
+              </div>
+            }
+
+          </div>
+
+          <h2>
+            {{ company?.nomeFantasia || 'Sua empresa' }}
+          </h2>
+
+          <span class="identity-subtitle">
+            {{ company?.razaoSocial }}
+          </span>
+
+          <label class="upload-button">
+            Alterar logo
+
+            <input
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              (change)="selecionarAvatar($event)"
+              hidden
+            >
+          </label>
+
+          <div class="identity-meta">
+
+            <div>
+              <small>CNPJ</small>
+              <strong>
+                {{ company?.cnpj || 'Não informado' }}
+              </strong>
+            </div>
+
+            <div>
+              <small>E-mail</small>
+              <strong>
+                {{ company?.email || 'Não informado' }}
+              </strong>
+            </div>
+
+            <div>
+              <small>Status</small>
+
+              <span
+                class="verification-badge"
+                [class.verified]="company?.verificada"
+              >
+                {{
+                  company?.verificada
+                    ? 'Verificada'
+                    : 'Não verificada'
+                }}
+              </span>
+            </div>
+
+          </div>
+
+        </aside>
+
+        <main class="form-column">
+
+          <form
+            [formGroup]="companyForm"
+            (ngSubmit)="salvar()"
+          >
+
+            <section class="form-card">
+
+              <div class="section-heading">
+                <div>
+                  <span class="eyebrow">
+                    Informações públicas
+                  </span>
+
+                  <h2>
+                    Identidade da empresa
+                  </h2>
+                </div>
+
+                <span class="section-icon">
+                  ◇
+                </span>
+              </div>
+
+              <div class="form-grid">
+
+                <div class="field full">
+                  <label for="nomeFantasia">
+                    Nome fantasia
+                  </label>
+
+                  <input
+                    id="nomeFantasia"
+                    type="text"
+                    formControlName="nomeFantasia"
+                    placeholder="Nome exibido na plataforma"
+                  >
+                </div>
+
+                <div class="field">
+                  <label for="telefoneEmpresa">
+                    Telefone
+                  </label>
+
+                  <input
+                    id="telefoneEmpresa"
+                    type="text"
+                    formControlName="telefone"
+                    placeholder="(11) 99999-9999"
+                  >
+                </div>
+
+                <div class="field">
+                  <label for="site">
+                    Site
+                  </label>
+
+                  <input
+                    id="site"
+                    type="url"
+                    formControlName="site"
+                    placeholder="https://suaempresa.com"
+                  >
+                </div>
+
+                <div class="field">
+                  <label for="cidadeEmpresa">
+                    Cidade
+                  </label>
+
+                  <input
+                    id="cidadeEmpresa"
+                    type="text"
+                    formControlName="cidade"
+                    placeholder="São Paulo"
+                  >
+                </div>
+
+                <div class="field">
+                  <label for="estadoEmpresa">
+                    Estado
+                  </label>
+
+                  <input
+                    id="estadoEmpresa"
+                    type="text"
+                    maxlength="2"
+                    formControlName="estado"
+                    placeholder="SP"
+                  >
+                </div>
+
+              </div>
+
+            </section>
+
+            <section class="form-card">
+
+              <div class="section-heading">
+                <div>
+                  <span class="eyebrow">
+                    Apresentação
+                  </span>
+
+                  <h2>
+                    Sobre a empresa
+                  </h2>
+                </div>
+
+                <span class="section-icon">
+                  ✦
+                </span>
+              </div>
+
+              <div class="field">
+                <label for="descricaoEmpresa">
+                  Descrição
+                </label>
+
+                <textarea
+                  id="descricaoEmpresa"
+                  rows="7"
+                  formControlName="descricao"
+                  placeholder="Conte sobre a empresa, cultura, serviços e o tipo de profissional que vocês procuram..."
+                ></textarea>
+              </div>
+
+            </section>
+
+            <div class="form-actions">
+              <button
+                type="submit"
+                class="save-button"
+                [disabled]="saving"
+              >
+                {{
+                  saving
+                    ? 'Salvando...'
+                    : 'Salvar alterações'
+                }}
+              </button>
+            </div>
+
+          </form>
+
+        </main>
+
+      </div>
+
+    }
+
+    @else {
+
+      <div class="profile-grid">
+
+        <aside class="identity-card">
+
+          <div class="avatar-wrapper">
+
+            @if (avatarUrl) {
+              <img
+                [src]="avatarUrl"
+                alt="Foto de perfil"
+              >
+            }
+
+            @else {
+              <div class="avatar-placeholder">
+                {{
+                  freelancer?.nome
+                    ? freelancer?.nome?.charAt(0)?.toUpperCase()
+                    : 'O'
+                }}
+              </div>
+            }
+
+            @if (uploading) {
+              <div class="upload-overlay">
+                <div class="loader small"></div>
+              </div>
+            }
+
+          </div>
+
+          <h2>
+            {{ freelancer?.nome || 'Seu perfil' }}
+          </h2>
+
+          <span class="identity-subtitle">
+            {{
+              freelancer?.tituloProfissional
+                || 'Profissional OpenFree'
+            }}
+          </span>
+
+          <label class="upload-button">
+            Alterar foto
+
+            <input
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              (change)="selecionarAvatar($event)"
+              hidden
+            >
+          </label>
+
+          <div class="identity-meta">
+
+            <div>
+              <small>E-mail</small>
+              <strong>
+                {{ freelancer?.email }}
+              </strong>
+            </div>
+
+            <div>
+              <small>Localização</small>
+              <strong>
+                @if (
+                  freelancer?.cidade
+                  || freelancer?.estado
+                ) {
+                  {{ freelancer?.cidade }}
+                  {{ freelancer?.estado ? '· ' + freelancer?.estado : '' }}
+                }
+                @else {
+                  Não informada
+                }
+              </strong>
+            </div>
+
+          </div>
+
+        </aside>
+
+        <main class="form-column">
+
+          <form
+            [formGroup]="freelancerForm"
+            (ngSubmit)="salvar()"
+          >
+
+            <section class="form-card">
+
+              <div class="section-heading">
+                <div>
+                  <span class="eyebrow">
+                    Identidade profissional
+                  </span>
+
+                  <h2>
+                    Informações principais
+                  </h2>
+                </div>
+
+                <span class="section-icon">
+                  ◎
+                </span>
+              </div>
+
+              <div class="form-grid">
+
+                <div class="field">
+                  <label for="nome">
+                    Nome
+                  </label>
+
+                  <input
+                    id="nome"
+                    type="text"
+                    formControlName="nome"
+                    placeholder="Seu nome"
+                  >
+                </div>
+
+                <div class="field">
+                  <label for="tituloProfissional">
+                    Título profissional
+                  </label>
+
+                  <input
+                    id="tituloProfissional"
+                    type="text"
+                    formControlName="tituloProfissional"
+                    placeholder="Ex.: Desenvolvedor Full Stack"
+                  >
+                </div>
+
+                <div class="field">
+                  <label for="telefone">
+                    Telefone
+                  </label>
+
+                  <input
+                    id="telefone"
+                    type="text"
+                    formControlName="telefone"
+                    placeholder="(11) 99999-9999"
+                  >
+                </div>
+
+                <div class="field">
+                  <label for="portfolioUrl">
+                    Portfólio
+                  </label>
+
+                  <input
+                    id="portfolioUrl"
+                    type="url"
+                    formControlName="portfolioUrl"
+                    placeholder="https://..."
+                  >
+                </div>
+
+                <div class="field">
+                  <label for="cidade">
+                    Cidade
+                  </label>
+
+                  <input
+                    id="cidade"
+                    type="text"
+                    formControlName="cidade"
+                    placeholder="São Paulo"
+                  >
+                </div>
+
+                <div class="field">
+                  <label for="estado">
+                    Estado
+                  </label>
+
+                  <input
+                    id="estado"
+                    type="text"
+                    maxlength="2"
+                    formControlName="estado"
+                    placeholder="SP"
+                  >
+                </div>
+
+              </div>
+
+            </section>
+
+            <section class="form-card">
+
+              <div class="section-heading">
+                <div>
+                  <span class="eyebrow">
+                    Apresentação
+                  </span>
+
+                  <h2>
+                    Sobre você
+                  </h2>
+                </div>
+
+                <span class="section-icon">
+                  ✦
+                </span>
+              </div>
+
+              <div class="field">
+                <label for="biografia">
+                  Biografia
+                </label>
+
+                <textarea
+                  id="biografia"
+                  rows="7"
+                  formControlName="biografia"
+                  placeholder="Fale sobre sua experiência, perfil e objetivos profissionais..."
+                ></textarea>
+              </div>
+
+            </section>
+
+            <section class="form-card">
+
+              <div class="section-heading">
+                <div>
+                  <span class="eyebrow">
+                    Competências
+                  </span>
+
+                  <h2>
+                    Habilidades
+                  </h2>
+                </div>
+
+                <span class="section-icon">
+                  ⌘
+                </span>
+              </div>
+
+              <div class="field">
+                <label for="habilidades">
+                  Suas habilidades
+                </label>
+
+                <textarea
+                  id="habilidades"
+                  rows="4"
+                  formControlName="habilidades"
+                  placeholder="Java, Spring Boot, Angular, PostgreSQL..."
+                ></textarea>
+
+                <small class="field-help">
+                  Separe as habilidades por vírgula.
+                </small>
+              </div>
+
+            </section>
+
+            <section class="form-card document-card">
+
+              <div class="section-heading">
+                <div>
+                  <span class="eyebrow">
+                    Documentos
+                  </span>
+
+                  <h2>
+                    Currículo
+                  </h2>
+                </div>
+
+                <span class="section-icon">
+                  ▤
+                </span>
+              </div>
+
+              <div class="document-area">
+
+                <div class="document-icon">
+                  PDF
+                </div>
+
+                <div class="document-info">
+
+                  @if (freelancer?.curriculoUrl) {
+
+                    <strong>
+                      Currículo disponível
+                    </strong>
+
+                    <span>
+                      Seu currículo já está salvo na OpenFree.
+                    </span>
+
+                  }
+
+                  @else {
+
+                    <strong>
+                      Nenhum currículo enviado
+                    </strong>
+
+                    <span>
+                      Envie um arquivo PDF de até 10 MB.
+                    </span>
+
+                  }
+
+                </div>
+
+                <label class="document-button">
+
+                  {{
+                    freelancer?.curriculoUrl
+                      ? 'Substituir'
+                      : 'Enviar currículo'
+                  }}
+
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    (change)="selecionarCurriculo($event)"
+                    hidden
+                  >
+
+                </label>
+
+              </div>
+
+            </section>
+
+            <div class="form-actions">
+              <button
+                type="submit"
+                class="save-button"
+                [disabled]="saving"
+              >
+                {{
+                  saving
+                    ? 'Salvando...'
+                    : 'Salvar alterações'
+                }}
+              </button>
+            </div>
+
+          </form>
+
+        </main>
+
+      </div>
+
+      @if (isFreelancer) {
+
+        <section class="company-conversion-card">
+
+          <div class="company-conversion-icon">
+            ◇
+          </div>
+
+          <div class="company-conversion-content">
+
+            <span class="company-conversion-label">
+              PARA EMPRESAS
+            </span>
+
+            <h2>
+              Quer contratar profissionais?
+            </h2>
+
+            <p>
+              Crie gratuitamente seu perfil empresarial,
+              publique oportunidades e encontre profissionais
+              pela OpenFree.
+            </p>
+
+            <a
+              routerLink="/company/create"
+              class="company-conversion-button"
+            >
+              <span>＋</span>
+              Criar perfil empresarial
+            </a>
+
+          </div>
+
+        </section>
+
+      }
+
+    }
+
+  }
+
+</section>

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
+
 import {
   LoginRequest,
   LoginResponse,
@@ -15,13 +16,20 @@ import {
 })
 export class AuthService {
 
-  private readonly http = inject(HttpClient);
-  private readonly router = inject(Router);
+  private readonly http =
+    inject(HttpClient);
 
-  private readonly apiUrl = `${environment.apiUrl}/auth`;
+  private readonly router =
+    inject(Router);
 
-  private readonly tokenKey = 'openfree_token';
-  private readonly roleKey = 'openfree_role';
+  private readonly apiUrl =
+    `${environment.apiUrl}/auth`;
+
+  private readonly tokenKey =
+    'openfree_token';
+
+  private readonly roleKey =
+    'openfree_role';
 
   login(
     request: LoginRequest
@@ -34,6 +42,7 @@ export class AuthService {
       )
       .pipe(
         tap(response => {
+
           localStorage.setItem(
             this.tokenKey,
             response.token
@@ -43,17 +52,24 @@ export class AuthService {
             this.roleKey,
             response.role
           );
+
         })
       );
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+
+    return localStorage.getItem(
+      this.tokenKey
+    );
   }
 
   getRole(): UserRole | null {
+
     const role =
-      localStorage.getItem(this.roleKey);
+      localStorage.getItem(
+        this.roleKey
+      );
 
     if (
       role === 'FREELANCER'
@@ -66,27 +82,47 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return Boolean(this.getToken());
+
+    return Boolean(
+      this.getToken()
+    );
   }
 
   isCompany(): boolean {
-    return this.getRole() === 'EMPRESA';
+
+    return (
+      this.getRole()
+      === 'EMPRESA'
+    );
   }
 
   isFreelancer(): boolean {
-    return this.getRole() === 'FREELANCER';
+
+    return (
+      this.getRole()
+      === 'FREELANCER'
+    );
   }
 
   getDefaultDashboard(): string {
+
     return this.isCompany()
       ? '/dashboard/company'
       : '/dashboard/freelancer';
   }
 
   logout(): void {
-    localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem(this.roleKey);
 
-    this.router.navigate(['/login']);
+    localStorage.removeItem(
+      this.tokenKey
+    );
+
+    localStorage.removeItem(
+      this.roleKey
+    );
+
+    this.router.navigate([
+      '/login'
+    ]);
   }
 }

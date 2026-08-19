@@ -60,7 +60,66 @@
         <span class="arrow">→</span>
       </a>
     </header>
+@if (!companyProfileReady) {
 
+  <section class="company-onboarding">
+
+    <div class="onboarding-header">
+
+      <div>
+
+        <span class="eyebrow">
+          PRIMEIROS PASSOS
+        </span>
+
+        <h2>
+          Prepare sua empresa para contratar
+        </h2>
+
+        <p>
+          Complete as informações da empresa
+          para transmitir mais confiança aos
+          profissionais da OpenFree.
+        </p>
+
+      </div>
+
+      <div class="completion-circle">
+        {{ companyProfileCompletion }}%
+      </div>
+
+    </div>
+
+    <div class="progress-track">
+
+      <div
+        class="progress-value"
+        [style.width.%]="companyProfileCompletion"
+      ></div>
+
+    </div>
+
+    <div class="onboarding-actions">
+
+      <a
+        routerLink="/profile"
+        class="secondary-action"
+      >
+        Completar empresa
+      </a>
+
+      <a
+        routerLink="/jobs/create"
+        class="primary-action"
+      >
+        ＋ Publicar primeira vaga
+      </a>
+
+    </div>
+
+  </section>
+
+}
     <div class="primary-grid">
 
       <app-stat-card
@@ -96,7 +155,63 @@
       />
 
     </div>
+<section class="company-quick-actions">
 
+  <a routerLink="/jobs/create">
+
+    <span class="quick-icon">
+      ＋
+    </span>
+
+    <div>
+      <strong>
+        Publicar vaga
+      </strong>
+
+      <small>
+        Encontre profissionais
+      </small>
+    </div>
+
+  </a>
+
+  <a routerLink="/jobs">
+
+    <span class="quick-icon">
+      ◇
+    </span>
+
+    <div>
+      <strong>
+        Minhas vagas
+      </strong>
+
+      <small>
+        Gerencie oportunidades
+      </small>
+    </div>
+
+  </a>
+
+  <a routerLink="/contracts">
+
+    <span class="quick-icon">
+      ▧
+    </span>
+
+    <div>
+      <strong>
+        Contratos
+      </strong>
+
+      <small>
+        Acompanhe contratações
+      </small>
+    </div>
+
+  </a>
+
+</section>
     <div class="content-grid">
 
       <section class="panel vacancies-panel">

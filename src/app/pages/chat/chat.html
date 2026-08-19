@@ -1,1 +1,374 @@
-<p>chat works!</p>
+<section class="chat-page">
+
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">Comunicação</span>
+      <h1>Mensagens</h1>
+
+      <p>
+        Converse diretamente sobre suas oportunidades
+        e contratações.
+      </p>
+    </div>
+
+    <div class="online-badge">
+      <span></span>
+      OpenFree Chat
+    </div>
+  </header>
+
+  @if (errorMessage) {
+    <div class="error-banner">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <div class="chat-shell">
+
+    <aside class="conversation-sidebar">
+
+      <div class="sidebar-header">
+        <strong>Conversas</strong>
+
+        <span>
+          {{ conversations.length }}
+        </span>
+      </div>
+
+      @if (loadingConversations) {
+
+        <div class="sidebar-loading">
+          <div class="loader"></div>
+          <span>Carregando...</span>
+        </div>
+
+      }
+
+      @else if (conversations.length === 0) {
+
+        <div class="conversation-empty">
+          <div>◌</div>
+
+          <strong>
+            Nenhuma conversa ainda
+          </strong>
+
+          <p>
+            Quando uma candidatura for aceita,
+            a conversa aparecerá aqui.
+          </p>
+        </div>
+
+      }
+
+      @else {
+
+        <div class="conversation-list">
+
+          @for (
+            conversation of conversations;
+            track conversation.id
+          ) {
+
+            <button
+              type="button"
+              class="conversation-item"
+              [class.active]="
+                selectedConversation?.id === conversation.id
+              "
+              (click)="selecionarConversa(conversation)"
+            >
+
+              <div class="avatar">
+                {{
+                  nomeContato(conversation)
+                    ? nomeContato(conversation)
+                        .charAt(0)
+                        .toUpperCase()
+                    : 'O'
+                }}
+              </div>
+
+              <div class="conversation-info">
+
+                <div class="conversation-title">
+                  <strong>
+                    {{ nomeContato(conversation) }}
+                  </strong>
+
+                  <small>
+                    {{
+                      conversation.updatedAt
+                        | date:'HH:mm'
+                    }}
+                  </small>
+                </div>
+
+                <span class="job-name">
+                  {{ conversation.vagaTitulo }}
+                </span>
+
+              </div>
+
+              @if (
+                conversation.mensagensNaoLidas > 0
+              ) {
+                <span class="unread-badge">
+                  {{ conversation.mensagensNaoLidas }}
+                </span>
+              }
+
+            </button>
+
+          }
+
+        </div>
+
+      }
+
+    </aside>
+
+    <main class="conversation-area">
+
+      @if (!selectedConversation) {
+
+        <div class="chat-empty-state">
+
+          <div class="chat-empty-icon">
+            ◌
+          </div>
+
+          <h2>
+            Selecione uma conversa
+          </h2>
+
+          <p>
+            Escolha uma conversa ao lado para começar.
+          </p>
+
+        </div>
+
+      }
+
+      @else {
+
+        <header class="conversation-header">
+
+          <div class="avatar large">
+            {{
+              nomeContatoSelecionado
+                ? nomeContatoSelecionado
+                    .charAt(0)
+                    .toUpperCase()
+                : 'O'
+            }}
+          </div>
+
+          <div>
+            <strong>
+              {{ nomeContatoSelecionado }}
+            </strong>
+
+            <span>
+              {{ selectedConversation.vagaTitulo }}
+            </span>
+          </div>
+
+         <div class="conversation-header-actions">
+
+  <div
+    class="conversation-status"
+    [class.closed]="conversaEncerrada"
+  >
+    <span></span>
+
+    {{
+      conversaEncerrada
+        ? 'Encerrada'
+        : 'Ativa'
+    }}
+  </div>
+
+  @if (
+    isCompany
+    && !conversaEncerrada
+  ) {
+
+    <button
+      type="button"
+      class="close-conversation-button"
+      [disabled]="closingConversation"
+      (click)="encerrarConversa()"
+    >
+      {{
+        closingConversation
+          ? 'Encerrando...'
+          : 'Encerrar conversa'
+      }}
+    </button>
+
+  }
+
+</div>
+
+        </header>
+
+        <div class="messages-area">
+
+          @if (loadingMessages) {
+
+            <div class="messages-loading">
+              <div class="loader"></div>
+              <span>Carregando mensagens...</span>
+            </div>
+
+          }
+
+          @else if (messages.length === 0) {
+
+            <div class="first-message-state">
+
+              <div>✦</div>
+
+              <strong>
+                Comece a conversa
+              </strong>
+
+              <p>
+                Envie a primeira mensagem sobre esta oportunidade.
+              </p>
+
+            </div>
+
+          }
+
+          @else {
+
+            @for (
+              message of messages;
+              track message.id
+            ) {
+
+              <div
+                class="message-row"
+                [class.mine]="
+                  mensagemEhMinha(message)
+                "
+              >
+
+                <div class="message-bubble">
+
+                  <p>
+                    {{ message.conteudo }}
+                  </p>
+
+                  <footer>
+                    <span>
+                      {{
+                        message.createdAt
+                          | date:'HH:mm'
+                      }}
+                    </span>
+
+                    @if (mensagemEhMinha(message)) {
+                      <span
+                        class="read-indicator"
+                        [class.read]="message.lida"
+                      >
+                        ✓✓
+                      </span>
+                    }
+
+                  </footer>
+
+                </div>
+
+              </div>
+
+            }
+
+          }
+
+        </div>
+
+      @if (conversaEncerrada) {
+
+  <div class="closed-conversation">
+
+    <span>✓</span>
+
+    <div>
+      <strong>
+        Conversa encerrada
+      </strong>
+
+      <p>
+        Esta contratação não aceita novas
+        mensagens neste chat.
+      </p>
+    </div>
+
+  </div>
+
+}
+
+@else {
+
+  <form
+    class="message-composer"
+    [formGroup]="messageForm"
+    (ngSubmit)="enviar()"
+  >
+
+    <button
+      type="button"
+      class="attachment-button"
+      title="Anexos em breve"
+      disabled
+    >
+      ＋
+    </button>
+
+    <textarea
+      rows="1"
+      maxlength="2000"
+      formControlName="conteudo"
+      placeholder="Digite uma mensagem..."
+    ></textarea>
+
+    <span class="character-count">
+      {{
+        messageForm
+          .controls
+          .conteudo
+          .value
+          .length
+      }}/2000
+    </span>
+
+    <button
+      type="submit"
+      class="send-button"
+      [disabled]="
+        messageForm.invalid
+        || sending
+      "
+    >
+      {{
+        sending
+          ? '...'
+          : '➜'
+      }}
+    </button>
+
+  </form>
+
+}
+
+      }
+
+    </main>
+
+  </div>
+
+</section>

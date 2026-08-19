@@ -1,0 +1,165 @@
+<main class="register-page">
+
+  <section class="register-card">
+
+    <div class="brand">
+
+      <span class="brand-mark">
+        OF
+      </span>
+
+      <div>
+        <h1>OpenFree</h1>
+
+        <p>
+          Crie sua conta profissional.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="heading">
+
+      <span>
+        NOVA CONTA
+      </span>
+
+      <h2>
+        Comece na OpenFree
+      </h2>
+
+      <p>
+        Cadastre-se gratuitamente para encontrar
+        oportunidades e construir seu perfil profissional.
+      </p>
+
+    </div>
+
+    <form
+      [formGroup]="registerForm"
+      (ngSubmit)="submit()"
+    >
+
+      <label for="nome">
+        Nome
+      </label>
+
+      <input
+        id="nome"
+        type="text"
+        formControlName="nome"
+        placeholder="Seu nome completo"
+      >
+
+      @if (
+        registerForm.controls.nome.touched
+        && registerForm.controls.nome.invalid
+      ) {
+        <small class="field-error">
+          Informe seu nome.
+        </small>
+      }
+
+      <label for="email">
+        E-mail
+      </label>
+
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="seu@email.com"
+      >
+
+      @if (
+        registerForm.controls.email.touched
+        && registerForm.controls.email.invalid
+      ) {
+        <small class="field-error">
+          Informe um e-mail válido.
+        </small>
+      }
+
+      <label for="telefone">
+        Telefone
+        <span>Opcional</span>
+      </label>
+
+      <input
+        id="telefone"
+        type="text"
+        formControlName="telefone"
+        placeholder="(11) 99999-9999"
+      >
+
+      <label for="senha">
+        Senha
+      </label>
+
+      <input
+        id="senha"
+        type="password"
+        formControlName="senha"
+        placeholder="Mínimo de 6 caracteres"
+      >
+
+      @if (
+        registerForm.controls.senha.touched
+        && registerForm.controls.senha.invalid
+      ) {
+        <small class="field-error">
+          A senha deve possuir ao menos 6 caracteres.
+        </small>
+      }
+
+      <label for="confirmarSenha">
+        Confirmar senha
+      </label>
+
+      <input
+        id="confirmarSenha"
+        type="password"
+        formControlName="confirmarSenha"
+        placeholder="Digite sua senha novamente"
+      >
+
+      @if (errorMessage) {
+        <div class="message error">
+          {{ errorMessage }}
+        </div>
+      }
+
+      @if (successMessage) {
+        <div class="message success">
+          {{ successMessage }}
+        </div>
+      }
+
+      <button
+        type="submit"
+        [disabled]="loading"
+      >
+        {{
+          loading
+            ? 'Criando conta...'
+            : 'Criar conta'
+        }}
+      </button>
+
+    </form>
+
+    <div class="login-link">
+
+      <span>
+        Já possui uma conta?
+      </span>
+
+      <a routerLink="/login">
+        Entrar
+      </a>
+
+    </div>
+
+  </section>
+
+</main>

@@ -10,6 +10,11 @@ import { DashboardEmpresa } from '../../core/models/dashboard.models';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { StatCard } from '../../shared/components/stat-card/stat-card';
 
+import { CompaniesService } from '../../core/services/companies.service';
+
+
+
+
 @Component({
   selector: 'app-dashboard-company',
   standalone: true,
@@ -26,6 +31,8 @@ export class DashboardCompany implements OnInit {
   private readonly dashboardService =
     inject(DashboardService);
 
+    private readonly companiesService =
+  inject(CompaniesService);
   dashboard: DashboardEmpresa | null = null;
 
   loading = true;
@@ -33,6 +40,7 @@ export class DashboardCompany implements OnInit {
 
   ngOnInit(): void {
     this.carregarDashboard();
+    this.carregarEmpresa();
   }
 
   carregarDashboard(): void {
@@ -75,4 +83,60 @@ export class DashboardCompany implements OnInit {
         index < quantidade ? 1 : 0
     );
   }
+  companyProfileCompletion = 0;
+companyProfileReady = false;
+
+calcularProgressoEmpresa(empresa: any): void {
+
+  const campos = [
+    empresa.razaoSocial,
+    empresa.nomeFantasia,
+    empresa.cnpj,
+    empresa.email,
+    empresa.telefone,
+    empresa.descricao,
+    empresa.cidade,
+    empresa.estado,
+    empresa.site,
+    empresa.logo
+  ];
+
+  const preenchidos =
+    campos.filter(valor =>
+      valor !== null
+      && valor !== undefined
+      && String(valor).trim() !== ''
+    ).length;
+
+  this.companyProfileCompletion =
+    Math.round(
+      (preenchidos / campos.length) * 100
+    );
+
+  this.companyProfileReady =
+    this.companyProfileCompletion >= 70;
+}
+carregarEmpresa(): void {
+
+  this.companiesService
+    .buscarMinhaEmpresa()
+    .subscribe({
+
+      next: response => {
+
+        this.calcularProgressoEmpresa(
+          response.data
+        );
+      },
+
+      error: error => {
+
+        console.error(
+          'Erro ao carregar empresa:',
+          error
+        );
+      }
+
+    });
+}
 }

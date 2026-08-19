@@ -1,0 +1,341 @@
+<section class="public-profile-page">
+
+  <a
+    routerLink="/jobs"
+    class="back-link"
+  >
+    ← Voltar
+  </a>
+
+  @if (loading) {
+
+    <div class="loading-state">
+      <div class="loader"></div>
+
+      <p>
+        Carregando perfil profissional...
+      </p>
+    </div>
+
+  }
+
+  @else if (errorMessage) {
+
+    <div class="error-state">
+
+      <div class="error-icon">
+        !
+      </div>
+
+      <h2>
+        Não foi possível carregar o perfil
+      </h2>
+
+      <p>
+        {{ errorMessage }}
+      </p>
+
+      <button
+        type="button"
+        (click)="carregar()"
+      >
+        Tentar novamente
+      </button>
+
+    </div>
+
+  }
+
+  @else if (profile) {
+
+    <header class="profile-hero">
+
+      <div class="profile-identity">
+
+        <div class="avatar">
+
+          @if (avatarUrl) {
+
+            <img
+              [src]="avatarUrl"
+              [alt]="profile.nome"
+            >
+
+          }
+
+          @else {
+
+            <span>
+              {{ iniciais() }}
+            </span>
+
+          }
+
+        </div>
+
+        <div class="profile-copy">
+
+          <span class="eyebrow">
+            PROFISSIONAL OPENFREE
+          </span>
+
+          <h1>
+            {{ profile.nome }}
+          </h1>
+
+          <p class="professional-title">
+            {{
+              profile.tituloProfissional
+              || 'Profissional freelancer'
+            }}
+          </p>
+
+          @if (
+            profile.cidade
+            || profile.estado
+          ) {
+
+            <div class="location">
+              ◎
+
+              {{ profile.cidade }}
+
+              @if (profile.estado) {
+                <span>
+                  · {{ profile.estado }}
+                </span>
+              }
+            </div>
+
+          }
+
+        </div>
+
+      </div>
+
+      <div class="hero-actions">
+
+        @if (profile.portfolioUrl) {
+
+          <a
+            [href]="profile.portfolioUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="secondary-button"
+          >
+            Ver portfólio
+            <span>↗</span>
+          </a>
+
+        }
+
+        @if (curriculoUrl) {
+
+          <a
+            [href]="curriculoUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="primary-button"
+          >
+            Ver currículo
+            <span>↗</span>
+          </a>
+
+        }
+
+      </div>
+
+    </header>
+
+    <div class="profile-grid">
+
+      <main class="profile-main">
+
+        <section class="profile-card">
+
+          <div class="section-heading">
+
+            <div>
+              <span class="eyebrow">
+                APRESENTAÇÃO
+              </span>
+
+              <h2>
+                Sobre o profissional
+              </h2>
+            </div>
+
+            <span class="section-icon">
+              ✦
+            </span>
+
+          </div>
+
+          @if (profile.biografia) {
+
+            <p class="bio">
+              {{ profile.biografia }}
+            </p>
+
+          }
+
+          @else {
+
+            <p class="empty-copy">
+              Este profissional ainda não adicionou
+              uma apresentação.
+            </p>
+
+          }
+
+        </section>
+
+        <section class="profile-card">
+
+          <div class="section-heading">
+
+            <div>
+              <span class="eyebrow">
+                COMPETÊNCIAS
+              </span>
+
+              <h2>
+                Habilidades
+              </h2>
+            </div>
+
+            <span class="section-icon">
+              ⌘
+            </span>
+
+          </div>
+
+          @if (habilidades.length > 0) {
+
+            <div class="skills">
+
+              @for (
+                habilidade of habilidades;
+                track habilidade
+              ) {
+
+                <span>
+                  {{ habilidade }}
+                </span>
+
+              }
+
+            </div>
+
+          }
+
+          @else {
+
+            <p class="empty-copy">
+              Nenhuma habilidade informada.
+            </p>
+
+          }
+
+        </section>
+
+      </main>
+
+      <aside class="profile-sidebar">
+
+        <section class="info-card">
+
+          <span class="eyebrow">
+            INFORMAÇÕES
+          </span>
+
+          <h2>
+            Perfil profissional
+          </h2>
+
+          <div class="info-list">
+
+            <div>
+              <small>
+                Localização
+              </small>
+
+              <strong>
+                @if (
+                  profile.cidade
+                  || profile.estado
+                ) {
+
+                  {{ profile.cidade }}
+
+                  @if (profile.estado) {
+                    · {{ profile.estado }}
+                  }
+
+                }
+
+                @else {
+                  Não informada
+                }
+              </strong>
+            </div>
+
+            <div>
+              <small>
+                Portfólio
+              </small>
+
+              <strong>
+                {{
+                  profile.portfolioUrl
+                    ? 'Disponível'
+                    : 'Não informado'
+                }}
+              </strong>
+            </div>
+
+            <div>
+              <small>
+                Currículo
+              </small>
+
+              <strong>
+                {{
+                  curriculoUrl
+                    ? 'Disponível'
+                    : 'Não enviado'
+                }}
+              </strong>
+            </div>
+
+          </div>
+
+        </section>
+
+        <section class="trust-card">
+
+          <div class="trust-icon">
+            ✓
+          </div>
+
+          <div>
+            <strong>
+              Perfil OpenFree
+            </strong>
+
+            <p>
+              As contratações realizadas pela plataforma
+              podem gerar histórico, avaliações e reputação
+              profissional.
+            </p>
+          </div>
+
+        </section>
+
+      </aside>
+
+    </div>
+
+  }
+
+</section>

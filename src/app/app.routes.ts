@@ -3,64 +3,267 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
+
+  // =========================
+  // PÚBLICO
+  // =========================
+
   {
     path: 'login',
     loadComponent: () =>
       import('./pages/login/login')
         .then(component => component.Login)
   },
+
+   {
+  path: 'register',
+  loadComponent: () =>
+    import('./pages/register/register')
+      .then(component => component.Register)
+},
+
+{
+  path: 'forgot-password',
+  loadComponent: () =>
+    import('./pages/forgot-password/forgot-password')
+      .then(component => component.ForgotPassword)
+},
+
+{
+  path: 'reset-password',
+  loadComponent: () =>
+    import('./pages/reset-password/reset-password')
+      .then(component => component.ResetPassword)
+},
+
+
+
+  // =========================
+  // ÁREA AUTENTICADA
+  // =========================
+
   {
     path: '',
     loadComponent: () =>
       import('./layout/main-layout/main-layout')
         .then(component => component.MainLayout),
+
     canActivate: [authGuard],
+
     children: [
+
+      // =====================
+      // DASHBOARDS
+      // =====================
+
       {
         path: 'dashboard/freelancer',
         loadComponent: () =>
-          import('./pages/dashboard-freelancer/dashboard-freelancer')
-            .then(component => component.DashboardFreelancer)
+          import(
+            './pages/dashboard-freelancer/dashboard-freelancer'
+          ).then(
+            component =>
+              component.DashboardFreelancer
+          )
       },
+
       {
         path: 'dashboard/company',
         loadComponent: () =>
-          import('./pages/dashboard-company/dashboard-company')
-            .then(component => component.DashboardCompany)
+          import(
+            './pages/dashboard-company/dashboard-company'
+          ).then(
+            component =>
+              component.DashboardCompany
+          )
       },
+
+          {
+      path: 'profile/user/:id',
+      loadComponent: () =>
+        import('./pages/public-profile/public-profile')
+          .then(component => component.PublicProfile)
+    },
+
+      // =====================
+      // VAGAS
+      // =====================
+
       {
         path: 'jobs',
         loadComponent: () =>
           import('./pages/jobs/jobs')
             .then(component => component.Jobs)
       },
+
+      {
+        path: 'jobs/create',
+        loadComponent: () =>
+          import('./pages/job-form/job-form')
+            .then(component => component.JobForm)
+      },
+
+      {
+        path: 'jobs/:id/applications',
+        loadComponent: () =>
+          import(
+            './pages/job-applications/job-applications'
+          ).then(
+            component =>
+              component.JobApplications
+          )
+      },
+
+      {
+        path: 'jobs/:id',
+        loadComponent: () =>
+          import('./pages/job-details/job-details')
+            .then(component => component.JobDetails)
+      },
+
+      {
+    path: 'profile/user/:id',
+    loadComponent: () =>
+      import('./pages/public-profile/public-profile')
+        .then(component => component.PublicProfile)
+     },
+
+
+
+      // =====================
+      // FREELANCER
+      // =====================
+
       {
         path: 'applications',
         loadComponent: () =>
           import('./pages/applications/applications')
-            .then(component => component.Applications)
+            .then(
+              component =>
+                component.Applications
+            )
       },
+
+      {
+        path: 'favorites',
+        loadComponent: () =>
+          import('./pages/favorites/favorites')
+            .then(
+              component =>
+                component.Favorites
+            )
+      },
+
+      {
+        path: 'earnings',
+        loadComponent: () =>
+          import('./pages/earnings/earnings')
+            .then(
+              component =>
+                component.Earnings
+            )
+      },
+
+      // =====================
+      // CONTRATOS
+      // =====================
+
+      {
+        path: 'contracts',
+        loadComponent: () =>
+          import('./pages/contracts/contracts')
+            .then(
+              component =>
+                component.Contracts
+            )
+      },
+
+      // =====================
+      // EMPRESA
+      // =====================
+
+      {
+        path: 'finance',
+        loadComponent: () =>
+          import('./pages/finance/finance')
+            .then(
+              component =>
+                component.Finance
+            )
+      },
+
+      // =====================
+      // COMUNICAÇÃO
+      // =====================
+
       {
         path: 'chat',
         loadComponent: () =>
           import('./pages/chat/chat')
-            .then(component => component.Chat)
+            .then(
+              component =>
+                component.Chat
+            )
       },
+
+      {
+        path: 'notifications',
+        loadComponent: () =>
+          import(
+            './pages/notifications/notifications'
+          ).then(
+            component =>
+              component.Notifications
+          )
+      },
+
+      // =====================
+      // CONTA
+      // =====================
+
       {
         path: 'profile',
         loadComponent: () =>
           import('./pages/profile/profile')
-            .then(component => component.Profile)
+            .then(
+              component =>
+                component.Profile
+            )
       }
+          ,
+            {
+        path: 'company/create',
+        loadComponent: () =>
+          import(
+            './pages/company-register/company-register'
+          ).then(
+            component =>
+              component.CompanyRegister
+          )
+      },
+
+
     ]
   },
+
+  // =========================
+  // FALLBACK
+  // =========================
+
   {
     path: '',
     pathMatch: 'full',
     redirectTo: 'login'
   },
+
   {
     path: '**',
     redirectTo: 'login'
-  }
+  },
+
+
+
+ 
+
+
 ];

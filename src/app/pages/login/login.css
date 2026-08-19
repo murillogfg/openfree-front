@@ -109,3 +109,36 @@ button:disabled {
   opacity: 0.65;
   cursor: not-allowed;
 }
+.register-link {
+  position: relative;
+  z-index: 10;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+
+  margin-top: 22px;
+
+  color: #8f9ab8;
+  font-size: 14px;
+
+  pointer-events: auto;
+}
+
+.register-link a {
+  position: relative;
+  z-index: 11;
+
+  color: #7d86ff;
+  font-weight: 700;
+  text-decoration: none;
+
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.register-link a:hover {
+  color: #a5abff;
+  text-decoration: underline;
+}

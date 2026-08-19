@@ -1,0 +1,71 @@
+<section class="page">
+
+<h1>Minhas candidaturas</h1>
+
+@if(loading){
+
+<p>Carregando...</p>
+
+}
+
+@else{
+
+@for(app of applications; track app.candidaturaId){
+
+<div class="card">
+
+<h2>{{app.titulo}}</h2>
+
+<p>{{app.empresa}}</p>
+
+<p>
+
+{{app.cidade}}
+
+-
+
+{{app.estado}}
+
+</p>
+
+<strong>
+
+{{app.valor | currency:'BRL'}}
+
+</strong>
+
+<p>
+
+{{app.dataServico | date:'dd/MM/yyyy'}}
+
+</p>
+
+<span>
+
+{{app.status}}
+
+</span>
+
+@if(app.empresaVisualizou){
+
+<p>👀 Empresa visualizou sua candidatura</p>
+
+}
+
+<a
+
+[routerLink]="['/jobs',app.vagaId]"
+
+>
+
+Ver vaga →
+
+</a>
+
+</div>
+
+}
+
+}
+
+</section>

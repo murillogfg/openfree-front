@@ -1,1 +1,159 @@
-<p>jobs works!</p>
+<section class="jobs-page">
+
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">
+        Marketplace OpenFree
+      </span>
+
+      <h1>
+        Encontre sua próxima oportunidade.
+      </h1>
+
+      <p>
+        Explore vagas publicadas por empresas e encontre
+        trabalhos compatíveis com seu perfil.
+      </p>
+    </div>
+
+    @if (pagina) {
+      <div class="results-count">
+        <strong>{{ pagina.totalElements }}</strong>
+        <span>oportunidade(s)</span>
+      </div>
+    }
+  </header>
+
+  <form
+    class="filters"
+    [formGroup]="filtroForm"
+    (ngSubmit)="buscarVagas()"
+  >
+    <div class="search-field">
+      <span>⌕</span>
+
+      <input
+        type="search"
+        formControlName="titulo"
+        placeholder="Buscar por título da vaga..."
+      >
+    </div>
+
+    <input
+      type="text"
+      formControlName="cidade"
+      placeholder="Cidade"
+    >
+
+    <input
+      type="text"
+      maxlength="2"
+      formControlName="estado"
+      placeholder="UF"
+    >
+
+    <button
+      type="submit"
+      class="search-button"
+    >
+      Buscar
+    </button>
+
+    <button
+      type="button"
+      class="clear-button"
+      (click)="limparFiltros()"
+    >
+      Limpar
+    </button>
+  </form>
+
+  @if (successMessage) {
+
+  <div class="success-message">
+    <span>✓</span>
+    {{ successMessage }}
+  </div>
+
+}
+
+  @if (loading) {
+    <div class="loading-state">
+      <div class="loader"></div>
+      <p>Buscando oportunidades...</p>
+    </div>
+  }
+
+  @else if (errorMessage) {
+    <div class="error-state">
+      <strong>Não foi possível buscar as vagas.</strong>
+      <p>{{ errorMessage }}</p>
+
+      <button
+        type="button"
+        (click)="buscarVagas()"
+      >
+        Tentar novamente
+      </button>
+    </div>
+  }
+
+  @else if (pagina?.empty) {
+    <div class="empty-state">
+      <div class="empty-icon">⌕</div>
+
+      <h2>Nenhuma vaga disponivel</h2>
+
+      <p>
+        Tente alterar os filtros ou volte novamente mais tarde.
+      </p>
+
+      <button
+        type="button"
+        (click)="limparFiltros()"
+      >
+        Limpar filtros
+      </button>
+    </div>
+  }
+
+  @else if (pagina) {
+    <div class="jobs-grid">
+      @for (job of pagina.content; track job.id) {
+        <app-job-card
+          [job]="job"
+          [isCompany]="isCompany"
+          [isFavorite]="isFavorita(job.id)"
+          [favoriteLoading]="favoriteLoadingId === job.id"
+          (favoriteToggle)="alternarFavorito($event)"
+        />
+      }
+    </div>
+
+    <footer class="pagination">
+      <button
+        type="button"
+        [disabled]="pagina.first"
+        (click)="paginaAnterior()"
+      >
+        ← Anterior
+      </button>
+
+      <span>
+        Página
+        <strong>{{ pagina.page + 1 }}</strong>
+        de
+        <strong>{{ pagina.totalPages }}</strong>
+      </span>
+
+      <button
+        type="button"
+        [disabled]="pagina.last"
+        (click)="proximaPagina()"
+      >
+        Próxima →
+      </button>
+    </footer>
+  }
+
+</section>

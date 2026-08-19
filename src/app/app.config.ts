@@ -1,7 +1,7 @@
 import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
-  provideZonelessChangeDetection
+  provideZoneChangeDetection
 } from '@angular/core';
 
 import { provideRouter } from '@angular/router';
@@ -18,7 +18,9 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
 
-    provideZonelessChangeDetection(),
+    provideZoneChangeDetection({
+      eventCoalescing: true
+    }),
 
     provideRouter(routes),
 
