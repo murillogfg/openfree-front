@@ -10,6 +10,8 @@ import {
 
 import { Router } from '@angular/router';
 
+import { environment } from '../../../environments/environment';
+
 interface ApiResponse<T> {
   success: boolean;
   message: string;
@@ -40,6 +42,9 @@ export class JobForm {
 
   private readonly router =
     inject(Router);
+
+  private readonly apiUrl =
+    `${environment.apiUrl}/jobs`;
 
   loading = false;
 
@@ -201,7 +206,7 @@ export class JobForm {
 
     this.http
       .post<ApiResponse<CreatedJob>>(
-        'http://localhost:8080/jobs',
+        this.apiUrl,
         payload
       )
       .subscribe({
@@ -239,7 +244,7 @@ export class JobForm {
 
     this.http
       .patch(
-        `http://localhost:8080/jobs/${vagaId}/publicar`,
+        `${this.apiUrl}/${vagaId}/publicar`,
         {}
       )
       .subscribe({
