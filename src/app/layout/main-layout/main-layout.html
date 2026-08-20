@@ -26,38 +26,7 @@
         Visão geral
       </span>
 
-      <a
-        routerLink="/chat"
-        routerLinkActive="active"
-        (click)="closeSidebar()"
-      >
-        <span class="nav-icon">◌</span>
-        <span class="nav-text">Chat</span>
-      </a>
-
-      <a
-        routerLink="/notifications"
-        routerLinkActive="active"
-        (click)="closeSidebar()"
-      >
-        <span class="nav-icon">♢</span>
-
-        <span class="nav-text">
-          Notificações
-        </span>
-
-        @if (unreadNotifications > 0) {
-          <span class="nav-badge">
-            {{
-              unreadNotifications > 99
-                ? '99+'
-                : unreadNotifications
-            }}
-          </span>
-        }
-      </a>
-
-      @if (isFreelancer) {
+      @if (!isAuthenticated) {
 
         <a
           routerLink="/jobs"
@@ -70,177 +39,247 @@
           </span>
         </a>
 
-        <a
-          routerLink="/applications"
-          routerLinkActive="active"
-          (click)="closeSidebar()"
-        >
-          <span class="nav-icon">▤</span>
-          <span class="nav-text">
-            Minhas candidaturas
-          </span>
-        </a>
-
-        <a
-          routerLink="/contracts"
-          routerLinkActive="active"
-          (click)="closeSidebar()"
-        >
-          <span class="nav-icon">▧</span>
-          <span class="nav-text">
-            Contratos
-          </span>
-        </a>
-
-        <a
-          routerLink="/favorites"
-          routerLinkActive="active"
-          (click)="closeSidebar()"
-        >
-          <span class="nav-icon">★</span>
-          <span class="nav-text">
-            Favoritos
-          </span>
-        </a>
-
-        <span class="navigation-label">
-          Financeiro
-        </span>
-
-        <a
-          routerLink="/earnings"
-          routerLinkActive="active"
-          (click)="closeSidebar()"
-        >
-          <span class="nav-icon">$</span>
-          <span class="nav-text">
-            Meus ganhos
-          </span>
-        </a>
-
-
-        <a
-          routerLink="/company/create"
-          routerLinkActive="active"
-          (click)="closeSidebar()"
-        >
-          <span class="nav-icon">＋</span>
-          <span class="nav-text">
-            Criar empresa
-          </span>
-        </a>
-
       }
 
-      @if (isCompany) {
+      @if (isAuthenticated) {
 
         <a
-          routerLink="/jobs"
+          routerLink="/chat"
           routerLinkActive="active"
           (click)="closeSidebar()"
         >
-          <span class="nav-icon">◇</span>
+          <span class="nav-icon">◌</span>
           <span class="nav-text">
-            Minhas vagas
+            Chat
           </span>
         </a>
 
         <a
-          routerLink="/jobs/create"
+          routerLink="/notifications"
           routerLinkActive="active"
           (click)="closeSidebar()"
         >
-          <span class="nav-icon">＋</span>
+          <span class="nav-icon">♢</span>
+
           <span class="nav-text">
-            Publicar vaga
+            Notificações
           </span>
+
+          @if (unreadNotifications > 0) {
+            <span class="nav-badge">
+              {{
+                unreadNotifications > 99
+                  ? '99+'
+                  : unreadNotifications
+              }}
+            </span>
+          }
         </a>
 
-        <a
-          routerLink="/contracts"
-          routerLinkActive="active"
-          (click)="closeSidebar()"
-        >
-          <span class="nav-icon">▧</span>
-          <span class="nav-text">
-            Contratos
+        @if (isFreelancer) {
+
+          <a
+            routerLink="/jobs"
+            routerLinkActive="active"
+            (click)="closeSidebar()"
+          >
+            <span class="nav-icon">◇</span>
+            <span class="nav-text">
+              Explorar vagas
+            </span>
+          </a>
+
+          <a
+            routerLink="/applications"
+            routerLinkActive="active"
+            (click)="closeSidebar()"
+          >
+            <span class="nav-icon">▤</span>
+            <span class="nav-text">
+              Minhas candidaturas
+            </span>
+          </a>
+
+          <a
+            routerLink="/contracts"
+            routerLinkActive="active"
+            (click)="closeSidebar()"
+          >
+            <span class="nav-icon">▧</span>
+            <span class="nav-text">
+              Contratos
+            </span>
+          </a>
+
+          <a
+            routerLink="/favorites"
+            routerLinkActive="active"
+            (click)="closeSidebar()"
+          >
+            <span class="nav-icon">★</span>
+            <span class="nav-text">
+              Favoritos
+            </span>
+          </a>
+
+          <span class="navigation-label">
+            Financeiro
           </span>
-        </a>
+
+          <a
+            routerLink="/earnings"
+            routerLinkActive="active"
+            (click)="closeSidebar()"
+          >
+            <span class="nav-icon">$</span>
+            <span class="nav-text">
+              Meus ganhos
+            </span>
+          </a>
+
+          <a
+            routerLink="/company/create"
+            routerLinkActive="active"
+            (click)="closeSidebar()"
+          >
+            <span class="nav-icon">＋</span>
+            <span class="nav-text">
+              Criar empresa
+            </span>
+          </a>
+        }
+
+        @if (isCompany) {
+
+          <a
+            routerLink="/jobs"
+            routerLinkActive="active"
+            (click)="closeSidebar()"
+          >
+            <span class="nav-icon">◇</span>
+            <span class="nav-text">
+              Minhas vagas
+            </span>
+          </a>
+
+          <a
+            routerLink="/jobs/create"
+            routerLinkActive="active"
+            (click)="closeSidebar()"
+          >
+            <span class="nav-icon">＋</span>
+            <span class="nav-text">
+              Publicar vaga
+            </span>
+          </a>
+
+          <a
+            routerLink="/contracts"
+            routerLinkActive="active"
+            (click)="closeSidebar()"
+          >
+            <span class="nav-icon">▧</span>
+            <span class="nav-text">
+              Contratos
+            </span>
+          </a>
+
+          <span class="navigation-label">
+            Financeiro
+          </span>
+
+          <a
+            routerLink="/finance"
+            routerLinkActive="active"
+            (click)="closeSidebar()"
+          >
+            <span class="nav-icon">$</span>
+            <span class="nav-text">
+              Pagamentos
+            </span>
+          </a>
+        }
 
         <span class="navigation-label">
-          Financeiro
+          Conta
         </span>
 
         <a
-          routerLink="/finance"
+          routerLink="/profile"
           routerLinkActive="active"
           (click)="closeSidebar()"
         >
-          <span class="nav-icon">$</span>
+          <span class="nav-icon">◎</span>
           <span class="nav-text">
-            Pagamentos
+            Perfil
           </span>
         </a>
-
       }
-
-      <span class="navigation-label">
-        Conta
-      </span>
-
-      <a
-        routerLink="/profile"
-        routerLinkActive="active"
-        (click)="closeSidebar()"
-      >
-        <span class="nav-icon">◎</span>
-        <span class="nav-text">
-          Perfil
-        </span>
-      </a>
 
     </nav>
 
     <div class="sidebar-footer">
 
-      <div class="user-card">
+      @if (isAuthenticated) {
 
-        <div class="avatar">
-          {{ displayInitials }}
+        <div class="user-card">
+
+          <div class="avatar">
+            {{ displayInitials }}
+          </div>
+
+          <div class="user-info">
+
+            <strong>
+              {{ displayName }}
+            </strong>
+
+            <span>
+              {{ tipoConta }}
+            </span>
+
+          </div>
+
         </div>
 
-        <div class="user-info">
-          <strong>
-            {{ displayName }}
-          </strong>
+        <button
+          type="button"
+          class="logout-button"
+          (click)="logout()"
+        >
+          Sair
+        </button>
 
-          <span>
-            {{ tipoConta }}
-          </span>
-        </div>
+      }
 
-      </div>
+      @else {
 
-      <button
-        type="button"
-        class="logout-button"
-        (click)="logout()"
-      >
-        Sair
-      </button>
+        <a
+          routerLink="/login"
+          class="logout-button"
+          (click)="closeSidebar()"
+        >
+          Entrar
+        </a>
+
+      }
 
     </div>
 
   </aside>
 
+
   @if (sidebarOpen) {
+
     <button
       type="button"
       class="overlay"
       aria-label="Fechar menu"
       (click)="closeSidebar()"
     ></button>
+
   }
+
 
   <section class="main-area">
 
@@ -269,28 +308,48 @@
 
       <div class="topbar-actions">
 
-        <a
-          routerLink="/notifications"
-          class="icon-button"
-          aria-label="Notificações"
-        >
-          ♢
+        @if (isAuthenticated) {
 
-          @if (unreadNotifications > 0) {
-            <span class="topbar-badge">
-              {{
-                unreadNotifications > 99
-                  ? '99+'
-                  : unreadNotifications
-              }}
-            </span>
-          }
+          <a
+            routerLink="/notifications"
+            class="icon-button"
+            aria-label="Notificações"
+          >
+            ♢
 
-        </a>
+            @if (unreadNotifications > 0) {
+
+              <span class="topbar-badge">
+                {{
+                  unreadNotifications > 99
+                    ? '99+'
+                    : unreadNotifications
+                }}
+              </span>
+
+            }
+
+          </a>
+
+        }
+
+        @else {
+
+          <a
+            routerLink="/login"
+            class="icon-button"
+            aria-label="Entrar"
+            title="Entrar"
+          >
+            ↪
+          </a>
+
+        }
 
       </div>
 
     </header>
+
 
     <main class="page-content">
       <router-outlet />

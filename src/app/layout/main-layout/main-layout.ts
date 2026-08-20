@@ -15,9 +15,18 @@ import {
   takeUntilDestroyed
 } from '@angular/core/rxjs-interop';
 
-import { AuthService } from '../../core/services/auth.service';
-import { ProfileService } from '../../core/services/profile.service';
-import { NotificationsService } from '../../core/services/notifications.service';
+import {
+  AuthService
+} from '../../core/services/auth.service';
+
+import {
+  ProfileService
+} from '../../core/services/profile.service';
+
+import {
+  NotificationsService
+} from '../../core/services/notifications.service';
+
 
 @Component({
   selector: 'app-main-layout',
@@ -46,27 +55,58 @@ export class MainLayout implements OnInit {
   private readonly destroyRef =
     inject(DestroyRef);
 
-  sidebarOpen = false;
 
-  displayName = '';
-  displayInitials = 'OF';
+  sidebarOpen =
+    false;
 
-  unreadNotifications = 0;
+  displayName =
+    '';
+
+  displayInitials =
+    'OF';
+
+  unreadNotifications =
+    0;
+
 
   ngOnInit(): void {
+
+    /*
+     * /jobs e /jobs/:id agora são públicos.
+     *
+     * Portanto o layout também pode ser criado
+     * sem um JWT. Não devemos disparar chamadas
+     * protegidas de perfil/notificações quando
+     * o visitante ainda não fez login.
+     */
+    if (
+      !this.isAuthenticated
+    ) {
+
+      this.displayName =
+        'Visitante';
+
+      this.displayInitials =
+        'OF';
+
+      return;
+    }
 
     this.carregarIdentidade();
 
     this.observarNotificacoes();
 
-    /*
-     * Faz a primeira consulta ao backend.
-     * Depois disso, alterações no service
-     * atualizam o layout automaticamente.
-     */
     this.notificationsService
       .atualizarContador();
   }
+
+
+  get isAuthenticated(): boolean {
+
+    return this.authService
+      .isAuthenticated();
+  }
+
 
   get isCompany(): boolean {
 
@@ -74,28 +114,46 @@ export class MainLayout implements OnInit {
       .isCompany();
   }
 
+
   get isFreelancer(): boolean {
 
     return this.authService
       .isFreelancer();
   }
 
+
   get dashboardRoute(): string {
+
+    if (
+      !this.isAuthenticated
+    ) {
+      return '/jobs';
+    }
 
     return this.authService
       .getDefaultDashboard();
   }
 
+
   get tipoConta(): string {
+
+    if (
+      !this.isAuthenticated
+    ) {
+      return 'Visitante';
+    }
 
     return this.isCompany
       ? 'Empresa'
       : 'Freelancer';
   }
 
+
   private carregarIdentidade(): void {
 
-    if (this.isCompany) {
+    if (
+      this.isCompany
+    ) {
 
       this.profileService
         .getCompanyProfile()
@@ -126,11 +184,11 @@ export class MainLayout implements OnInit {
             this.displayInitials =
               'EM';
           }
-
         });
 
       return;
     }
+
 
     this.profileService
       .getFreelancerProfile()
@@ -161,9 +219,9 @@ export class MainLayout implements OnInit {
           this.displayInitials =
             'PF';
         }
-
       });
   }
+
 
   private observarNotificacoes(): void {
 
@@ -183,6 +241,7 @@ export class MainLayout implements OnInit {
       );
   }
 
+
   private criarIniciais(
     nome: string
   ): string {
@@ -193,11 +252,15 @@ export class MainLayout implements OnInit {
         .split(/\s+/)
         .filter(Boolean);
 
-    if (partes.length === 0) {
+    if (
+      partes.length === 0
+    ) {
       return 'OF';
     }
 
-    if (partes.length === 1) {
+    if (
+      partes.length === 1
+    ) {
 
       return partes[0]
         .substring(0, 2)
@@ -213,11 +276,13 @@ export class MainLayout implements OnInit {
     ).toUpperCase();
   }
 
+
   toggleSidebar(): void {
 
     this.sidebarOpen =
       !this.sidebarOpen;
   }
+
 
   closeSidebar(): void {
 
@@ -225,8 +290,10 @@ export class MainLayout implements OnInit {
       false;
   }
 
+
   logout(): void {
 
-    this.authService.logout();
+    this.authService
+      .logout();
   }
 }

@@ -1,4 +1,7 @@
-import { Component, inject } from '@angular/core';
+import {
+  Component,
+  inject
+} from '@angular/core';
 
 import {
   FormBuilder,
@@ -7,14 +10,23 @@ import {
 } from '@angular/forms';
 
 import {
+  ActivatedRoute,
   Router,
   RouterLink
 } from '@angular/router';
 
-import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
+import {
+  CommonModule
+} from '@angular/common';
 
-import { AuthService } from '../../core/services/auth.service';
+import {
+  HttpErrorResponse
+} from '@angular/common/http';
+
+import {
+  AuthService
+} from '../../core/services/auth.service';
+
 
 @Component({
   selector: 'app-login',
@@ -37,31 +49,42 @@ export class Login {
   private readonly authService =
     inject(AuthService);
 
+  private readonly route =
+    inject(ActivatedRoute);
+
   readonly router =
     inject(Router);
 
-  loading = false;
-  errorMessage = '';
+
+  loading =
+    false;
+
+  errorMessage =
+    '';
+
 
   loginForm =
-    this.formBuilder.nonNullable.group({
+    this.formBuilder
+      .nonNullable
+      .group({
 
-      email: [
-        '',
-        [
-          Validators.required,
-          Validators.email
-        ]
-      ],
+        email: [
+          '',
+          [
+            Validators.required,
+            Validators.email
+          ]
+        ],
 
-      senha: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(6)
+        senha: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(6)
+          ]
         ]
-      ]
-    });
+      });
+
 
   submit(): void {
 
@@ -70,41 +93,67 @@ export class Login {
       || this.loading
     ) {
 
-      this.loginForm.markAllAsTouched();
+      this.loginForm
+        .markAllAsTouched();
+
       return;
     }
 
-    this.loading = true;
-    this.errorMessage = '';
+    this.loading =
+      true;
+
+    this.errorMessage =
+      '';
 
     this.authService
       .login(
-        this.loginForm.getRawValue()
+        this.loginForm
+          .getRawValue()
       )
       .subscribe({
 
         next: response => {
 
-          const destino =
+          const returnUrl =
+            this.route
+              .snapshot
+              .queryParamMap
+              .get('returnUrl');
+
+          const dashboard =
             response.role === 'EMPRESA'
               ? '/dashboard/company'
               : '/dashboard/freelancer';
 
+          const destino =
+            this.isSafeReturnUrl(
+              returnUrl
+            )
+              ? returnUrl!
+              : dashboard;
+
           this.router
-            .navigate([destino])
+            .navigateByUrl(
+              destino
+            )
             .then(() => {
-              this.loading = false;
+
+              this.loading =
+                false;
             });
         },
 
-        error: (error: HttpErrorResponse) => {
+        error: (
+          error: HttpErrorResponse
+        ) => {
 
           console.error(
             'Erro no login:',
             error
           );
 
-          this.loading = false;
+          this.loading =
+            false;
 
           this.errorMessage =
             error.error?.message
@@ -112,5 +161,29 @@ export class Login {
             ?? 'Não foi possível realizar o login.';
         }
       });
+  }
+
+
+  /*
+   * Evita aceitar redirecionamento externo.
+   *
+   * Somente URLs internas iniciadas por uma
+   * única barra podem ser usadas como returnUrl.
+   */
+  private isSafeReturnUrl(
+    returnUrl: string | null
+  ): boolean {
+
+    if (
+      !returnUrl
+    ) {
+      return false;
+    }
+
+    return (
+      returnUrl.startsWith('/')
+      && !returnUrl.startsWith('//')
+      && !returnUrl.startsWith('/login')
+    );
   }
 }

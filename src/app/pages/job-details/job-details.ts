@@ -35,6 +35,10 @@ import {
 } from '../../core/services/applications.service';
 
 import {
+  AuthService
+} from '../../core/services/auth.service';
+
+import {
   AdService
 } from '../../core/services/ad.service';
 
@@ -75,23 +79,32 @@ export class JobDetails implements OnInit {
   private readonly applicationsService =
     inject(ApplicationsService);
 
+  private readonly authService =
+    inject(AuthService);
+
   private readonly adService =
     inject(AdService);
 
 
-  job: Vaga | null = null;
+  job:
+    Vaga | null =
+    null;
 
-  loading = true;
+  loading =
+    true;
 
-  applying = false;
+  applying =
+    false;
 
+  errorMessage =
+    '';
 
-  errorMessage = '';
+  successMessage =
+    '';
 
-  successMessage = '';
+  modalOpen =
+    false;
 
-
-  modalOpen = false;
 
   /*
    * Controla o espaço de anúncio.
@@ -100,27 +113,33 @@ export class JobDetails implements OnInit {
    * de uma candidatura concluída
    * com sucesso.
    */
-  showAd = false;
+  showAd =
+    false;
 
 
   applicationForm =
-    this.formBuilder.nonNullable.group({
+    this.formBuilder
+      .nonNullable
+      .group({
 
-      mensagem: [
-        '',
-        [
-          Validators.maxLength(1000)
+        mensagem: [
+          '',
+          [
+            Validators.maxLength(
+              1000
+            )
+          ]
+        ],
+
+        valorProposto: [
+          null as number | null,
+          [
+            Validators.min(
+              0.01
+            )
+          ]
         ]
-      ],
-
-      valorProposto: [
-        null as number | null,
-        [
-          Validators.min(0.01)
-        ]
-      ]
-
-    });
+      });
 
 
   ngOnInit(): void {
@@ -138,7 +157,6 @@ export class JobDetails implements OnInit {
           .paramMap
           .get('id')
       );
-
 
     if (
       !Number.isFinite(id)
@@ -163,7 +181,9 @@ export class JobDetails implements OnInit {
 
 
     this.jobsService
-      .buscarPorId(id)
+      .buscarPorId(
+        id
+      )
       .subscribe({
 
         next: response => {
@@ -174,7 +194,6 @@ export class JobDetails implements OnInit {
           this.loading =
             false;
         },
-
 
         error: (
           error: HttpErrorResponse
@@ -188,18 +207,38 @@ export class JobDetails implements OnInit {
             ?? 'Não foi possível carregar esta vaga.';
         },
 
-
         complete: () => {
 
           this.loading =
             false;
         }
-
       });
   }
 
 
   abrirModal(): void {
+
+    /*
+     * A descrição da vaga é pública para SEO,
+     * mas candidatar-se continua exigindo conta.
+     */
+    if (
+      !this.authService
+        .isAuthenticated()
+    ) {
+
+      this.router.navigate(
+        ['/login'],
+        {
+          queryParams: {
+            returnUrl:
+              this.router.url
+          }
+        }
+      );
+
+      return;
+    }
 
     this.successMessage =
       '';
@@ -214,17 +253,17 @@ export class JobDetails implements OnInit {
 
   fecharModal(): void {
 
-    if (this.applying) {
+    if (
+      this.applying
+    ) {
       return;
     }
-
 
     this.modalOpen =
       false;
 
     this.errorMessage =
       '';
-
 
     this.applicationForm
       .reset({
@@ -235,6 +274,31 @@ export class JobDetails implements OnInit {
 
 
   candidatarSe(): void {
+
+    /*
+     * Defesa adicional caso o método seja
+     * disparado sem passar por abrirModal().
+     */
+    if (
+      !this.authService
+        .isAuthenticated()
+    ) {
+
+      this.modalOpen =
+        false;
+
+      this.router.navigate(
+        ['/login'],
+        {
+          queryParams: {
+            returnUrl:
+              this.router.url
+          }
+        }
+      );
+
+      return;
+    }
 
     if (
       !this.job
@@ -248,7 +312,6 @@ export class JobDetails implements OnInit {
       return;
     }
 
-
     this.applying =
       true;
 
@@ -257,7 +320,6 @@ export class JobDetails implements OnInit {
 
     this.successMessage =
       '';
-
 
     const formValue =
       this.applicationForm
@@ -279,7 +341,6 @@ export class JobDetails implements OnInit {
             formValue
               .valorProposto
             ?? undefined
-
         }
       )
       .subscribe({
@@ -289,21 +350,17 @@ export class JobDetails implements OnInit {
           this.applying =
             false;
 
-
           this.successMessage =
             'Candidatura enviada com sucesso.';
 
-
           this.modalOpen =
             false;
-
 
           this.applicationForm
             .reset({
               mensagem: '',
               valorProposto: null
             });
-
 
           /*
            * ==========================================
@@ -320,7 +377,6 @@ export class JobDetails implements OnInit {
           this.verificarAnuncio();
         },
 
-
         error: (
           error: HttpErrorResponse
         ) => {
@@ -328,12 +384,10 @@ export class JobDetails implements OnInit {
           this.applying =
             false;
 
-
           this.errorMessage =
             error.error?.message
             ?? 'Não foi possível enviar a candidatura.';
         }
-
       });
   }
 
@@ -343,7 +397,6 @@ export class JobDetails implements OnInit {
    * ANÚNCIOS
    * ==================================================
    */
-
   private verificarAnuncio(): void {
 
     if (
@@ -352,7 +405,6 @@ export class JobDetails implements OnInit {
     ) {
       return;
     }
-
 
     /*
      * Registra o anúncio no momento
@@ -363,7 +415,6 @@ export class JobDetails implements OnInit {
      */
     this.adService
       .registerAdShown();
-
 
     this.showAd =
       true;

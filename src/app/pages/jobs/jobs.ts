@@ -15,18 +15,31 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 
-import { AuthService } from '../../core/services/auth.service';
+import {
+  Router
+} from '@angular/router';
 
-import { JobCard } from '../../shared/components/job-card/job-card';
+import {
+  AuthService
+} from '../../core/services/auth.service';
+
+import {
+  JobCard
+} from '../../shared/components/job-card/job-card';
 
 import {
   PageResponse,
   Vaga
 } from '../../core/models/job.models';
 
-import { JobsService } from '../../core/services/jobs.service';
+import {
+  JobsService
+} from '../../core/services/jobs.service';
 
-import { FavoritesService } from '../../core/services/favorites.service';
+import {
+  FavoritesService
+} from '../../core/services/favorites.service';
+
 
 @Component({
   selector: 'app-jobs',
@@ -55,18 +68,30 @@ export class Jobs implements OnInit {
   private readonly authService =
     inject(AuthService);
 
-  pagina: PageResponse<Vaga> | null = null;
+  private readonly router =
+    inject(Router);
 
-  loading = true;
 
-  errorMessage = '';
-  successMessage = '';
+  pagina:
+    PageResponse<Vaga> | null =
+    null;
+
+  loading =
+    true;
+
+  errorMessage =
+    '';
+
+  successMessage =
+    '';
 
   favoriteIds =
     new Set<number>();
 
   favoriteLoadingId:
-    number | null = null;
+    number | null =
+    null;
+
 
   filtroForm =
     this.formBuilder
@@ -80,21 +105,34 @@ export class Jobs implements OnInit {
         estado: ['']
       });
 
+
   ngOnInit(): void {
 
-    if (!this.isCompany) {
+    /*
+     * Visitantes podem consultar vagas sem login,
+     * mas favoritos continuam sendo um recurso
+     * privado da conta.
+     */
+    if (
+      this.isAuthenticated
+      && !this.isCompany
+    ) {
       this.carregarFavoritos();
     }
 
     this.buscarVagas();
   }
 
+
   buscarVagas(
     page = 0
   ): void {
 
-    this.loading = true;
-    this.errorMessage = '';
+    this.loading =
+      true;
+
+    this.errorMessage =
+      '';
 
     const filtro =
       this.filtroForm
@@ -119,14 +157,16 @@ export class Jobs implements OnInit {
           this.pagina =
             response.data;
 
-          this.loading = false;
+          this.loading =
+            false;
         },
 
         error: (
           error: HttpErrorResponse
         ) => {
 
-          this.loading = false;
+          this.loading =
+            false;
 
           this.errorMessage =
             error.error?.message
@@ -134,6 +174,7 @@ export class Jobs implements OnInit {
         }
       });
   }
+
 
   private carregarFavoritos(): void {
 
@@ -144,7 +185,8 @@ export class Jobs implements OnInit {
         next: response => {
 
           const favoritos =
-            response.data ?? [];
+            response.data
+            ?? [];
 
           this.favoriteIds =
             new Set(
@@ -167,9 +209,9 @@ export class Jobs implements OnInit {
            * se favoritos falhar.
            */
         }
-
       });
   }
+
 
   isFavorita(
     vagaId: number
@@ -179,9 +221,30 @@ export class Jobs implements OnInit {
       .has(vagaId);
   }
 
+
   alternarFavorito(
     job: Vaga
   ): void {
+
+    /*
+     * O visitante pode navegar pelas vagas,
+     * mas precisa entrar para salvar favoritos.
+     */
+    if (
+      !this.isAuthenticated
+    ) {
+
+      this.router.navigate(
+        ['/login'],
+        {
+          queryParams: {
+            returnUrl: this.router.url
+          }
+        }
+      );
+
+      return;
+    }
 
     if (
       this.isCompany
@@ -190,43 +253,51 @@ export class Jobs implements OnInit {
       return;
     }
 
-    this.errorMessage = '';
-    this.successMessage = '';
+    this.errorMessage =
+      '';
+
+    this.successMessage =
+      '';
 
     this.favoriteLoadingId =
       job.id;
 
     if (
-      this.isFavorita(job.id)
+      this.isFavorita(
+        job.id
+      )
     ) {
 
-      this.removerFavorito(job);
+      this.removerFavorito(
+        job
+      );
 
       return;
     }
 
-    this.adicionarFavorito(job);
+    this.adicionarFavorito(
+      job
+    );
   }
+
 
   private adicionarFavorito(
     job: Vaga
   ): void {
 
     this.favoritesService
-      .favoritar(job.id)
+      .favoritar(
+        job.id
+      )
       .subscribe({
 
         next: () => {
 
-          this.favoriteIds.add(
-            job.id
-          );
+          this.favoriteIds
+            .add(
+              job.id
+            );
 
-          /*
-           * Cria novo Set para deixar
-           * a mudança explícita para
-           * a detecção do Angular.
-           */
           this.favoriteIds =
             new Set(
               this.favoriteIds
@@ -250,23 +321,26 @@ export class Jobs implements OnInit {
             error.error?.message
             ?? 'Não foi possível favoritar a vaga.';
         }
-
       });
   }
+
 
   private removerFavorito(
     job: Vaga
   ): void {
 
     this.favoritesService
-      .desfavoritar(job.id)
+      .desfavoritar(
+        job.id
+      )
       .subscribe({
 
         next: () => {
 
-          this.favoriteIds.delete(
-            job.id
-          );
+          this.favoriteIds
+            .delete(
+              job.id
+            );
 
           this.favoriteIds =
             new Set(
@@ -291,20 +365,22 @@ export class Jobs implements OnInit {
             error.error?.message
             ?? 'Não foi possível remover a vaga dos favoritos.';
         }
-
       });
   }
 
+
   limparFiltros(): void {
 
-    this.filtroForm.reset({
-      titulo: '',
-      cidade: '',
-      estado: ''
-    });
+    this.filtroForm
+      .reset({
+        titulo: '',
+        cidade: '',
+        estado: ''
+      });
 
     this.buscarVagas();
   }
+
 
   paginaAnterior(): void {
 
@@ -319,6 +395,7 @@ export class Jobs implements OnInit {
     }
   }
 
+
   proximaPagina(): void {
 
     if (
@@ -331,6 +408,14 @@ export class Jobs implements OnInit {
       );
     }
   }
+
+
+  get isAuthenticated(): boolean {
+
+    return this.authService
+      .isAuthenticated();
+  }
+
 
   get isCompany(): boolean {
 
