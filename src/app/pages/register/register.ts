@@ -22,11 +22,13 @@ import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-register',
   standalone: true,
+
   imports: [
     CommonModule,
     ReactiveFormsModule,
     RouterLink
   ],
+
   templateUrl: './register.html',
   styleUrl: './register.css'
 })
@@ -81,6 +83,13 @@ export class Register {
         [
           Validators.required
         ]
+      ],
+
+      aceitouTermos: [
+        false,
+        [
+          Validators.requiredTrue
+        ]
       ]
 
     });
@@ -96,6 +105,9 @@ export class Register {
     ) {
 
       this.registerForm.markAllAsTouched();
+
+      this.errorMessage =
+        'Preencha os campos obrigatórios e aceite os Termos de Uso e a Política de Privacidade.';
 
       return;
     }
@@ -114,24 +126,27 @@ export class Register {
       return;
     }
 
-    const request = {
+   const request = {
 
-      nome:
-        formValue.nome.trim(),
+  nome:
+    formValue.nome.trim(),
 
-      email:
-        formValue.email
-          .trim()
-          .toLowerCase(),
+  email:
+    formValue.email
+      .trim()
+      .toLowerCase(),
 
-      senha:
-        formValue.senha,
+  senha:
+    formValue.senha,
 
-      telefone:
-        formValue.telefone.trim()
-        || null
+  telefone:
+    formValue.telefone.trim()
+    || null,
 
-    };
+  aceitouTermos:
+    formValue.aceitouTermos
+
+};
 
     this.loading = true;
 

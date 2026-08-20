@@ -122,6 +122,53 @@
         formControlName="confirmarSenha"
         placeholder="Digite sua senha novamente"
       >
+    <div class="terms-field">
+
+  <label class="terms-check">
+
+    <input
+      type="checkbox"
+      formControlName="aceitouTermos"
+    >
+
+    <span>
+      Li e aceito os
+
+      <a
+        routerLink="/terms"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Termos de Uso
+      </a>
+
+      e a
+
+      <a
+        routerLink="/privacy"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Política de Privacidade
+      </a>.
+            </span>
+
+          </label>
+
+          @if (
+            registerForm.controls.aceitouTermos.touched
+            && registerForm.controls.aceitouTermos.invalid
+          ) {
+
+            <small class="field-error">
+              Você precisa aceitar os Termos de Uso
+              e a Política de Privacidade para criar sua conta.
+            </small>
+
+          }
+
+      </div>
+
 
       @if (errorMessage) {
         <div class="message error">

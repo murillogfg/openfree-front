@@ -428,4 +428,57 @@
   .primary-button {
     width: 100%;
   }
+
+  /* =========================================
+   ANÚNCIO PÓS-CANDIDATURA
+   ========================================= */
+
+.ad-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+
+  display: grid;
+  place-items: center;
+
+  padding: 20px;
+
+  background:
+    rgba(5, 9, 20, .72);
+
+  backdrop-filter:
+    blur(8px);
+}
+
+.ad-modal {
+  width:
+    min(
+      100%,
+      540px
+    );
+
+  animation:
+    adEnter
+    180ms
+    ease;
+}
+
+@keyframes adEnter {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(12px)
+      scale(.98);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
 }

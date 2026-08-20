@@ -8,14 +8,14 @@ export const routes: Routes = [
   // PÚBLICO
   // =========================
 
-  {
-    path: 'login',
-    loadComponent: () =>
-      import('./pages/login/login')
-        .then(component => component.Login)
-  },
+ {
+  path: 'login',
+  loadComponent: () =>
+    import('./pages/login/login')
+      .then(component => component.Login)
+},
 
-   {
+{
   path: 'register',
   loadComponent: () =>
     import('./pages/register/register')

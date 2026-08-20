@@ -338,4 +338,48 @@
   .register-card input {
     min-height: 50px;
   }
+
+  .terms-field {
+  margin-top: 8px;
+}
+
+.terms-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  color: #8d97b3;
+
+  font-size: 11px;
+  line-height: 1.6;
+
+  cursor: pointer;
+}
+
+.terms-check input {
+  width: 16px;
+  height: 16px;
+
+  margin-top: 2px;
+
+  accent-color: #6671ff;
+
+  cursor: pointer;
+}
+
+.terms-check span {
+  flex: 1;
+}
+
+.terms-check a {
+  color: #8f98ff;
+
+  font-weight: 700;
+
+  text-decoration: none;
+}
+
+.terms-check a:hover {
+  text-decoration: underline;
+}
 }

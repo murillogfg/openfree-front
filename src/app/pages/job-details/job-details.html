@@ -165,7 +165,6 @@
   }
 
 </section>
-
 @if (modalOpen && job) {
   <div
     class="modal-backdrop"
@@ -273,6 +272,26 @@
           </button>
         </footer>
       </form>
+
     </section>
   </div>
+}
+
+
+<!-- ANÚNCIO FICA FORA DO MODAL DA CANDIDATURA -->
+
+@if (showAd) {
+
+  <div class="ad-overlay">
+
+    <div class="ad-modal">
+
+      <app-ad-slot
+        (close)="fecharAnuncio()"
+      />
+
+    </div>
+
+  </div>
+
 }
