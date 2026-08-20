@@ -40,6 +40,11 @@ import {
   FavoritesService
 } from '../../core/services/favorites.service';
 
+import {
+  SeoService
+} from '../../core/services/seo.service';
+
+
 
 @Component({
   selector: 'app-jobs',
@@ -70,6 +75,9 @@ export class Jobs implements OnInit {
 
   private readonly router =
     inject(Router);
+
+    private readonly seoService =
+  inject(SeoService);
 
 
   pagina:
@@ -106,7 +114,11 @@ export class Jobs implements OnInit {
       });
 
 
+
   ngOnInit(): void {
+
+    this.seoService
+      .setJobsPage();
 
     /*
      * Visitantes podem consultar vagas sem login,

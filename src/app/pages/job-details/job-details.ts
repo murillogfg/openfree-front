@@ -46,6 +46,10 @@ import {
   AdSlot
 } from '../../shared/components/ad-slot/ad-slot';
 
+import {
+  SeoService
+} from '../../core/services/seo.service';
+
 
 @Component({
   selector: 'app-job-details',
@@ -84,6 +88,9 @@ export class JobDetails implements OnInit {
 
   private readonly adService =
     inject(AdService);
+
+  private readonly seoService =
+    inject(SeoService);
 
 
   job:
@@ -191,10 +198,16 @@ export class JobDetails implements OnInit {
           this.job =
             response.data;
 
+          this.seoService
+            .setJobPage(
+              response.data
+            );
+
           this.loading =
             false;
         },
 
+        
         error: (
           error: HttpErrorResponse
         ) => {
@@ -205,6 +218,8 @@ export class JobDetails implements OnInit {
           this.errorMessage =
             error.error?.message
             ?? 'Não foi possível carregar esta vaga.';
+
+            
         },
 
         complete: () => {
@@ -213,6 +228,7 @@ export class JobDetails implements OnInit {
             false;
         }
       });
+
   }
 
 
