@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://openfree-front.vercel.app/sitemap.xml
