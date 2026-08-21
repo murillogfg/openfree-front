@@ -396,6 +396,16 @@
   }
 }
 
+/* =========================================
+   ANÚNCIO PÓS-CANDIDATURA
+   ========================================= */
+
+.post-application-ad {
+  width: 100%;
+
+  margin-top: 32px;
+}
+
 @media (max-width: 900px) {
   .details-grid {
     grid-template-columns: 1fr;
@@ -463,22 +473,4 @@
     ease;
 }
 
-@keyframes adEnter {
-
-  from {
-    opacity: 0;
-
-    transform:
-      translateY(12px)
-      scale(.98);
-  }
-
-  to {
-    opacity: 1;
-
-    transform:
-      translateY(0)
-      scale(1);
-  }
-}
 }

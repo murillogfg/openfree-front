@@ -1,41 +1,38 @@
 import {
+  AfterViewInit,
   Component,
-  EventEmitter,
-  Output
+  PLATFORM_ID,
+  inject
 } from '@angular/core';
+
+import {
+  isPlatformBrowser
+} from '@angular/common';
+
 
 @Component({
   selector: 'app-ad-slot',
+
   standalone: true,
 
   template: `
-    <section class="ad-slot">
-
-      <button
-        type="button"
-        class="close-button"
-        aria-label="Fechar anúncio"
-        (click)="fechar()"
-      >
-        ×
-      </button>
+    <section
+      class="ad-container"
+      aria-label="Anúncios"
+    >
 
       <span class="ad-label">
-        Conteúdo patrocinado
+        Anúncios
       </span>
 
-      <div class="ad-placeholder">
-
-        <strong>
-          Ajude a manter a OpenFree aberta
-        </strong>
-
-        <p>
-          Este espaço será usado para anúncios
-          leves e selecionados.
-        </p>
-
-      </div>
+      <ins
+        class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5599361534576915"
+        data-ad-slot="7941347963"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
 
     </section>
   `,
@@ -43,23 +40,25 @@ import {
   styles: [`
     :host {
       display: block;
+      width: 100%;
     }
 
-    .ad-slot {
-      position: relative;
+    .ad-container {
+      width: 100%;
+      min-height: 120px;
 
-      padding: 22px;
+      padding: 18px;
 
       border:
         1px solid
-        rgba(255, 255, 255, 0.08);
+        rgba(255, 255, 255, 0.07);
 
-      border-radius: 18px;
+      border-radius: 16px;
 
       background:
-        rgba(15, 23, 44, 0.96);
+        rgba(14, 21, 42, 0.58);
 
-      text-align: center;
+      overflow: hidden;
     }
 
     .ad-label {
@@ -69,74 +68,90 @@ import {
 
       color: #707b99;
 
-      font-size: 9px;
-      font-weight: 800;
+      font-size: 10px;
+      font-weight: 700;
 
       text-transform: uppercase;
 
-      letter-spacing: 0.12em;
+      letter-spacing: 0.08em;
     }
 
-    .ad-placeholder {
-      padding: 22px;
-
-      border-radius: 14px;
-
-      background:
-        rgba(102, 113, 255, 0.05);
-    }
-
-    .ad-placeholder strong {
-      color: #ffffff;
-    }
-
-    .ad-placeholder p {
-      margin: 7px 0 0;
-
-      color: #808ba7;
-
-      font-size: 12px;
-    }
-
-    .close-button {
-      position: absolute;
-
-      top: 10px;
-      right: 10px;
-
-      width: 30px;
-      height: 30px;
-
-      border: 0;
-
-      border-radius: 9px;
-
-      background:
-        rgba(255, 255, 255, 0.05);
-
-      color: #9aa4bd;
-
-      cursor: pointer;
-
-      font-size: 18px;
-    }
-
-    .close-button:hover {
-      background:
-        rgba(255, 255, 255, 0.1);
-
-      color: #ffffff;
+    .adsbygoogle {
+      width: 100%;
     }
   `]
 })
-export class AdSlot {
+export class AdSlot
+  implements AfterViewInit {
 
-  @Output()
-  close =
-    new EventEmitter<void>();
+  private readonly platformId =
+    inject(PLATFORM_ID);
 
-  fechar(): void {
 
-    this.close.emit();
+  ngAfterViewInit(): void {
+
+    if (
+      !isPlatformBrowser(
+        this.platformId
+      )
+    ) {
+      return;
+    }
+
+
+    /*
+     * O script principal do AdSense já está
+     * carregado no <head> do index.html.
+     *
+     * Aqui apenas solicitamos a renderização
+     * deste bloco específico.
+     */
+    setTimeout(
+      () => {
+
+        try {
+
+          const adsbygoogle =
+            (
+              window as Window & {
+                adsbygoogle?: unknown[];
+              }
+            ).adsbygoogle
+            ?? [];
+
+
+          (
+            window as Window & {
+              adsbygoogle?: unknown[];
+            }
+          ).adsbygoogle =
+            adsbygoogle;
+
+
+          adsbygoogle.push(
+            {}
+          );
+
+        }
+        catch (
+          error
+        ) {
+
+          /*
+           * Durante a revisão do AdSense ou
+           * quando não há inventário disponível,
+           * o bloco pode não receber anúncio.
+           *
+           * Isso não deve quebrar a página.
+           */
+          console.warn(
+            'AdSense ainda não conseguiu renderizar o bloco.',
+            error
+          );
+        }
+
+      },
+      0
+    );
   }
 }

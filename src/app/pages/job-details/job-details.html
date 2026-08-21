@@ -163,6 +163,15 @@
 
     </div>
   }
+  @if (showAd) {
+
+  <div class="post-application-ad">
+
+    <app-ad-slot />
+
+  </div>
+
+}
 
 </section>
 @if (modalOpen && job) {
