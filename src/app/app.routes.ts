@@ -104,6 +104,20 @@ export const routes: Routes = [
               )
           },
 
+          {
+              path: 'privacy',
+              loadComponent: () =>
+                import('./pages/privacy/privacy')
+                  .then(component => component.Privacy)
+            },
+
+            {
+              path: 'terms',
+              loadComponent: () =>
+                import('./pages/terms/terms')
+                  .then(component => component.Terms)
+            },
+
           // =====================
           // PERFIL PÚBLICO INTERNO
           // =====================

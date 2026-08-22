@@ -20,11 +20,13 @@
       </span>
     </a>
 
+
     <nav class="navigation">
 
       <span class="navigation-label">
         Visão geral
       </span>
+
 
       @if (!isAuthenticated) {
 
@@ -34,12 +36,14 @@
           (click)="closeSidebar()"
         >
           <span class="nav-icon">◇</span>
+
           <span class="nav-text">
             Explorar vagas
           </span>
         </a>
 
       }
+
 
       @if (isAuthenticated) {
 
@@ -49,10 +53,12 @@
           (click)="closeSidebar()"
         >
           <span class="nav-icon">◌</span>
+
           <span class="nav-text">
             Chat
           </span>
         </a>
+
 
         <a
           routerLink="/notifications"
@@ -66,6 +72,7 @@
           </span>
 
           @if (unreadNotifications > 0) {
+
             <span class="nav-badge">
               {{
                 unreadNotifications > 99
@@ -73,8 +80,10 @@
                   : unreadNotifications
               }}
             </span>
+
           }
         </a>
+
 
         @if (isFreelancer) {
 
@@ -84,10 +93,12 @@
             (click)="closeSidebar()"
           >
             <span class="nav-icon">◇</span>
+
             <span class="nav-text">
               Explorar vagas
             </span>
           </a>
+
 
           <a
             routerLink="/applications"
@@ -95,10 +106,12 @@
             (click)="closeSidebar()"
           >
             <span class="nav-icon">▤</span>
+
             <span class="nav-text">
               Minhas candidaturas
             </span>
           </a>
+
 
           <a
             routerLink="/contracts"
@@ -106,10 +119,12 @@
             (click)="closeSidebar()"
           >
             <span class="nav-icon">▧</span>
+
             <span class="nav-text">
               Contratos
             </span>
           </a>
+
 
           <a
             routerLink="/favorites"
@@ -117,14 +132,17 @@
             (click)="closeSidebar()"
           >
             <span class="nav-icon">★</span>
+
             <span class="nav-text">
               Favoritos
             </span>
           </a>
 
+
           <span class="navigation-label">
             Financeiro
           </span>
+
 
           <a
             routerLink="/earnings"
@@ -132,10 +150,12 @@
             (click)="closeSidebar()"
           >
             <span class="nav-icon">$</span>
+
             <span class="nav-text">
               Meus ganhos
             </span>
           </a>
+
 
           <a
             routerLink="/company/create"
@@ -143,11 +163,14 @@
             (click)="closeSidebar()"
           >
             <span class="nav-icon">＋</span>
+
             <span class="nav-text">
               Criar empresa
             </span>
           </a>
+
         }
+
 
         @if (isCompany) {
 
@@ -157,10 +180,12 @@
             (click)="closeSidebar()"
           >
             <span class="nav-icon">◇</span>
+
             <span class="nav-text">
               Minhas vagas
             </span>
           </a>
+
 
           <a
             routerLink="/jobs/create"
@@ -168,10 +193,12 @@
             (click)="closeSidebar()"
           >
             <span class="nav-icon">＋</span>
+
             <span class="nav-text">
               Publicar vaga
             </span>
           </a>
+
 
           <a
             routerLink="/contracts"
@@ -179,14 +206,17 @@
             (click)="closeSidebar()"
           >
             <span class="nav-icon">▧</span>
+
             <span class="nav-text">
               Contratos
             </span>
           </a>
 
+
           <span class="navigation-label">
             Financeiro
           </span>
+
 
           <a
             routerLink="/finance"
@@ -194,15 +224,19 @@
             (click)="closeSidebar()"
           >
             <span class="nav-icon">$</span>
+
             <span class="nav-text">
               Pagamentos
             </span>
           </a>
+
         }
+
 
         <span class="navigation-label">
           Conta
         </span>
+
 
         <a
           routerLink="/profile"
@@ -210,13 +244,16 @@
           (click)="closeSidebar()"
         >
           <span class="nav-icon">◎</span>
+
           <span class="nav-text">
             Perfil
           </span>
         </a>
+
       }
 
     </nav>
+
 
     <div class="sidebar-footer">
 
@@ -227,6 +264,7 @@
           <div class="avatar">
             {{ displayInitials }}
           </div>
+
 
           <div class="user-info">
 
@@ -241,6 +279,7 @@
           </div>
 
         </div>
+
 
         <button
           type="button"
@@ -263,6 +302,32 @@
         </a>
 
       }
+
+
+      <nav
+        class="legal-links"
+        aria-label="Links legais"
+      >
+
+        <a
+          routerLink="/privacy"
+          (click)="closeSidebar()"
+        >
+          Privacidade
+        </a>
+
+        <span aria-hidden="true">
+          •
+        </span>
+
+        <a
+          routerLink="/terms"
+          (click)="closeSidebar()"
+        >
+          Termos
+        </a>
+
+      </nav>
 
     </div>
 
@@ -294,6 +359,7 @@
         ☰
       </button>
 
+
       <div class="topbar-title">
 
         <strong>
@@ -305,6 +371,7 @@
         </span>
 
       </div>
+
 
       <div class="topbar-actions">
 
@@ -328,7 +395,6 @@
               </span>
 
             }
-
           </a>
 
         }

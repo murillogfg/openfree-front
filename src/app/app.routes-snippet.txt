@@ -1,0 +1,16 @@
+// Adicione estes dois blocos na ÁREA PÚBLICA do app.routes.ts,
+// antes do bloco protegido por authGuard:
+
+{
+  path: 'privacy',
+  loadComponent: () =>
+    import('./pages/privacy/privacy')
+      .then(component => component.Privacy)
+},
+
+{
+  path: 'terms',
+  loadComponent: () =>
+    import('./pages/terms/terms')
+      .then(component => component.Terms)
+},

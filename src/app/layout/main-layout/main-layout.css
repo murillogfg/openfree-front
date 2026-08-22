@@ -392,4 +392,61 @@
   font-weight: 900;
 }
 
+.legal-links {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+
+  margin-bottom: 14px;
+
+  font-size: 11px;
+}
+
+.legal-links a {
+  color: #66718d;
+  text-decoration: none;
+}
+
+.legal-links a:hover {
+  color: #8992ff;
+}
+
+
+/* Adicione este bloco ao final de main-layout.css */
+
+.legal-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  margin-top: 14px;
+  padding-top: 14px;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.06);
+
+  color: #66718d;
+
+  font-size: 11px;
+}
+
+.legal-links a {
+  color: #66718d;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.legal-links a:hover {
+  color: #8992ff;
+}
+
+.legal-links a:focus-visible {
+  outline: 2px solid #8992ff;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
 }
