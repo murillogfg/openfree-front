@@ -2,11 +2,12 @@ import { Routes } from '@angular/router';
 
 import { authGuard } from './core/guards/auth-guard';
 
+
 export const routes: Routes = [
 
-  // =========================
-  // PÚBLICO
-  // =========================
+  // =====================================================
+  // PÁGINAS PÚBLICAS SEM O LAYOUT PRINCIPAL
+  // =====================================================
 
   {
     path: 'login',
@@ -36,27 +37,34 @@ export const routes: Routes = [
         .then(component => component.ResetPassword)
   },
 
-  // =========================
+
+  // =====================================================
   // LAYOUT PRINCIPAL
-  // =========================
+  // =====================================================
   //
-  // O layout agora também pode ser carregado por
-  // visitantes, porque /jobs e /jobs/:id são públicos.
+  // O MainLayout pode ser carregado sem login porque
+  // algumas páginas dentro dele são públicas:
   //
-  // As demais rotas continuam protegidas pelo
-  // agrupamento com authGuard.
+  // /jobs
+  // /jobs/:id
+  // /privacy
+  // /terms
+  //
+  // O próprio MainLayout já está preparado para não
+  // buscar perfil/notificações quando não há login.
   //
   {
     path: '',
+
     loadComponent: () =>
       import('./layout/main-layout/main-layout')
         .then(component => component.MainLayout),
 
     children: [
 
-      // =====================
-      // VAGAS PÚBLICAS
-      // =====================
+      // =================================================
+      // ROTAS PÚBLICAS
+      // =================================================
 
       {
         path: 'jobs',
@@ -65,32 +73,50 @@ export const routes: Routes = [
             .then(component => component.Jobs)
       },
 
-      // =====================
-      // ÁREA AUTENTICADA
-      // =====================
+      {
+        path: 'privacy',
+        loadComponent: () =>
+          import('./pages/privacy/privacy')
+            .then(component => component.Privacy)
+      },
+
+      {
+        path: 'terms',
+        loadComponent: () =>
+          import('./pages/terms/terms')
+            .then(component => component.Terms)
+      },
+
+
+      // =================================================
+      // ROTAS PRIVADAS
+      // =================================================
       //
-      // Esse agrupamento sem URL adicional mantém
-      // todas as rotas privadas sob o authGuard.
+      // Tudo dentro deste grupo exige autenticação.
       //
       {
         path: '',
-        canActivate: [authGuard],
+
+        canActivate: [
+          authGuard
+        ],
 
         children: [
 
-          // =====================
+          // =============================================
           // DASHBOARDS
-          // =====================
+          // =============================================
 
           {
             path: 'dashboard/freelancer',
             loadComponent: () =>
               import(
                 './pages/dashboard-freelancer/dashboard-freelancer'
-              ).then(
-                component =>
-                  component.DashboardFreelancer
               )
+                .then(
+                  component =>
+                    component.DashboardFreelancer
+                )
           },
 
           {
@@ -98,46 +124,43 @@ export const routes: Routes = [
             loadComponent: () =>
               import(
                 './pages/dashboard-company/dashboard-company'
-              ).then(
-                component =>
-                  component.DashboardCompany
               )
+                .then(
+                  component =>
+                    component.DashboardCompany
+                )
           },
 
-          {
-              path: 'privacy',
-              loadComponent: () =>
-                import('./pages/privacy/privacy')
-                  .then(component => component.Privacy)
-            },
 
-            {
-              path: 'terms',
-              loadComponent: () =>
-                import('./pages/terms/terms')
-                  .then(component => component.Terms)
-            },
-
-          // =====================
+          // =============================================
           // PERFIL PÚBLICO INTERNO
-          // =====================
+          // =============================================
 
           {
             path: 'profile/user/:id',
             loadComponent: () =>
-              import('./pages/public-profile/public-profile')
-                .then(component => component.PublicProfile)
+              import(
+                './pages/public-profile/public-profile'
+              )
+                .then(
+                  component =>
+                    component.PublicProfile
+                )
           },
 
-          // =====================
+
+          // =============================================
           // VAGAS PRIVADAS
-          // =====================
+          // =============================================
 
           {
             path: 'jobs/create',
             loadComponent: () =>
               import('./pages/job-form/job-form')
-                .then(component => component.JobForm)
+                .then(
+                  component =>
+                    component.JobForm
+                )
           },
 
           {
@@ -145,15 +168,17 @@ export const routes: Routes = [
             loadComponent: () =>
               import(
                 './pages/job-applications/job-applications'
-              ).then(
-                component =>
-                  component.JobApplications
               )
+                .then(
+                  component =>
+                    component.JobApplications
+                )
           },
 
-          // =====================
+
+          // =============================================
           // FREELANCER
-          // =====================
+          // =============================================
 
           {
             path: 'applications',
@@ -185,9 +210,10 @@ export const routes: Routes = [
                 )
           },
 
-          // =====================
+
+          // =============================================
           // CONTRATOS
-          // =====================
+          // =============================================
 
           {
             path: 'contracts',
@@ -199,9 +225,10 @@ export const routes: Routes = [
                 )
           },
 
-          // =====================
+
+          // =============================================
           // EMPRESA
-          // =====================
+          // =============================================
 
           {
             path: 'finance',
@@ -213,9 +240,10 @@ export const routes: Routes = [
                 )
           },
 
-          // =====================
+
+          // =============================================
           // COMUNICAÇÃO
-          // =====================
+          // =============================================
 
           {
             path: 'chat',
@@ -232,15 +260,17 @@ export const routes: Routes = [
             loadComponent: () =>
               import(
                 './pages/notifications/notifications'
-              ).then(
-                component =>
-                  component.Notifications
               )
+                .then(
+                  component =>
+                    component.Notifications
+                )
           },
 
-          // =====================
+
+          // =============================================
           // CONTA
-          // =====================
+          // =============================================
 
           {
             path: 'profile',
@@ -257,33 +287,44 @@ export const routes: Routes = [
             loadComponent: () =>
               import(
                 './pages/company-register/company-register'
-              ).then(
-                component =>
-                  component.CompanyRegister
               )
+                .then(
+                  component =>
+                    component.CompanyRegister
+                )
           }
         ]
       },
 
-      // IMPORTANTE:
+
+      // =================================================
+      // DETALHE PÚBLICO DA VAGA
+      // =================================================
       //
-      // /jobs/:id vem depois das rotas privadas
-      // /jobs/create e /jobs/:id/applications.
+      // Fica DEPOIS de:
       //
-      // Assim "create" nunca será interpretado
-      // como se fosse o ID de uma vaga.
+      // /jobs/create
+      // /jobs/:id/applications
+      //
+      // para evitar que "create" seja interpretado
+      // como um ID.
+      //
       {
         path: 'jobs/:id',
         loadComponent: () =>
           import('./pages/job-details/job-details')
-            .then(component => component.JobDetails)
+            .then(
+              component =>
+                component.JobDetails
+            )
       }
     ]
   },
 
-  // =========================
-  // FALLBACK
-  // =========================
+
+  // =====================================================
+  // REDIRECIONAMENTOS
+  // =====================================================
 
   {
     path: '',
