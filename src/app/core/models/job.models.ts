@@ -4,7 +4,9 @@ export type StatusVaga =
   | 'EM_ANDAMENTO'
   | 'FINALIZADA'
   | 'CANCELADA'
-  | 'ARQUIVADA';
+  | 'ARQUIVADA'
+  | 'EXPIRADA';
+
 
 export interface Vaga {
   id: number;
@@ -25,6 +27,7 @@ export interface Vaga {
   updatedAt: string;
 }
 
+
 export interface JobFilter {
   titulo?: string;
   cidade?: string;
@@ -34,6 +37,7 @@ export interface JobFilter {
   size?: number;
   sort?: string;
 }
+
 
 export interface PageResponse<T> {
   content: T[];
