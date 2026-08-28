@@ -449,4 +449,138 @@
   outline-offset: 3px;
   border-radius: 4px;
 }
+/* =====================================================
+   BRANDING GENOVA FORGE
+   Adicione este bloco ao FINAL do main-layout.css
+   ===================================================== */
+
+.brand-mark {
+  overflow: hidden;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 12px 30px
+    rgba(81, 92, 232, 0.24);
+}
+
+.brand-mark img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  border-radius: 12px;
+}
+
+
+/* =====================================================
+   LINKS DO RODAPÉ DA SIDEBAR
+   ===================================================== */
+
+.footer-resources {
+  display: grid;
+
+  gap: 10px;
+
+  margin-top: 16px;
+  padding-top: 14px;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.06);
+
+  text-align: center;
+}
+
+
+.legal-links {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+
+  color: #66718d;
+
+  font-size: 11px;
+}
+
+
+.legal-links a,
+.community-links a,
+.feedback-email {
+  color: #7d88a8;
+
+  text-decoration: none;
+
+  transition:
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+
+.legal-links a:hover,
+.community-links a:hover,
+.feedback-email:hover {
+  color: #aab2ff;
+}
+
+
+.legal-links a:focus-visible,
+.community-links a:focus-visible,
+.feedback-email:focus-visible {
+  outline:
+    2px solid
+    #8992ff;
+
+  outline-offset: 3px;
+
+  border-radius: 4px;
+}
+
+
+.community-links {
+  display: flex;
+
+  justify-content: center;
+  flex-wrap: wrap;
+
+  gap: 7px 12px;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+
+.community-links a {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 4px;
+}
+
+
+.feedback-email {
+  overflow: hidden;
+
+  font-size: 10px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  opacity: 0.72;
+}
+
+
+
 }

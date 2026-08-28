@@ -10,14 +10,30 @@
       [routerLink]="dashboardRoute"
       (click)="closeSidebar()"
     >
+
       <span class="brand-mark">
-        OF
+
+        <img
+          src="/brand/genova-mark.png"
+          alt="Genova Forge"
+          width="46"
+          height="46"
+        >
+
       </span>
 
       <span class="brand-copy">
-        <strong>OpenFree</strong>
-        <small>by Genova Forge</small>
+
+        <strong>
+          OpenFree
+        </strong>
+
+        <small>
+          by Genova Forge
+        </small>
+
       </span>
+
     </a>
 
 
@@ -35,7 +51,9 @@
           routerLinkActive="active"
           (click)="closeSidebar()"
         >
-          <span class="nav-icon">◇</span>
+          <span class="nav-icon">
+            ◇
+          </span>
 
           <span class="nav-text">
             Explorar vagas
@@ -52,7 +70,9 @@
           routerLinkActive="active"
           (click)="closeSidebar()"
         >
-          <span class="nav-icon">◌</span>
+          <span class="nav-icon">
+            ◌
+          </span>
 
           <span class="nav-text">
             Chat
@@ -65,7 +85,9 @@
           routerLinkActive="active"
           (click)="closeSidebar()"
         >
-          <span class="nav-icon">♢</span>
+          <span class="nav-icon">
+            ♢
+          </span>
 
           <span class="nav-text">
             Notificações
@@ -82,6 +104,7 @@
             </span>
 
           }
+
         </a>
 
 
@@ -92,7 +115,9 @@
             routerLinkActive="active"
             (click)="closeSidebar()"
           >
-            <span class="nav-icon">◇</span>
+            <span class="nav-icon">
+              ◇
+            </span>
 
             <span class="nav-text">
               Explorar vagas
@@ -105,7 +130,9 @@
             routerLinkActive="active"
             (click)="closeSidebar()"
           >
-            <span class="nav-icon">▤</span>
+            <span class="nav-icon">
+              ▤
+            </span>
 
             <span class="nav-text">
               Minhas candidaturas
@@ -118,7 +145,9 @@
             routerLinkActive="active"
             (click)="closeSidebar()"
           >
-            <span class="nav-icon">▧</span>
+            <span class="nav-icon">
+              ▧
+            </span>
 
             <span class="nav-text">
               Contratos
@@ -131,7 +160,9 @@
             routerLinkActive="active"
             (click)="closeSidebar()"
           >
-            <span class="nav-icon">★</span>
+            <span class="nav-icon">
+              ★
+            </span>
 
             <span class="nav-text">
               Favoritos
@@ -149,7 +180,9 @@
             routerLinkActive="active"
             (click)="closeSidebar()"
           >
-            <span class="nav-icon">$</span>
+            <span class="nav-icon">
+              $
+            </span>
 
             <span class="nav-text">
               Meus ganhos
@@ -162,7 +195,9 @@
             routerLinkActive="active"
             (click)="closeSidebar()"
           >
-            <span class="nav-icon">＋</span>
+            <span class="nav-icon">
+              ＋
+            </span>
 
             <span class="nav-text">
               Criar empresa
@@ -179,7 +214,9 @@
             routerLinkActive="active"
             (click)="closeSidebar()"
           >
-            <span class="nav-icon">◇</span>
+            <span class="nav-icon">
+              ◇
+            </span>
 
             <span class="nav-text">
               Minhas vagas
@@ -192,7 +229,9 @@
             routerLinkActive="active"
             (click)="closeSidebar()"
           >
-            <span class="nav-icon">＋</span>
+            <span class="nav-icon">
+              ＋
+            </span>
 
             <span class="nav-text">
               Publicar vaga
@@ -205,7 +244,9 @@
             routerLinkActive="active"
             (click)="closeSidebar()"
           >
-            <span class="nav-icon">▧</span>
+            <span class="nav-icon">
+              ▧
+            </span>
 
             <span class="nav-text">
               Contratos
@@ -223,7 +264,9 @@
             routerLinkActive="active"
             (click)="closeSidebar()"
           >
-            <span class="nav-icon">$</span>
+            <span class="nav-icon">
+              $
+            </span>
 
             <span class="nav-text">
               Pagamentos
@@ -243,7 +286,9 @@
           routerLinkActive="active"
           (click)="closeSidebar()"
         >
-          <span class="nav-icon">◎</span>
+          <span class="nav-icon">
+            ◎
+          </span>
 
           <span class="nav-text">
             Perfil
@@ -264,7 +309,6 @@
           <div class="avatar">
             {{ displayInitials }}
           </div>
-
 
           <div class="user-info">
 
@@ -304,30 +348,68 @@
       }
 
 
-      <nav
-        class="legal-links"
-        aria-label="Links legais"
-      >
+      <div class="footer-resources">
+
+        <nav
+          class="legal-links"
+          aria-label="Links legais"
+        >
+
+          <a
+            routerLink="/privacy"
+            (click)="closeSidebar()"
+          >
+            Privacidade
+          </a>
+
+          <span aria-hidden="true">
+            •
+          </span>
+
+          <a
+            routerLink="/terms"
+            (click)="closeSidebar()"
+          >
+            Termos
+          </a>
+
+        </nav>
+
+
+        <nav
+          class="community-links"
+          aria-label="Canais da Genova Forge"
+        >
+
+          <a
+            href="https://www.instagram.com/genova_forge/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Instagram
+            <span aria-hidden="true">
+              ↗
+            </span>
+          </a>
+
+
+          <a
+            href="mailto:genovaforge@gmail.com?subject=Feedback%20OpenFree"
+          >
+            Enviar feedback
+          </a>
+
+        </nav>
+
 
         <a
-          routerLink="/privacy"
-          (click)="closeSidebar()"
+          class="feedback-email"
+          href="mailto:genovaforge@gmail.com?subject=Feedback%20OpenFree"
         >
-          Privacidade
+          genovaforge@gmail.com
         </a>
 
-        <span aria-hidden="true">
-          •
-        </span>
-
-        <a
-          routerLink="/terms"
-          (click)="closeSidebar()"
-        >
-          Termos
-        </a>
-
-      </nav>
+      </div>
 
     </div>
 
@@ -395,6 +477,7 @@
               </span>
 
             }
+
           </a>
 
         }
