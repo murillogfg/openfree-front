@@ -5,18 +5,30 @@
     <div class="brand">
 
       <span class="brand-mark">
-        OF
+
+        <img
+          src="/brand/genova-mark.png"
+          alt="Genova Forge"
+          width="52"
+          height="52"
+        >
+
       </span>
 
       <div>
-        <h1>OpenFree</h1>
+
+        <h1>
+          OpenFree
+        </h1>
 
         <p>
           Conectando empresas e profissionais.
         </p>
+
       </div>
 
     </div>
+
 
     <form
       [formGroup]="loginForm"
@@ -24,6 +36,7 @@
     >
 
       <!-- E-MAIL -->
+
       <label for="email">
         E-mail
       </label>
@@ -34,6 +47,7 @@
         formControlName="email"
         placeholder="seu@email.com"
       />
+
 
       <small
         *ngIf="
@@ -46,6 +60,7 @@
 
 
       <!-- SENHA -->
+
       <label for="senha">
         Senha
       </label>
@@ -56,6 +71,7 @@
         formControlName="senha"
         placeholder="Sua senha"
       />
+
 
       <small
         *ngIf="
@@ -68,14 +84,18 @@
 
 
       <!-- RECUPERAÇÃO DE SENHA -->
+
       <div class="forgot-password-link">
+
         <a routerLink="/forgot-password">
           Esqueci minha senha
         </a>
+
       </div>
 
 
       <!-- ERRO DE LOGIN -->
+
       <div
         class="error-message"
         *ngIf="errorMessage"
@@ -85,6 +105,7 @@
 
 
       <!-- LOGIN -->
+
       <button
         type="submit"
         [disabled]="loading"
@@ -100,6 +121,7 @@
 
 
     <!-- CADASTRO -->
+
     <div class="register-link">
 
       <span>
