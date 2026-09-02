@@ -1,0 +1,19 @@
+{
+  "name": "OpenFree",
+  "short_name": "OpenFree",
+  "description": "Vagas e oportunidades para freelancers.",
+  "start_url": "/jobs",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/brand/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/brand/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
