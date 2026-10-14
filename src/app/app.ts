@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+
+import { NativeAppService } from './core/services/native-app.service';
 
 @Component({
   selector: 'app-root',
@@ -8,4 +10,8 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.css'
 })
 export class App {
+
+  constructor() {
+    inject(NativeAppService).init();
+  }
 }

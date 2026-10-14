@@ -23,7 +23,7 @@ import {
 export class SeoService {
 
   private readonly siteUrl =
-    'https://openfree-front.vercel.app';
+    'https://openfree.genovaforge.com.br';
 
 
   private readonly jobPostingScriptId =

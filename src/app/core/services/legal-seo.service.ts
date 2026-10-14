@@ -4,7 +4,7 @@ import { Meta, Title } from '@angular/platform-browser';
 
 @Injectable({ providedIn: 'root' })
 export class LegalSeoService {
-  private readonly siteUrl = 'https://openfree-front.vercel.app';
+  private readonly siteUrl = 'https://openfree.genovaforge.com.br';
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
   private readonly document = inject(DOCUMENT);

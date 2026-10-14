@@ -62,6 +62,12 @@ export class Login {
   errorMessage =
     '';
 
+  readonly sessionExpired =
+    this.route
+      .snapshot
+      .queryParamMap
+      .has('sessionExpired');
+
 
   loginForm =
     this.formBuilder

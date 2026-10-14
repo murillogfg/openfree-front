@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://openfree-front.vercel.app/sitemap.xml
+Sitemap: https://openfree.genovaforge.com.br/sitemap.xml

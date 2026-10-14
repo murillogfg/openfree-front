@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/sitemap.xml",
-      "destination": "https://openfree-api-production.up.railway.app/jobs/sitemap.xml"
+      "destination": "https://openfree-api.genovaforge.com.br/jobs/sitemap.xml"
     }
   ]
 }

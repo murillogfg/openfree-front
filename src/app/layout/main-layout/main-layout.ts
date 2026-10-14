@@ -42,6 +42,9 @@ import {
   styleUrl: './main-layout.css'
 })
 export class MainLayout implements OnInit {
+perfil() {
+throw new Error('Method not implemented.');
+}
 
   private readonly authService =
     inject(AuthService);

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
 
 @Injectable({
   providedIn: 'root'
@@ -66,6 +67,14 @@ export class AdService {
      * Publicidade globalmente desligada.
      */
     if (!this.ADS_ENABLED) {
+      return false;
+    }
+
+    /*
+     * No aplicativo (Android/iOS) o AdSense não é
+     * permitido. Lá usaremos AdMob no futuro.
+     */
+    if (Capacitor.isNativePlatform()) {
       return false;
     }
 
@@ -189,4 +198,4 @@ export class AdService {
       this.storageKey
     );
   }
-}
+}

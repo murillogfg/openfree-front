@@ -30,6 +30,14 @@
     </div>
 
 
+    <div
+      class="info-message"
+      *ngIf="sessionExpired"
+    >
+      Sua sessão expirou. Entre novamente para continuar.
+    </div>
+
+
     <form
       [formGroup]="loginForm"
       (ngSubmit)="submit()"

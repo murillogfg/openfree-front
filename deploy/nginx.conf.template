@@ -1,0 +1,38 @@
+server {
+    listen ${PORT};
+    server_name _;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    gzip on;
+    gzip_types text/plain text/css application/javascript application/json image/svg+xml application/xml;
+    gzip_min_length 1024;
+
+    # Sitemap dinâmico gerado pela API (vagas publicadas).
+    # O resolver + variável fazem o DNS ser resolvido só na hora
+    # do acesso: o site sobe mesmo se a API estiver fora do ar.
+    location = /sitemap.xml {
+        resolver 1.1.1.1 8.8.8.8 valid=300s ipv6=off;
+        set $api_sitemap ${API_URL}/jobs/sitemap.xml;
+        proxy_pass $api_sitemap;
+        proxy_ssl_server_name on;
+    }
+
+    # Arquivos com hash no nome podem ficar em cache por 1 ano.
+    location ~* \.(?:js|css|woff2?|png|jpg|jpeg|webp|svg|ico)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        try_files $uri =404;
+    }
+
+    # index.html nunca em cache, para os deploys aparecerem na hora.
+    location = /index.html {
+        add_header Cache-Control "no-cache";
+    }
+
+    # Rotas do Angular (ex.: /jobs/12, /login) caem no index.html.
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}

@@ -83,8 +83,98 @@ export class AuthService {
 
   isAuthenticated(): boolean {
 
-    return Boolean(
-      this.getToken()
+    const token =
+      this.getToken();
+
+    if (!token) {
+      return false;
+    }
+
+    if (this.isTokenExpired(token)) {
+
+      this.clearSession();
+
+      return false;
+    }
+
+    return true;
+  }
+
+  /*
+   * Chamado quando a API responde 401 para uma
+   * requisição autenticada (token expirado ou
+   * inválido). Limpa a sessão e volta ao login
+   * avisando o usuário.
+   */
+  handleExpiredSession(): void {
+
+    if (!this.getToken()) {
+      return;
+    }
+
+    this.clearSession();
+
+    const returnUrl =
+      this.router.url;
+
+    this.router.navigate(
+      ['/login'],
+      {
+        queryParams: {
+          sessionExpired: 1,
+          returnUrl:
+            returnUrl.startsWith('/login')
+              ? null
+              : returnUrl
+        }
+      }
+    );
+  }
+
+  /*
+   * Lê o campo "exp" do JWT (em segundos).
+   * Considera expirado com 30s de folga para
+   * evitar requisições que falhariam no caminho.
+   */
+  private isTokenExpired(
+    token: string
+  ): boolean {
+
+    try {
+
+      const payload =
+        token.split('.')[1];
+
+      const json =
+        atob(
+          payload
+            .replace(/-/g, '+')
+            .replace(/_/g, '/')
+        );
+
+      const exp =
+        JSON.parse(json).exp;
+
+      if (typeof exp !== 'number') {
+        return false;
+      }
+
+      return Date.now() >= (exp * 1000) - 30_000;
+
+    } catch {
+
+      return true;
+    }
+  }
+
+  private clearSession(): void {
+
+    localStorage.removeItem(
+      this.tokenKey
+    );
+
+    localStorage.removeItem(
+      this.roleKey
     );
   }
 
@@ -113,16 +203,10 @@ export class AuthService {
 
   logout(): void {
 
-    localStorage.removeItem(
-      this.tokenKey
-    );
-
-    localStorage.removeItem(
-      this.roleKey
-    );
+    this.clearSession();
 
     this.router.navigate([
       '/login'
     ]);
   }
-}
+}

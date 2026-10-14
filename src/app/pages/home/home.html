@@ -1,0 +1,259 @@
+<header class="topo">
+  <a class="marca" routerLink="/">
+    <img src="/brand/genova-mark.png" alt="" width="34" height="34">
+    <span>OpenFree</span>
+  </a>
+
+  <nav class="topo-acoes">
+    <a class="link" routerLink="/login">Entrar</a>
+    <a class="btn btn-primario btn-pequeno" routerLink="/register">Criar conta</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <div class="container hero-grid">
+
+      <div>
+        <span class="selo">Plataforma de freelas para empresas e profissionais</span>
+
+        <h1>
+          Publique a vaga.<br>
+          Escolha o freela.<br>
+          <span class="destaque">Projeto entregue.</span>
+        </h1>
+
+        <p class="lead">
+          O OpenFree conecta empresas que precisam de um trabalho a
+          profissionais prontos para fazer. Sem grupo de WhatsApp, sem
+          planilha e sem intermediário: vaga, candidatura, contrato e
+          conversa no mesmo lugar.
+        </p>
+
+        <div class="hero-botoes">
+          <a class="btn btn-primario" routerLink="/register" [queryParams]="{ perfil: 'contratante' }">
+            Sou empresa · publicar vaga
+          </a>
+          <a class="btn btn-contorno" routerLink="/jobs">
+            Sou freelancer · ver vagas
+          </a>
+        </div>
+
+        <p class="nota">Cadastro gratuito para empresas e freelancers.</p>
+      </div>
+
+      <!-- Ilustração do fluxo -->
+      <div class="demo" aria-hidden="true">
+        <div class="card">
+          <div class="linha">
+            <span class="tag">Nova vaga</span>
+            <strong class="valor">R$ 1.200</strong>
+          </div>
+          <h3>Landing page para loja de roupas</h3>
+          <p class="mutado">Remoto · Entrega em 10 dias · Front-end</p>
+          <div class="chips">
+            <span>HTML</span><span>CSS</span><span>Angular</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <p class="rotulo">Candidaturas</p>
+          <div class="candidato"><span class="avatar">AL</span><b>Ana L.</b><span class="status ok">Aceita</span></div>
+          <div class="candidato"><span class="avatar">RS</span><b>Rafael S.</b><span class="status">Em análise</span></div>
+          <div class="candidato"><span class="avatar">JM</span><b>Júlia M.</b><span class="status">Em análise</span></div>
+        </div>
+
+        <div class="card card-sucesso">
+          <span class="check">✓</span>
+          <div>
+            <b>Contrato fechado</b>
+            <p class="mutado">Ana L. · Landing page</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== DIFERENCIAIS ===================== -->
+  <section class="faixa">
+    <div class="container diferenciais">
+      <div class="item"><span class="icone">◇</span><div><b>Vagas abertas ao público</b><p>Explore sem precisar de login</p></div></div>
+      <div class="item"><span class="icone">◌</span><div><b>Chat integrado</b><p>Converse antes de fechar</p></div></div>
+      <div class="item"><span class="icone">▤</span><div><b>Contratos na plataforma</b><p>Tudo registrado e organizado</p></div></div>
+      <div class="item"><span class="icone">+</span><div><b>100% gratuito para começar</b><p>Crie sua conta em minutos</p></div></div>
+    </div>
+  </section>
+
+  <!-- ===================== COMO FUNCIONA ===================== -->
+  <section class="secao" id="como-funciona">
+    <div class="container centro">
+      <span class="selo">Como funciona</span>
+      <h2>Do anúncio ao contrato em três passos</h2>
+      <p class="sub">Escolha o seu lado e veja como o OpenFree funciona para você.</p>
+
+      <div class="abas" role="tablist">
+        <button type="button" role="tab" [class.ativa]="lado() === 'empresas'"
+                [attr.aria-selected]="lado() === 'empresas'" (click)="escolherLado('empresas')">
+          Para empresas
+        </button>
+        <button type="button" role="tab" [class.ativa]="lado() === 'freelancers'"
+                [attr.aria-selected]="lado() === 'freelancers'" (click)="escolherLado('freelancers')">
+          Para freelancers
+        </button>
+      </div>
+
+      <div class="passos">
+        @for (passo of passos[lado()]; track passo.titulo; let i = $index) {
+          <article class="card passo">
+            <span class="numero">{{ i + 1 }}</span>
+            <h3>{{ passo.titulo }}</h3>
+            <p>{{ passo.texto }}</p>
+          </article>
+        }
+      </div>
+
+      @if (lado() === 'empresas') {
+        <a class="btn btn-primario" routerLink="/register" [queryParams]="{ perfil: 'contratante' }">
+          Publicar minha primeira vaga
+        </a>
+      } @else {
+        <a class="btn btn-primario" routerLink="/register" [queryParams]="{ perfil: 'freelancer' }">
+          Criar meu perfil de freelancer
+        </a>
+      }
+    </div>
+  </section>
+
+  <!-- ===================== BENEFÍCIOS ===================== -->
+  <section class="secao secao-alt">
+    <div class="container centro">
+      <span class="selo">Benefícios</span>
+      <h2>Feito para os dois lados do trabalho</h2>
+      <p class="sub">Ferramentas simples para quem contrata e para quem é contratado.</p>
+
+      <div class="beneficios">
+        <article class="card beneficio">
+          <p class="rotulo">Para empresas</p>
+          <h3>Contrate sem complicação</h3>
+          <ul>
+            <li>Publique vagas com descrição, prazo e valor</li>
+            <li>Receba candidaturas e compare perfis lado a lado</li>
+            <li>Converse com os candidatos pelo chat da plataforma</li>
+            <li>Acompanhe contratos e pagamentos em um painel único</li>
+          </ul>
+          <a class="btn btn-contorno" routerLink="/register" [queryParams]="{ perfil: 'contratante' }">
+            Cadastrar minha empresa
+          </a>
+        </article>
+
+        <article class="card beneficio beneficio-destaque">
+          <p class="rotulo">Para freelancers</p>
+          <h3>Encontre seu próximo projeto</h3>
+          <ul>
+            <li>Novas oportunidades publicadas pelas empresas</li>
+            <li>Salve vagas nos favoritos e candidate-se rápido</li>
+            <li>Receba notificações quando sua candidatura andar</li>
+            <li>Veja seus contratos e seus ganhos no painel</li>
+          </ul>
+          <a class="btn btn-primario" routerLink="/register" [queryParams]="{ perfil: 'freelancer' }">
+            Criar perfil de freelancer
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SOBRE ===================== -->
+  <section class="secao secao-escura" id="sobre">
+    <div class="container estreito">
+      <span class="selo">Sobre o OpenFree</span>
+      <h2 class="esquerda">Uma ponte direta entre quem precisa e quem sabe fazer</h2>
+      <p class="texto">
+        O OpenFree nasceu na Genova Forge, em São Paulo, com uma ideia simples:
+        contratar um freelancer não deveria depender de indicação, de grupo
+        lotado de mensagens ou de uma planilha perdida no computador.
+      </p>
+      <p class="texto">
+        Por isso reunimos em uma só plataforma tudo o que acontece entre a
+        empresa e o profissional: o anúncio da vaga, a candidatura, a conversa,
+        o contrato e o acompanhamento do trabalho. Assim, as duas partes sabem
+        exatamente em que pé está cada projeto.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== FAQ ===================== -->
+  <section class="secao" id="duvidas">
+    <div class="container estreito">
+      <div class="centro">
+        <span class="selo">Dúvidas frequentes</span>
+        <h2>Perguntas e respostas</h2>
+      </div>
+
+      <div class="faq">
+        @for (item of perguntas; track item.pergunta; let primeiro = $first) {
+          <details class="card" [open]="primeiro">
+            <summary>{{ item.pergunta }}</summary>
+            <p>{{ item.resposta }}</p>
+          </details>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA FINAL ===================== -->
+  <section class="secao">
+    <div class="container">
+      <div class="cta">
+        <h2>Seu próximo projeto começa aqui</h2>
+        <p>Crie sua conta grátis e publique uma vaga ou encontre um trabalho ainda hoje.</p>
+        <div class="cta-botoes">
+          <a class="btn btn-branco" routerLink="/register">Criar conta grátis</a>
+          <a class="btn btn-vidro" routerLink="/jobs">Explorar vagas</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ===================== RODAPÉ ===================== -->
+<footer class="rodape">
+  <div class="container rodape-grid">
+    <div>
+      <a class="marca" routerLink="/">
+        <img src="/brand/genova-mark.png" alt="" width="34" height="34">
+        <span>OpenFree</span>
+      </a>
+      <p class="mutado">
+        Plataforma que conecta empresas e profissionais freelancers.
+        Um produto da Genova Forge, feito em São Paulo.
+      </p>
+    </div>
+
+    <div>
+      <p class="rotulo">Plataforma</p>
+      <a routerLink="/jobs">Explorar vagas</a>
+      <a href="#como-funciona">Como funciona</a>
+      <a routerLink="/register">Criar conta</a>
+      <a routerLink="/login">Entrar</a>
+    </div>
+
+    <div>
+      <p class="rotulo">Institucional</p>
+      <a href="#sobre">Sobre nós</a>
+      <a href="mailto:genovaforge@gmail.com">Contato</a>
+      <a routerLink="/privacy">Política de Privacidade</a>
+      <a routerLink="/terms">Termos de Uso</a>
+    </div>
+
+    <div>
+      <p class="rotulo">Genova Forge</p>
+      <a href="https://instagram.com/genova_forge" target="_blank" rel="noopener">Instagram ↗</a>
+      <a href="mailto:genovaforge@gmail.com">genovaforge&#64;gmail.com</a>
+    </div>
+  </div>
+
+  <p class="container copy">© {{ ano }} OpenFree · Genova Forge. Todos os direitos reservados.</p>
+</footer>

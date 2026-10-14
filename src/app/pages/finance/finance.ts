@@ -8,6 +8,7 @@ import {
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { PaymentsService } from '../../core/services/payments.service';
+import { environment } from '../../../environments/environment';
 
 import {
   Payment,
@@ -25,6 +26,9 @@ import {
   styleUrl: './finance.css'
 })
 export class Finance implements OnInit {
+
+  readonly simulacaoPagamentoAtiva =
+    environment.payments.simulationEnabled;
 
   private readonly paymentsService =
     inject(PaymentsService);
@@ -116,7 +120,10 @@ export class Finance implements OnInit {
     payment: Payment
   ): void {
 
-    if (this.processingId !== null) {
+    if (
+      this.processingId !== null
+      || !this.simulacaoPagamentoAtiva
+    ) {
       return;
     }
 

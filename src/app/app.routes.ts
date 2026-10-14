@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { authGuard } from './core/guards/auth-guard';
+import { homeGuard } from './core/guards/home-guard';
 
 
 export const routes: Routes = [
@@ -8,6 +9,18 @@ export const routes: Routes = [
   // =====================================================
   // PÁGINAS PÚBLICAS SEM O LAYOUT PRINCIPAL
   // =====================================================
+
+  // Página inicial (landing). Logado vai pro painel.
+  {
+    path: '',
+    pathMatch: 'full',
+    canActivate: [
+      homeGuard
+    ],
+    loadComponent: () =>
+      import('./pages/home/home')
+        .then(component => component.Home)
+  },
 
   {
     path: 'login',
@@ -325,12 +338,6 @@ export const routes: Routes = [
   // =====================================================
   // REDIRECIONAMENTOS
   // =====================================================
-
-  {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'jobs'
-  },
 
   {
     path: '**',

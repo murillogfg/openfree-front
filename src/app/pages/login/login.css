@@ -280,3 +280,15 @@ button:disabled {
   }
 
 }
+.info-message {
+  padding: 12px;
+
+  margin-bottom: 14px;
+
+  border-radius: 10px;
+
+  background:
+    rgba(255, 193, 7, 0.12);
+
+  color: #ffd98a;
+}

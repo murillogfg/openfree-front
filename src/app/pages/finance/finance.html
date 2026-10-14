@@ -335,6 +335,30 @@
               @if (
                 payment.status ===
                 'AGUARDANDO_PAGAMENTO'
+                && !simulacaoPagamentoAtiva
+              ) {
+
+                <div class="protected-banner">
+                  <div>
+                    <div>
+                      <strong>
+                        Pagamento combinado com o profissional
+                      </strong>
+
+                      <p>
+                        O pagamento pela plataforma estará disponível em breve.
+                        Por enquanto, combine a forma de pagamento diretamente
+                        com o freelancer pelo chat.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+              }
+
+              @else if (
+                payment.status ===
+                'AGUARDANDO_PAGAMENTO'
               ) {
 
                 <div class="payment-action">
