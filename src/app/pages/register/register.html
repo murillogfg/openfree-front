@@ -12,7 +12,7 @@
         <h1>OpenFree</h1>
 
         <p>
-          Crie sua conta profissional.
+          {{ contratante ? 'Encontre o profissional certo.' : 'Crie sua conta profissional.' }}
         </p>
       </div>
 
@@ -29,8 +29,13 @@
       </h2>
 
       <p>
-        Cadastre-se gratuitamente para encontrar
-        oportunidades e construir seu perfil profissional.
+        @if (contratante) {
+          Cadastre-se gratuitamente para publicar vagas
+          e contratar freelancers.
+        } @else {
+          Cadastre-se gratuitamente para encontrar
+          oportunidades e construir seu perfil profissional.
+        }
       </p>
 
     </div>
@@ -39,6 +44,40 @@
       [formGroup]="registerForm"
       (ngSubmit)="submit()"
     >
+
+      <!-- ESCOLHA DO LADO -->
+
+      <label>
+        Como você quer usar a OpenFree?
+      </label>
+
+      <div class="profile-choice" role="radiogroup">
+
+        <button
+          type="button"
+          class="profile-option"
+          role="radio"
+          [class.selected]="!contratante"
+          [attr.aria-checked]="!contratante"
+          (click)="escolherPerfil('FREELANCER')"
+        >
+          <strong>Quero trabalhar</strong>
+          <small>Sou freelancer e quero encontrar vagas.</small>
+        </button>
+
+        <button
+          type="button"
+          class="profile-option"
+          role="radio"
+          [class.selected]="contratante"
+          [attr.aria-checked]="contratante"
+          (click)="escolherPerfil('CONTRATANTE')"
+        >
+          <strong>Quero contratar</strong>
+          <small>Vou publicar vagas e escolher profissionais.</small>
+        </button>
+
+      </div>
 
       <label for="nome">
         Nome
@@ -91,6 +130,112 @@
         formControlName="telefone"
         placeholder="(11) 99999-9999"
       >
+
+      <!-- DADOS DO CONTRATANTE -->
+
+      @if (contratante) {
+
+        <label>
+          Você vai contratar como
+        </label>
+
+        <div class="person-type">
+          <button
+            type="button"
+            [class.selected]="tipoPessoa === 'PF'"
+            (click)="escolherTipoPessoa('PF')"
+          >
+            Pessoa física
+          </button>
+
+          <button
+            type="button"
+            [class.selected]="tipoPessoa === 'PJ'"
+            (click)="escolherTipoPessoa('PJ')"
+          >
+            Empresa (CNPJ)
+          </button>
+        </div>
+
+        @if (tipoPessoa === 'PF') {
+
+          <label for="cpf">
+            CPF
+          </label>
+
+          <input
+            id="cpf"
+            type="text"
+            inputmode="numeric"
+            formControlName="cpf"
+            placeholder="000.000.000-00"
+            maxlength="14"
+          >
+
+          @if (
+            registerForm.controls.cpf.touched
+            && registerForm.controls.cpf.invalid
+          ) {
+            <small class="field-error">
+              Informe um CPF válido.
+            </small>
+          }
+
+          <small class="hint">
+            Seu CPF fica guardado com segurança e nunca
+            aparece para outras pessoas.
+          </small>
+
+        } @else {
+
+          <label for="nomeEmpresa">
+            Nome da empresa
+          </label>
+
+          <input
+            id="nomeEmpresa"
+            type="text"
+            formControlName="nomeEmpresa"
+            placeholder="Como sua empresa é conhecida"
+          >
+
+          @if (
+            registerForm.controls.nomeEmpresa.touched
+            && registerForm.controls.nomeEmpresa.invalid
+          ) {
+            <small class="field-error">
+              Informe o nome da empresa.
+            </small>
+          }
+
+          <label for="cnpj">
+            CNPJ
+          </label>
+
+          <input
+            id="cnpj"
+            type="text"
+            inputmode="numeric"
+            formControlName="cnpj"
+            placeholder="00.000.000/0000-00"
+            maxlength="18"
+          >
+
+          @if (
+            registerForm.controls.cnpj.touched
+            && registerForm.controls.cnpj.invalid
+          ) {
+            <small class="field-error">
+              Informe um CNPJ válido.
+            </small>
+          }
+
+          <small class="hint">
+            Empresas com CNPJ confirmado ganham o selo
+            de empresa verificada.
+          </small>
+        }
+      }
 
       <label for="senha">
         Senha

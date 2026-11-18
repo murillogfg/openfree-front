@@ -338,8 +338,10 @@
   .register-card input {
     min-height: 50px;
   }
+}
 
-  .terms-field {
+/* Termos: valem em qualquer tamanho de tela */
+.terms-field {
   margin-top: 8px;
 }
 
@@ -382,4 +384,94 @@
 .terms-check a:hover {
   text-decoration: underline;
 }
+
+
+/* ---------- Escolha de perfil ---------- */
+.profile-choice {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.profile-option {
+  display: grid;
+  gap: 4px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #c7cbe6;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .15s ease, background .15s ease;
+}
+
+.profile-option strong {
+  color: #f7f8ff;
+  font-size: 15px;
+}
+
+.profile-option small {
+  color: #8d97b3;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.profile-option.selected {
+  border-color: #6671ff;
+  background: rgba(102, 113, 255, 0.14);
+}
+
+.person-type {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.person-type button {
+  min-height: 38px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #aab2cf;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.person-type button.selected {
+  background: #6671ff;
+  color: #fff;
+}
+
+.hint {
+  color: #8d97b3;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+
+/* O checkbox dos termos não herda o visual dos campos de texto */
+.register-card .terms-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 4px;
+  color: #8d97b3;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.register-card .terms-check input {
+  flex: 0 0 auto;
+  width: 18px;
+  min-height: 0;
+  height: 18px;
+  margin-top: 2px;
+  padding: 0;
+  border-radius: 4px;
 }
