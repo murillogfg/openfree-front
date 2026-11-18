@@ -234,7 +234,7 @@ export class Profile implements OnInit {
 
           this.tratarErro(
             error,
-            'Não foi possível carregar a empresa.'
+            'Não foi possível carregar o seu perfil.'
           );
         }
       });
@@ -305,7 +305,7 @@ export class Profile implements OnInit {
           this.saving = false;
 
           this.successMessage =
-            'Perfil empresarial atualizado com sucesso.';
+            'Perfil atualizado com sucesso.';
         },
 
         error: error => {
@@ -314,7 +314,7 @@ export class Profile implements OnInit {
 
           this.tratarErro(
             error,
-            'Não foi possível atualizar a empresa.'
+            'Não foi possível atualizar o seu perfil.'
           );
         }
       });

@@ -147,7 +147,7 @@ throw new Error('Method not implemented.');
     }
 
     return this.isCompany
-      ? 'Empresa'
+      ? 'Contratante'
       : 'Freelancer';
   }
 
@@ -166,7 +166,7 @@ throw new Error('Method not implemented.');
 
             this.displayName =
               response.data?.nomeFantasia
-              ?? 'Empresa';
+              ?? 'Contratante';
 
             this.displayInitials =
               this.criarIniciais(
@@ -182,7 +182,7 @@ throw new Error('Method not implemented.');
             );
 
             this.displayName =
-              'Empresa';
+              'Contratante';
 
             this.displayInitials =
               'EM';

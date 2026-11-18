@@ -60,7 +60,7 @@ export class DashboardCompany implements OnInit {
 
           this.errorMessage =
             error.error?.message
-            ?? 'Não foi possível carregar o dashboard da empresa.';
+            ?? 'Não foi possível carregar o seu painel.';
         }
       });
   }

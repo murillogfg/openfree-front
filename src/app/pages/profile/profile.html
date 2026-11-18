@@ -21,7 +21,7 @@
         <h1>
           {{
             isCompany
-              ? 'Perfil da empresa'
+              ? 'Perfil de contratante'
               : 'Seu perfil profissional'
           }}
         </h1>
@@ -29,7 +29,7 @@
         <p>
           {{
             isCompany
-              ? 'Mantenha as informações da empresa atualizadas para transmitir mais confiança aos profissionais.'
+              ? 'Mantenha suas informações atualizadas para transmitir mais confiança aos profissionais.'
               : 'Seu perfil é sua vitrine. Mantenha suas informações, habilidades e documentos atualizados.'
           }}
         </p>
@@ -40,7 +40,7 @@
 
         {{
           isCompany
-            ? 'Conta empresarial'
+            ? 'Conta de contratante'
             : 'Conta profissional'
         }}
       </div>
@@ -72,7 +72,7 @@
             @if (avatarUrl) {
               <img
                 [src]="avatarUrl"
-                alt="Logo da empresa"
+                alt="Foto ou logo do contratante"
               >
             }
 
@@ -95,7 +95,7 @@
           </div>
 
           <h2>
-            {{ company?.nomeFantasia || 'Sua empresa' }}
+            {{ company?.nomeFantasia || 'Seu perfil' }}
           </h2>
 
           <span class="identity-subtitle">
@@ -164,7 +164,7 @@
                   </span>
 
                   <h2>
-                    Identidade da empresa
+                    Identificação
                   </h2>
                 </div>
 
@@ -254,7 +254,7 @@
                   </span>
 
                   <h2>
-                    Sobre a empresa
+                    Sobre você ou sua empresa
                   </h2>
                 </div>
 
@@ -272,7 +272,7 @@
                   id="descricaoEmpresa"
                   rows="7"
                   formControlName="descricao"
-                  placeholder="Conte sobre a empresa, cultura, serviços e o tipo de profissional que vocês procuram..."
+                  placeholder="Conte quem você é ou o que sua empresa faz, e o tipo de profissional que você procura..."
                 ></textarea>
               </div>
 
@@ -668,7 +668,7 @@
           <div class="company-conversion-content">
 
             <span class="company-conversion-label">
-              PARA EMPRESAS
+              PARA QUEM CONTRATA
             </span>
 
             <h2>

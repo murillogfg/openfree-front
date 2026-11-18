@@ -71,7 +71,7 @@ export class Home implements OnInit {
   readonly perguntas: Pergunta[] = [
     {
       pergunta: 'O que é o OpenFree?',
-      resposta: 'O OpenFree é uma plataforma brasileira que conecta empresas e pessoas que precisam de um trabalho a profissionais freelancers.'
+      resposta: 'O OpenFree é uma plataforma brasileira que conecta empresas e pessoas que precisam de um trabalho a profissionais freelancers. Para contratar, você pode se cadastrar com CNPJ ou como pessoa física, com CPF.'
     },
     {
       pergunta: 'Quanto custa para usar?',
@@ -82,11 +82,11 @@ export class Home implements OnInit {
       resposta: 'Trabalhos remotos e presenciais de várias áreas, como tecnologia, design, eventos e gastronomia. Cada vaga mostra prazo, local e valor.'
     },
     {
-      pergunta: 'Como a empresa escolhe o freelancer?',
-      resposta: 'Ela recebe as candidaturas, vê o perfil e as avaliações de cada profissional, conversa pelo chat e aceita quem mais combina com o projeto.'
+      pergunta: 'Como quem contrata escolhe o freelancer?',
+      resposta: 'O contratante recebe as candidaturas, vê o perfil e as avaliações de cada profissional, conversa pelo chat e aceita quem mais combina com o projeto.'
     },
     {
-      pergunta: 'Uma pessoa pode ser freelancer e empresa ao mesmo tempo?',
+      pergunta: 'Uma pessoa pode ser freelancer e contratante ao mesmo tempo?',
       resposta: 'Hoje cada conta é de um tipo: freelancer ou contratante. Se você quiser trabalhar e também contratar, pode criar uma conta para cada lado.'
     },
     {

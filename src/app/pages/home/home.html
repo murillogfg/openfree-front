@@ -26,7 +26,7 @@
         </h1>
 
         <p class="lead">
-          O OpenFree conecta empresas que precisam de um trabalho a
+          O OpenFree conecta empresas e pessoas que precisam de um trabalho a
           profissionais prontos para fazer. Sem grupo de WhatsApp, sem
           planilha e sem intermediário: vaga, candidatura, contrato e
           conversa no mesmo lugar.
@@ -34,7 +34,7 @@
 
         <div class="hero-botoes">
           <a class="btn btn-primario" routerLink="/register" [queryParams]="{ perfil: 'contratante' }">
-            Sou empresa · publicar vaga
+            Quero contratar · publicar vaga
           </a>
           <a class="btn btn-contorno" routerLink="/jobs">
             Sou freelancer · ver vagas
@@ -96,7 +96,7 @@
       <div class="abas" role="tablist">
         <button type="button" role="tab" [class.ativa]="lado() === 'empresas'"
                 [attr.aria-selected]="lado() === 'empresas'" (click)="escolherLado('empresas')">
-          Para empresas
+          Para quem contrata
         </button>
         <button type="button" role="tab" [class.ativa]="lado() === 'freelancers'"
                 [attr.aria-selected]="lado() === 'freelancers'" (click)="escolherLado('freelancers')">
@@ -135,7 +135,7 @@
 
       <div class="beneficios">
         <article class="card beneficio">
-          <p class="rotulo">Para empresas</p>
+          <p class="rotulo">Para quem contrata</p>
           <h3>Contrate sem complicação</h3>
           <ul>
             <li>Publique vagas com descrição, prazo e valor</li>
@@ -144,7 +144,7 @@
             <li>Acompanhe contratos e pagamentos em um painel único</li>
           </ul>
           <a class="btn btn-contorno" routerLink="/register" [queryParams]="{ perfil: 'contratante' }">
-            Cadastrar minha empresa
+            Quero contratar
           </a>
         </article>
 
@@ -152,7 +152,7 @@
           <p class="rotulo">Para freelancers</p>
           <h3>Encontre seu próximo projeto</h3>
           <ul>
-            <li>Novas oportunidades publicadas pelas empresas</li>
+            <li>Novas oportunidades publicadas por quem contrata</li>
             <li>Salve vagas nos favoritos e candidate-se rápido</li>
             <li>Receba notificações quando sua candidatura andar</li>
             <li>Veja seus contratos e seus ganhos no painel</li>
@@ -177,7 +177,7 @@
       </p>
       <p class="texto">
         Por isso reunimos em uma só plataforma tudo o que acontece entre a
-        empresa e o profissional: o anúncio da vaga, a candidatura, a conversa,
+        quem contrata e o profissional: o anúncio da vaga, a candidatura, a conversa,
         o contrato e o acompanhamento do trabalho. Assim, as duas partes sabem
         exatamente em que pé está cada projeto.
       </p>
