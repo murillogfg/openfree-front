@@ -1,7 +1,15 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+
+import {
+  Observable,
+  finalize,
+  map,
+  shareReplay,
+  tap,
+  throwError
+} from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 
@@ -19,6 +27,14 @@ export class AuthService {
   private readonly http =
     inject(HttpClient);
 
+  /*
+   * Cliente HTTP "cru", sem os interceptors.
+   * Usado no refresh/logout para não entrar em loop
+   * com o interceptor que chama o próprio refresh.
+   */
+  private readonly httpSemInterceptor =
+    new HttpClient(inject(HttpBackend));
+
   private readonly router =
     inject(Router);
 
@@ -31,6 +47,18 @@ export class AuthService {
   private readonly roleKey =
     'openfree_role';
 
+  private readonly refreshKey =
+    'openfree_refresh';
+
+  /*
+   * Renovação em andamento. Se várias requisições
+   * descobrirem ao mesmo tempo que o login venceu,
+   * todas esperam a MESMA renovação (o refresh token
+   * só pode ser usado uma vez).
+   */
+  private renovacaoEmAndamento:
+    Observable<string> | null = null;
+
   login(
     request: LoginRequest
   ): Observable<LoginResponse> {
@@ -41,19 +69,9 @@ export class AuthService {
         request
       )
       .pipe(
-        tap(response => {
-
-          localStorage.setItem(
-            this.tokenKey,
-            response.token
-          );
-
-          localStorage.setItem(
-            this.roleKey,
-            response.role
-          );
-
-        })
+        tap(response =>
+          this.salvarSessao(response)
+        )
       );
   }
 
@@ -61,6 +79,15 @@ export class AuthService {
 
     return localStorage.getItem(
       this.tokenKey
+    );
+  }
+
+  hasRefreshToken(): boolean {
+
+    return Boolean(
+      localStorage.getItem(
+        this.refreshKey
+      )
     );
   }
 
@@ -81,34 +108,122 @@ export class AuthService {
     return null;
   }
 
+  /*
+   * Logado = tem um login válido OU pode renová-lo.
+   * Assim a pessoa não cai na tela de login só porque
+   * o token de 1 hora venceu.
+   */
   isAuthenticated(): boolean {
 
     const token =
       this.getToken();
 
-    if (!token) {
-      return false;
+    if (
+      token
+      && !this.isTokenExpired(token)
+    ) {
+      return true;
     }
 
-    if (this.isTokenExpired(token)) {
+    if (this.hasRefreshToken()) {
+      return true;
+    }
 
+    if (token) {
       this.clearSession();
-
-      return false;
     }
 
-    return true;
+    return false;
   }
 
   /*
-   * Chamado quando a API responde 401 para uma
-   * requisição autenticada (token expirado ou
-   * inválido). Limpa a sessão e volta ao login
-   * avisando o usuário.
+   * O token atual vence nos próximos segundos?
+   * Usado pelo interceptor para renovar antes.
+   */
+  accessTokenExpirando(): boolean {
+
+    const token =
+      this.getToken();
+
+    return !token
+      || this.isTokenExpired(token);
+  }
+
+  /*
+   * Troca o refresh token por um login novo.
+   * Devolve o novo token de acesso.
+   */
+  renovarSessao(): Observable<string> {
+
+    const refreshToken =
+      localStorage.getItem(
+        this.refreshKey
+      );
+
+    if (!refreshToken) {
+      return throwError(() =>
+        new Error('Sem refresh token.')
+      );
+    }
+
+    if (!this.renovacaoEmAndamento) {
+
+      this.renovacaoEmAndamento =
+        this.httpSemInterceptor
+          .post<LoginResponse>(
+            `${this.apiUrl}/refresh`,
+            { refreshToken }
+          )
+          .pipe(
+            tap(response =>
+              this.salvarSessao(response)
+            ),
+            map(response =>
+              response.token
+            ),
+            finalize(() => {
+              this.renovacaoEmAndamento = null;
+            }),
+            shareReplay(1)
+          );
+    }
+
+    return this.renovacaoEmAndamento;
+  }
+
+  isCompany(): boolean {
+
+    return (
+      this.getRole()
+      === 'EMPRESA'
+    );
+  }
+
+  isFreelancer(): boolean {
+
+    return (
+      this.getRole()
+      === 'FREELANCER'
+    );
+  }
+
+  getDefaultDashboard(): string {
+
+    return this.isCompany()
+      ? '/dashboard/company'
+      : '/dashboard/freelancer';
+  }
+
+  /*
+   * Chamado quando não dá mais para renovar o login
+   * (refresh token vencido, revogado ou ausente).
    */
   handleExpiredSession(): void {
 
-    if (!this.getToken()) {
+    if (
+      !this.getToken()
+      && !this.hasRefreshToken()
+    ) {
       return;
     }
 
@@ -129,6 +244,58 @@ export class AuthService {
         }
       }
     );
+  }
+
+  logout(): void {
+
+    const refreshToken =
+      localStorage.getItem(
+        this.refreshKey
+      );
+
+    /*
+     * Avisa a API para invalidar a sessão deste
+     * aparelho. Se falhar (sem internet), saímos
+     * mesmo assim.
+     */
+    if (refreshToken) {
+      this.httpSemInterceptor
+        .post(
+          `${this.apiUrl}/logout`,
+          { refreshToken }
+        )
+        .subscribe({
+          error: () => undefined
+        });
+    }
+
+    this.clearSession();
+
+    this.router.navigate([
+      '/login'
+    ]);
+  }
+
+  private salvarSessao(
+    response: LoginResponse
+  ): void {
+
+    localStorage.setItem(
+      this.tokenKey,
+      response.token
+    );
+
+    localStorage.setItem(
+      this.roleKey,
+      response.role
+    );
+
+    if (response.refreshToken) {
+      localStorage.setItem(
+        this.refreshKey,
+        response.refreshToken
+      );
+    }
   }
 
   /*
@@ -176,37 +343,9 @@ export class AuthService {
     localStorage.removeItem(
       this.roleKey
     );
-  }
 
-  isCompany(): boolean {
-
-    return (
-      this.getRole()
-      === 'EMPRESA'
+    localStorage.removeItem(
+      this.refreshKey
     );
   }
-
-  isFreelancer(): boolean {
-
-    return (
-      this.getRole()
-      === 'FREELANCER'
-    );
-  }
-
-  getDefaultDashboard(): string {
-
-    return this.isCompany()
-      ? '/dashboard/company'
-      : '/dashboard/freelancer';
-  }
-
-  logout(): void {
-
-    this.clearSession();
-
-    this.router.navigate([
-      '/login'
-    ]);
-  }
-}
+}

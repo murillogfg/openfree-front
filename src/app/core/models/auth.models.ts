@@ -12,4 +12,5 @@ export interface LoginResponse {
   tipo: string;
   expiresIn: number;
   role: UserRole;
+  refreshToken?: string;
 }
